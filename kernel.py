@@ -1,10 +1,9 @@
 import os
 print('Checking Program...')
-from tqdm.rich import tqdm
 try:
     import cv2
     import numpy as np
-    
+    from tqdm.rich import tqdm
 except:
     os.system('pip install opencv-python')
     os.system('pip install tqdm')
