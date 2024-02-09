@@ -1,20 +1,49 @@
-import cv2
-import numpy as np
+import os
+print('Checking Program...')
+try:
+    import cv2
+    import numpy as np
+except:
+    os.system('pip install opencv-python')
+
+print('Check Completed!')
+print('Initializing Program...')
+
 cam = cv2.VideoCapture(0)
 img = np.empty((300, 300, 3), np.uint8)
-
 mx = 0
 mn = 255
 FDetect = False
+
+print('Initialize Completed!')
+print('Starting Camera...')
+
+check, frm = cam.read()
+if check:
+    print('Initializing Camera...')
+    #cam.set(cv2.CAP_PROP_AUTO_EXPOSURE, 1)
+    cam.set(cv2.CAP_PROP_EXPOSURE, -4)
+    cam.set(cv2.CAP_PROP_SHARPNESS, 5)
+    cam.set(cv2.CAP_PROP_CONTRAST, 20.0)
+    print('Camera Initialize Finished!')
+    cam.release()
+    cam = cv2.VideoCapture(0)
+else:
+    print('Camera Start Failed!')
+
 
 while(True):
     check, frm = cam.read()
     if check:
         cv2.imshow('cap', frm)
     else:
+        print('Camera Start Failed!')
         break
+
     if cv2.waitKey(1) == ord('q'):
+        print('Exiting...')
         break
+
     avgB, avgG, avgR, avgAlp = cv2.mean(frm)
 
     gray = cv2.cvtColor(frm, cv2.COLOR_BGR2GRAY)
@@ -22,7 +51,7 @@ while(True):
 
     mosaic = frm[300::20, 300::20]
     cv2.namedWindow('mos', flags=cv2.WINDOW_NORMAL)
-    cv2.resizeWindow('mos', 800, 600)
+    cv2.resizeWindow('mos', 400, 200)
     cv2.imshow('mos', mosaic)
 
     for row in range(300):
