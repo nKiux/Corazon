@@ -1,20 +1,25 @@
 import os
 print('Checking Program...')
+from tqdm.rich import tqdm
 try:
     import cv2
     import numpy as np
+    
 except:
     os.system('pip install opencv-python')
+    os.system('pip install tqdm')
+    os.system('pip install rich')
 
 print('Check Completed!')
 print('Initializing Program...')
-
+prog = tqdm(total=100)
+prog.update(20)
 cam = cv2.VideoCapture(0)
 img = np.empty((300, 300, 3), np.uint8)
 mx = 0
 mn = 255
 FDetect = False
-
+prog.update(20)
 print('Initialize Completed!')
 print('Starting Camera...')
 
@@ -26,8 +31,11 @@ if check:
     cam.set(cv2.CAP_PROP_SHARPNESS, 5)
     cam.set(cv2.CAP_PROP_CONTRAST, 20.0)
     print('Camera Initialize Finished!')
+    prog.update(30)
     cam.release()
     cam = cv2.VideoCapture(0)
+    prog.update(30)
+    prog.close()
 else:
     print('Camera Start Failed!')
 
