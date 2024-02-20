@@ -3,12 +3,19 @@
 
 # 24/02/20 更新進度
 `Kai`
-`version v0.4.2.Beta`
-回家寫
+`version v0.4.2(Light Engine : Cam_Beta)`
+- Kernel
+  - 新增**性能測試**至啟動 `若未通過性能測試則程式自動關閉`
+  - 若**快速啟動**為`False`且**性能測試**為`False`，則程式將不會運作(bug，將會修復)
+- Main
+  - **性能測試**將不會開啟相機預覽 `減少非必要閃爍與開啟視窗`
+  - 新增**所有webcam通用控制項**，需要自行下載插件放入與程式相同資料夾 `控制相機參數確保可以運作`
+- cam_sett.cfg
+  - 新增相機控制項
 
 # 24/02/18 更新進度
 `Kai`
-`version v0.4.1 (Light Engine SPD)`
+`version v0.4.1 (Light Engine : SPD)`
 - Kernel
   - 新增**性能測試** `統計10次計算共花時間(需在3秒內完成) 並顯示測試成果`
   - 新增**Kernel_speedup!** `略過啟動部分項目，共減少約50%啟動時間`
@@ -18,7 +25,7 @@
 
 # 24/02/15 更新進度
 `Kai`
-`version v0.4 (Light Engine)`
+`version v0.4 (Light Engine : Initial)`
 - Kernel
   - 新增**確信度評分** `等待10次update才開始進行校準`
   - 新增**自動校準** `每30次偵測到手指的update自動重設平均亮度最大值與最小值`
