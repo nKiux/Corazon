@@ -1,6 +1,11 @@
 # 共寫更新
 最新版本請寫在最上面
 
+# 24/02/20 更新進度
+`Kai`
+`version v0.4.2.Beta`
+回家寫
+
 # 24/02/18 更新進度
 `Kai`
 `version v0.4.1 (Light Engine SPD)`
