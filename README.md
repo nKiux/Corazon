@@ -12,6 +12,8 @@
   - 新增**所有webcam通用控制項**，需要自行下載插件放入與程式相同資料夾 `控制相機參數確保可以運作`
 - cam_sett.cfg
   - 新增相機控制項
+  - [cfg_cam下載](https://github.com/SuslikV/cfg-cam)
+  - 將此程式與`cam_sett.cfg`放入與Main, kernel_LightEngine相同資料夾
 
 # 24/02/18 更新進度
 `Kai`
