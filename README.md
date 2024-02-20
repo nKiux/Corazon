@@ -3,6 +3,17 @@
 
 # 24/02/20 更新進度
 `Kai`
+`version v0.4.3(Light Engine : FiX!)`
+- Kernel
+  - 修復 **程式無法運作**
+  - 新增一些註解
+  - 移除 **舊相機控制方法**
+  - 移除 **Kernel** 的性能測試選項，若未開啟 **Kernel SpeedUP!** 將會自動執行 **Benchmark**
+- Main
+  - 移除 **舊相機控制方法**
+  - 移除 **舊馬賽克方法**
+#
+`Kai`
 `version v0.4.2(Light Engine : Cam_Beta)`
 - Kernel
   - 新增**性能測試**至啟動 `若未通過性能測試則程式自動關閉`
