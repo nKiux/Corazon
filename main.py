@@ -94,13 +94,6 @@ def start(camera_select):
     FDetect = False
     img = np.empty((300, 300, 3), np.uint8)
     os.system('WCConfig.exe') #msvc120
-    '''cam.set(cv2.CAP_PROP_AUTO_EXPOSURE, 1)
-    cam.set(cv2.CAP_PROP_SHARPNESS, 5)
-    cam.set(cv2.CAP_PROP_CONTRAST, 20.0)
-    cam.set(cv2.CAP_PROP_AUTO_WB, 0)
-    cam.set(cv2.CAP_PROP_WB_TEMPERATURE, 1850)
-    cam.set(cv2.CAP_PROP_SETTINGS, 1)
-    cam.set(cv2.CAP_PROP_HUE, 340)'''
     
     while(True):
         check, frm = cam.read()
@@ -117,12 +110,7 @@ def start(camera_select):
         avgB, avgG, avgR, avgAlp = cv2.mean(frm)
         gray = cv2.cvtColor(frm, cv2.COLOR_BGR2GRAY)
         bright = cv2.mean(gray)[0]
-
-        '''mosaic = frm[300::20, 300::20]
-        cv2.namedWindow('mos', flags=cv2.WINDOW_NORMAL)
-        cv2.resizeWindow('mos', 400, 200)
-        cv2.imshow('mos', mosaic)'''
-
+        
         blur = cv2.blur(gray, (10,5))
         cv2.imshow('denoise', blur)
         for row in range(300):
