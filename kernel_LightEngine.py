@@ -42,13 +42,19 @@ if spd_up_start == False:
         #cam.set(cv2.CAP_PROP_EXPOSURE, 4)
         cam.set(cv2.CAP_PROP_SHARPNESS, 5)
         cam.set(cv2.CAP_PROP_CONTRAST, 20.0)
+        
         print('Camera Initialize Finished!')
-
         prog.update(30)
         cam.release()
         cam = cv2.VideoCapture(camera_select)
         prog.update(30)
         prog.close()
+        print('Testing...')
+        if benchmark(camera_select = camera_select) == True:
+            start(camera_select=camera_select)
+        else:
+            print('Test Failed... Closing')
+            exit()
         
     else:
         print('Camera Start Failed!')
@@ -56,7 +62,8 @@ if spd_up_start == False:
     if bnhmrk == True:
         benchmark(camera_select = camera_select)
     else:
-        start(camera_select = camera_select)
+        bnhmrk = bnhmrk
+        #start(camera_select = camera_select)
 
 else:
     if bnhmrk == True:

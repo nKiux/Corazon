@@ -18,10 +18,9 @@ def benchmark(camera_select):
     print(time_now)
     prog = tqdm(total=100)
     for i in range(10):
-        
         check, frm = cam.read()
         if check:
-            cv2.imshow('cap', frm)
+            check = check
         else:
             print('Camera Start Failed!')
             break
@@ -35,7 +34,6 @@ def benchmark(camera_select):
         bright = cv2.mean(gray)[0]
 
         blur = cv2.blur(gray, (10,5))
-        cv2.imshow('denoise', blur)
         for row in range(300):
             for col in range(300):
                 img[row][col] = [avgB, avgG, avgR]
@@ -78,10 +76,12 @@ def benchmark(camera_select):
         time_passed = 60 + time_passed
         if time_passed > 3:
             print('Test Failed')
-    elif time_passed > 3:
+    elif time_passed > 1:
         print('Test Failed')
+        return False
     else:
         print('Test Passed')
+        return True
     #10 frames in 3 secs
 
 def start(camera_select):
@@ -93,9 +93,15 @@ def start(camera_select):
     mn = 255
     FDetect = False
     img = np.empty((300, 300, 3), np.uint8)
-    cam.set(cv2.CAP_PROP_AUTO_EXPOSURE, 1)
+    os.system('WCConfig.exe') #msvc120
+    '''cam.set(cv2.CAP_PROP_AUTO_EXPOSURE, 1)
     cam.set(cv2.CAP_PROP_SHARPNESS, 5)
     cam.set(cv2.CAP_PROP_CONTRAST, 20.0)
+    cam.set(cv2.CAP_PROP_AUTO_WB, 0)
+    cam.set(cv2.CAP_PROP_WB_TEMPERATURE, 1850)
+    cam.set(cv2.CAP_PROP_SETTINGS, 1)
+    cam.set(cv2.CAP_PROP_HUE, 340)'''
+    
     while(True):
         check, frm = cam.read()
         if check:
