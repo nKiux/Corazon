@@ -1,6 +1,12 @@
 # 共寫更新
 最新版本請寫在最上面
 
+# 24/02/21 更新進度
+`Kai`
+`no version has been updated.`
+- Kernel
+  - 移除**舊Kernel**
+
 # 24/02/20 更新進度
 `Kai`
 `version v0.4.3(Light Engine : FiX!)`
