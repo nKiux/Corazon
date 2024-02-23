@@ -20,6 +20,8 @@
   - `Result`顯示`Benchmark`結果
   - `Fast Start`勾選框控制**快速啟動開關**
   - *`BPM`待接入*
+ 
+`備註：目前相機只能使用相機0，需要自行在kernel_LightEngine和UI_Beta2內進行修改`
 
 # 24/02/21 更新進度
 `Kai`
