@@ -27,7 +27,8 @@ def benchmark(camera_select):
 
         if cv2.waitKey(1) == ord('q'):
             print('Exiting...')
-            break
+            cv2.destroyAllWindows()
+            exit()
         frm = cv2.resize(frm,(600,420))
         avgB, avgG, avgR, avgAlp = cv2.mean(frm)
         gray = cv2.cvtColor(frm, cv2.COLOR_BGR2GRAY)
