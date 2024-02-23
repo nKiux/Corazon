@@ -1,6 +1,26 @@
 # 共寫更新
 最新版本請寫在最上面
 
+# 24/02/24 更新進度
+`Kai`
+`version v0.5.0(Light Engine : NewUI!)`
+- Kernel
+  - 修改為**以函式啟動**，由`UI_Beta2`開啟
+  - 將**效能測試**與**正規啟動**分開宣告
+  - 新增 `cv2.destroyAllWindows()` 正確關閉cv2視窗
+- Main
+  - 30行新增 `cv2.destroyAllWindows()`
+  - 31行新增 `exit()`
+- UI_Beta2
+  - 使用**PyQt5**
+  - **啟動主程式**
+  - 基礎UI設計
+  - `Start`連接至`kernel_LightEngine.start`
+  - `Benchmark`連接至`kernel_LightEngine.pure_benchmark`
+  - `Result`顯示`Benchmark`結果
+  - `Fast Start`勾選框控制**快速啟動開關**
+  - *`BPM`待接入*
+
 # 24/02/21 更新進度
 `Kai`
 `no version has been updated.`
