@@ -3,6 +3,7 @@
 
 # 24/02/27 更新進度
 `JT_0`
+`Pull request`
 - Main
   - 加入了 `time` 函式庫。 (Line 4)
   - `benchmark()` 函式為舊版本，本次更新只對 `start()` 做更新。
@@ -14,7 +15,7 @@
     - 新增了算法及心跳偵測。 (Line 190~207)
     - 新增了 `HR_monitor()`心跳偵測函式。 (Line 219~251)
 
-# 24/02/27 更新進度
+# 
 `Kai`
 `version v0.5.1(Light Engine : Performance Check)`
 - Kernel
