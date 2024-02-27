@@ -1,6 +1,16 @@
 # 共寫更新
 最新版本請寫在最上面
 
+# 24/02/17 更新進度
+`Kai`
+`version v0.5.1(Light Engine : Performance Check)`
+- Kernel
+  - `Fast Start`設定為`False`時，自動**新增**與 **!清空!** `Test.txt`存放亮度資料
+- main
+  - `Benchmark`內新增`FPS檢查`，檢查完畢的FPS數據將於終端機輸出以及存至`FPS`變數
+  - 將亮度資料寫入`Test.txt` (僅在Finger_Detect = True時進行寫入，手離開後自動清空)
+
+
 # 24/02/24 更新進度
 `Kai`
 `version v0.5.0(Light Engine : NewUI!)`
