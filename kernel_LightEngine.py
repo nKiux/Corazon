@@ -1,4 +1,4 @@
-#version v0.5.0: Light Engine : NewUI!
+#version v0.5.1: Light Engine : Performance Check
 import os
 import datetime
 
@@ -67,6 +67,12 @@ def start(kernel_speedUP):
         else:
             print('Camera Start Failed!')
     else:
+        with open('test.txt', 'a', encoding='utf-8') as data:
+            with open('test.txt', 'w', encoding='utf-8') as write:
+                write.write('\n')
+                write.close()
+            data.close()
+
         start(camera_select = camera_select)
         cv2.destroyAllWindows()
 
