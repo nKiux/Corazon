@@ -2,8 +2,9 @@
 最新版本請寫在最上面
 
 # 24/02/27 更新進度
+
 `JT_0`
-`Pull request`
+`version v0.6(Light Engine : Algorithm)`
 - Main
   - 加入了 `time` 函式庫。 (Line 4)
   - `benchmark()` 函式為舊版本，本次更新只對 `start()` 做更新。
