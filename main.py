@@ -4,7 +4,9 @@ import numpy as np
 from datetime import datetime
 from tqdm.rich import tqdm
 
+
 def benchmark(camera_select):
+    updates = 0
     cam = cv2.VideoCapture(camera_select)
     check, frm = cam.read()
     counting = 0
@@ -18,6 +20,7 @@ def benchmark(camera_select):
     print(time_now)
     prog = tqdm(total=100)
     for i in range(10):
+        updates += 1
         check, frm = cam.read()
         if check:
             check = check
@@ -73,6 +76,8 @@ def benchmark(camera_select):
     time_then = int(str(datetime.now())[17:19])
     print(time_then)
     time_passed = time_then - time_now
+    fps = updates / time_passed
+    print(f'fps = {fps}')
     if time_passed < 0:
         time_passed = 60 + time_passed
         if time_passed > 3:
@@ -151,6 +156,14 @@ def start(camera_select):
 
         cv2.imshow('img', img)
         print(f"R: {str(avgR)[:6]}, G: {str(avgG)[:6]}, B: {str(avgB)[:6]}, A: {str(bright)[:6]}, MX: {str(mx)}, MN: {str(mn)} (reset in {30 - chk_count}), FXL: {bright_fixed}, Finger Detected: {FDetect}, score: {counting}")
+        if FDetect == True:
+            with open('test.txt', 'a', encoding='utf-8') as data:
+                data.write(f'{str(bright)[:6]}\n')
+                data.close()
+        else:
+            with open('test.txt', 'w', encoding='utf-8') as data:
+                data.write('\n')
+                data.close()
 
 
         #print(frm)
