@@ -1,6 +1,19 @@
 # 共寫更新
 最新版本請寫在最上面
 
+# 24/02/27 更新進度
+`JT_0`
+- Main
+  - 加入了 `time` 函式庫。 (Line 4)
+  - `benchmark()` 函式為舊版本，本次更新只對 `start()` 做更新。
+  - 更改了手指偵測的判斷方式。 (Line 156, 160)
+  - 加入了紀錄亮度值的陣列 `bright_rec`，紀錄的為 `bright` (浮點數, A)。 (Line 176)
+  - 加入了 `passed`，使用於時間計算。 (Line 177)
+  - 修改了終端機輸出方式，改為刷新，但未來需更改。 (Line 211)
+  - 算法
+    - 新增了算法及心跳偵測。 (Line 190~207)
+    - 新增了 `HR_monitor()`心跳偵測函式。 (Line 219~251)
+
 # 24/02/17 更新進度
 `Kai`
 `version v0.5.1(Light Engine : Performance Check)`
