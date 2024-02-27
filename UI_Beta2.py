@@ -1,3 +1,4 @@
+#version 0.6.1 HotFix
 import os
 import kernel_LightEngine
 from kernel_LightEngine import pure_benchmark
@@ -53,15 +54,19 @@ class Ui_DefaultWindow(object):
         self.label_2.setText(_translate("DefaultWindow", "Result:"))
     
     def call_Kernel(self):
+        self.pushButton.setGeometry(QtCore.QRect(10, 10, 0, 0))
         kernel_LightEngine.start(kernel_LightEngine.bnhmrk)
+        self.pushButton.setGeometry(QtCore.QRect(10, 10, 161, 101))
 
     def benchmark(self):
+        self.pushButton_2.setGeometry(QtCore.QRect(10, 140, 0, 0))
         if pure_benchmark(camera_select=0): #目前只能選擇相機 0
             title = "Passed"
         else:
             title = "Failed"
         _translate = QtCore.QCoreApplication.translate
         self.label_2.setText(_translate("DefaultWindow", f"Result: {title}"))
+        self.pushButton_2.setGeometry(QtCore.QRect(10, 140, 101, 23))
 
     def KernelSpeedUP(self):
         if self.checkBox.isChecked():

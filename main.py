@@ -1,3 +1,4 @@
+#version 0.6.1 HotFix
 import os
 import cv2
 import numpy as np
@@ -8,6 +9,7 @@ from tqdm.rich import tqdm
 beats = 0
 
 def benchmark(camera_select):
+    fps = 0
     updates = 0
     cam = cv2.VideoCapture(camera_select)
     check, frm = cam.read()
@@ -22,14 +24,11 @@ def benchmark(camera_select):
     print(time_now)
     prog = tqdm(total=100)
     for i in range(10):
-        
         updates += 1
         check, frm = cam.read()
         if check:
             pass
-            
         else:
-            
             break
 
         if cv2.waitKey(1) == ord('q'):
@@ -42,8 +41,6 @@ def benchmark(camera_select):
         gray = cv2.cvtColor(frm, cv2.COLOR_BGR2GRAY)
         bright = cv2.mean(gray)[0]
 
-        blur = cv2.blur(gray, (10,5))
-        
         for row in range(300):
             for col in range(300):
                 img[row][col] = [avgB, avgG, avgR]
@@ -87,17 +84,24 @@ def benchmark(camera_select):
     time_then = int(str(datetime.now())[17:19])
     print(time_then)
     time_passed = time_then - time_now
-    
-    fps = updates / time_passed
-    print(f'fps = {fps}')
+    print(f'updates =  {updates}')
+    #fps = updates / time_passed
+    #print(f'fps = {fps}')
     if time_passed < 0:
         time_passed = 60 + time_passed
-        if time_passed > 3:
+        if time_passed > 1:
+            print(f'fps = {10 / time_passed}')
             print('Test Failed')
+            return False
+        else:
+            return True
     elif time_passed > 1:
+        print(f'fps = {10 / time_passed}')
         print('Test Failed')
         return False
     else:
+        if time_passed == 0:
+            print('fps >= 10')
         print('Test Passed')
         return True
     #10 frames in 3 secs
