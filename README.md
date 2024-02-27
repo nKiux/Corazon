@@ -14,7 +14,7 @@
     - 新增了算法及心跳偵測。 (Line 190~207)
     - 新增了 `HR_monitor()`心跳偵測函式。 (Line 219~251)
 
-# 24/02/17 更新進度
+# 24/02/27 更新進度
 `Kai`
 `version v0.5.1(Light Engine : Performance Check)`
 - Kernel
