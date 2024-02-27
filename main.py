@@ -195,7 +195,6 @@ def start(camera_select):
             bright_rec.append(bright)
             if (run_t-start_t) >= 5:
                 # bright_rec.pop(0)
-                print("bimbimbambam")
             
             beats = HR_monitor(D_speed, bright_rec, mx, mn, start_t, run_t)
             # print(f"bright_rec: {len(bright_rec)}")
