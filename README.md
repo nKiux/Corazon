@@ -3,6 +3,33 @@
 
 # 24/02/28 更新進度
 `Kai`
+`version v0.6.2(Light Engine : UI Update!)`
+- Kernel
+  - 新增`模式選擇`
+  - 改進開啟前清空檔案方式，空白檔案由第一行開始
+  - 相機啟動失敗回傳`False`
+- UI_Beta2
+  - 新增模式變數
+  - 重新設計UI
+  - 新增`相機選擇`轉盤(及函式)
+  - 新增`模式選擇`轉盤(及函式)
+  - `Result`於相機失敗時顯示相關訊息
+  - 新增`測試結束BPM顯示`，由`result.txt`讀取
+- main
+  - 若相機失敗回傳`False`
+  - 新增`模式轉譯`，減少架構改變
+  - 將BPM即時寫入`result.txt`，結束後轉交給UI輸出(UI_Beta2更新第6點) (註：需要算法配合，請於設定時間測試結束後將OpenCV結束，以便輸出)
+  - 新增`模式選擇即時輸出`
+
+- 舊UI
+
+![image](https://github.com/nKiux/Bio-HRMonitor/assets/46084374/d867ca59-8eeb-4e03-8ae1-c6f1d45c3a58)
+
+- 新UI
+
+![image](https://github.com/nKiux/Bio-HRMonitor/assets/46084374/850a845a-efb8-4e04-bb13-5d9ccecbb0ae)
+
+`Kai`
 `vesion v0.6.1(HotFix)`
 - Kernel
   - 更新`FPS檢查`測試方式，避免除以0的情況發生
