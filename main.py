@@ -1,18 +1,17 @@
-#version 0.6.1 HotFix
+#version 0.6.2 UI Update!
 import os
 import cv2
 import numpy as np
 import time
 from datetime import datetime
 from tqdm.rich import tqdm
+from UI_Beta2 import Ui_DefaultWindow
 
 beats = 0
-
 def benchmark(camera_select):
     fps = 0
     updates = 0
     cam = cv2.VideoCapture(camera_select)
-    check, frm = cam.read()
     counting = 0
     chk_count = 0
     mx = 0
@@ -29,7 +28,7 @@ def benchmark(camera_select):
         if check:
             pass
         else:
-            break
+            return False
 
         if cv2.waitKey(1) == ord('q'):
             print('Exiting...')
@@ -106,7 +105,17 @@ def benchmark(camera_select):
         return True
     #10 frames in 3 secs
 
-def start(camera_select):
+def start(camera_select, mode):
+    if mode == 0:
+        print('mode is Fast')
+        D_speed = "Fast"
+    elif mode == 1:
+        print('mode is Normal')
+        D_speed = "Normal"
+    else:
+        print('mode is Slow')
+        D_speed = "Slow"
+
     global beats
     start_t = int(time.time())
     cam = cv2.VideoCapture(camera_select)
@@ -136,8 +145,7 @@ def start(camera_select):
             cv2.imshow('cap', frm)
         else:
             print('Camera Start Failed!')
-            break
-
+            return False
         if cv2.waitKey(1) == ord('q'):
             print('Exiting...')
             break
@@ -214,6 +222,8 @@ def start(camera_select):
                 data.write('\n')
                 data.close()
 
+        open('result.txt', 'w', encoding='utf-8').write(str(bpm))
+
 def HR_monitor(D_speed, bright_values, mx, mn, start_t, run_t):
     global beats
     Bump = False
@@ -236,13 +246,16 @@ def HR_monitor(D_speed, bright_values, mx, mn, start_t, run_t):
             rest = True
         
         if D_speed == "Fast":
+            print('Mode now is Fast')
             if (run_t-start_t)%5 == 0 and (run_t-start_t) >= 5:
                 beats = 0
                 return beats
         elif D_speed == "Normal":
+            print('Mode now is Normal')
             if (run_t-start_t)%10 == 0 and (run_t-start_t) >= 10:
                 return beats
         else: # D_speed == "Slow"
+            print('Mode now is Slow')
             if (run_t-start_t)%15 == 0 and (run_t-start_t) >= 15:
                 return beats
     

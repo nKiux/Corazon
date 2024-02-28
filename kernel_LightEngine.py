@@ -1,7 +1,8 @@
-#version v0.5.1: Light Engine : Performance Check
+#version 0.6.2: UI Update!
 import os
 import datetime
 
+mode = 0
 camera_select = 0
 bnhmrk = False #僅在 KernelSpeedUP! 開啟時可使用
 spd_up_start = True
@@ -18,7 +19,7 @@ def pure_benchmark(camera_select):
         os.system('pip install rich')
     return benchmark(camera_select = camera_select)
 
-def start(kernel_speedUP):
+def start(kernel_speedUP, camera_select, mode):
     print('Checking Program...')
     try:
         import cv2
@@ -59,20 +60,24 @@ def start(kernel_speedUP):
             prog.close()
             print('Testing...')
             if benchmark(camera_select = camera_select) == True:
-                start(camera_select=camera_select)
+                open('result.txt', 'a', encoding='utf-8').close()
+                open('result.txt', 'w').close()
+                start(camera_select=camera_select, mode = mode)
             else:
                 print('Test Failed... Closing')
                 exit()
             cv2.destroyAllWindows()
         else:
             print('Camera Start Failed!')
+            return False
+        
     else:
-        with open('test.txt', 'a', encoding='utf-8') as data:
-            with open('test.txt', 'w', encoding='utf-8') as write:
-                write.write('\n')
-                write.close()
-            data.close()
+        open('result.txt', 'a', encoding='utf-8').close()
+        open('result.txt', 'w', encoding='utf-8').close()
 
-        start(camera_select = camera_select)
+        open('test.txt', 'a', encoding='utf-8').close()
+        open('test.txt', 'w', encoding='utf-8').close()
+        if start(camera_select = camera_select, mode = mode) == False:
+            return False
         cv2.destroyAllWindows()
 
