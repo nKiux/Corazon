@@ -3,6 +3,8 @@
 # 24/02/29 更新進度
 `Kai`
 `version v0.6.3 (Light Engine : DynaMarkX!)`
+- UI_Beta2
+  - 修復Benchmark呼叫失敗Bug
 - main
   - 修復模式選擇Bug
   - 新增DynaMarkX
@@ -15,7 +17,7 @@
 
 若偵測到效能問題則自動停止偵測
 
-目前`DynaMarkX`可允許的最小更新速度為150FPS
+目前`DynaMarkX`可允許的最小更新速度為2.5FPS
 
 `註：在開啟KernelSpeedUP的情況下仍會執行DMX`
 ![DMX](https://github.com/nKiux/Bio-HRMonitor/assets/46084374/813947f6-3af5-469f-ad49-199493767256)
