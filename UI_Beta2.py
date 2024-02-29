@@ -1,4 +1,4 @@
-#version 0.6.2 UI Update!
+#version 0.6.3 Bug Fix!
 import os
 import kernel_LightEngine
 from kernel_LightEngine import pure_benchmark
@@ -98,7 +98,7 @@ class Ui_DefaultWindow:
         global cam
         global mode
         self.pushButton_2.setGeometry(QtCore.QRect(10, 140, 0, 0))
-        if pure_benchmark(camera_select=cam, mode=mode):
+        if pure_benchmark(camera_select=cam):
             title = "Passed"
         else:
             title = "性能低於要求或相機不存在"
