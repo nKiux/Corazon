@@ -1,5 +1,24 @@
 # 共寫更新
 最新版本請寫在最上面
+# 24/02/29 更新進度
+`Kai`
+`version v0.6.3 (Light Engine : DynaMarkX!)`
+- main
+  - 修復模式選擇Bug
+  - 新增DynaMarkX
+- Kernel
+  - 縮減啟動所需步驟
+## 隆重介紹：DynaMarkX!
+在安全的啟動下減少60%以上的啟動時間！ (完整啟動，即未開啟`KernelSpeedUP!`)
+
+透過**動態追蹤每一幀所花費的時間**進行判斷電腦效能是否符合需求
+
+若偵測到效能問題則自動停止偵測
+
+目前`DynaMarkX`可允許的最小更新速度為150FPS
+
+`註：在開啟KernelSpeedUP的情況下仍會執行DMX`
+![DMX](https://github.com/nKiux/Bio-HRMonitor/assets/46084374/813947f6-3af5-469f-ad49-199493767256)
 
 # 24/02/28 更新進度
 `Kai`
