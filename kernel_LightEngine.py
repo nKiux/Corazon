@@ -1,6 +1,6 @@
-#version 0.6.2: UI Update!
+#version 0.6.3: DynaMarkX!
 import os
-import datetime
+from datetime import datetime
 
 mode = 0
 camera_select = 0
@@ -13,6 +13,7 @@ def pure_benchmark(camera_select):
         import numpy as np
         from tqdm.rich import tqdm
         from main import start, benchmark
+        
     except:
         os.system('pip install opencv-python')
         os.system('pip install tqdm')
@@ -20,7 +21,7 @@ def pure_benchmark(camera_select):
     return benchmark(camera_select = camera_select)
 
 def start(kernel_speedUP, camera_select, mode):
-    print('Checking Program...')
+    print(f'Checking Program... ({datetime.now()})')
     try:
         import cv2
         import numpy as np
@@ -32,8 +33,8 @@ def start(kernel_speedUP, camera_select, mode):
         os.system('pip install rich')
 
     if kernel_speedUP == False:
-        print('Check Completed!')
-        print('Initializing Program...')
+        print(f'Check Completed! ({datetime.now()})')
+        print(f'Initializing Program... ({datetime.now()})')
         #initialize
         counting = 0
         chk_count = 0
@@ -45,30 +46,32 @@ def start(kernel_speedUP, camera_select, mode):
         mn = 255
         FDetect = False
         prog.update(20)
-        print('Initialize Completed!')
-        print('Starting Camera...')
+        print(f'Initialize Completed! ({datetime.now()})')
+        print(f'Starting Camera... ({datetime.now()})')
         #initial finished
         #start camera
         check, frm = cam.read()
         if check:
-            print('Initializing Camera...')
-            print('Camera Initialize Finished!')
+            print(f'Camera Initialize Finished! ({datetime.now()})')
             prog.update(30)
             cam.release()
             cam = cv2.VideoCapture(camera_select)
             prog.update(30)
             prog.close()
-            print('Testing...')
+            '''
+            print(f'Testing... ({datetime.now()})')
             if benchmark(camera_select = camera_select) == True:
                 open('result.txt', 'a', encoding='utf-8').close()
                 open('result.txt', 'w').close()
                 start(camera_select=camera_select, mode = mode)
             else:
-                print('Test Failed... Closing')
+                print(f'Test Failed... Closing ({datetime.now()})')
                 exit()
+            '''
+            start(camera_select=camera_select, mode = mode)
             cv2.destroyAllWindows()
         else:
-            print('Camera Start Failed!')
+            print(f'Camera Start Failed! ({datetime.now()})')
             return False
         
     else:

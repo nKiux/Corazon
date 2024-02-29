@@ -1,4 +1,4 @@
-#version 0.6.2 UI Update!
+#version 0.6.3: DynaMarkX!
 import os
 import cv2
 import numpy as np
@@ -106,6 +106,7 @@ def benchmark(camera_select):
     #10 frames in 3 secs
 
 def start(camera_select, mode):
+    
     if mode == 0:
         print('mode is Fast')
         D_speed = "Fast"
@@ -119,9 +120,6 @@ def start(camera_select, mode):
     global beats
     start_t = int(time.time())
     cam = cv2.VideoCapture(camera_select)
-    check, frm = cam.read()
-    os.system("cam.exe")
-    # os.system("cam.exe --savedev")
 
     counting = 0
     chk_count = 0
@@ -130,7 +128,6 @@ def start(camera_select, mode):
     FDetect = False
     bright_rec = []
 
-    D_speed = "Fast" # Detection speed
     passed = False
     beats = 0
     bpm = 0
@@ -138,6 +135,7 @@ def start(camera_select, mode):
     os.system('WCConfig.exe') #msvc120
     
     while(True):
+        time_now = time.time_ns()
         blank = "....."
         run_t = round(time.time())
         check, frm = cam.read()
@@ -223,6 +221,23 @@ def start(camera_select, mode):
                 data.close()
 
         open('result.txt', 'w', encoding='utf-8').write(str(bpm))
+
+        #檢測區塊
+        time_then = time.time_ns()
+        time_passed = time_now - time_then
+        if time_passed < 0:
+            time_passed = time_passed*-1
+            print(time_passed)
+            if time_passed > 400000000:
+                print(f'偵測到效能問題(err1)\ntime_now = {time_now}\ntime_then = {time_then}\ntime passed = {time_passed}')
+                return False
+        elif time_passed > 400000000:
+            print(f'fps = {10 / time_passed}')
+            print('偵測到效能問題(err2)')
+            return False
+        else:
+            if time_passed == 0:
+                print('fps >= 10')
 
 def HR_monitor(D_speed, bright_values, mx, mn, start_t, run_t):
     global beats
