@@ -1,4 +1,4 @@
-#version 0.6.3 Bug Fix!
+#version 0.6.4 BugFix!
 import os
 import kernel_LightEngine
 from kernel_LightEngine import pure_benchmark
@@ -76,7 +76,7 @@ class Ui_DefaultWindow:
         DefaultWindow.setWindowTitle(_translate("DefaultWindow", "HRMonitor Beta"))
         self.pushButton.setText(_translate("DefaultWindow", "Start"))
         self.label.setText(_translate("DefaultWindow", "BPM"))
-        self.checkBox.setText(_translate("DefaultWindow", "Fast Start"))
+        self.checkBox.setText(_translate("DefaultWindow", "略過動態效能追蹤"))
         self.pushButton_2.setText(_translate("DefaultWindow", "Benchmark"))
         self.label_2.setText(_translate("DefaultWindow", "Result:"))
         self.label_3.setText(_translate("DefaultWindow", "選擇相機"))
@@ -110,10 +110,10 @@ class Ui_DefaultWindow:
     def KernelSpeedUP(self):
         if self.checkBox.isChecked():
             kernel_LightEngine.bnhmrk = True
-            print('Kernel SpeedUP! is set to true')
+            print('略過效能檢查 is set to true')
         else:
             kernel_LightEngine.bnhmrk = False
-            print('Kernel SpeedUP! is set to false')
+            print('略過效能檢查 is set to false')
 
     def camChange(self):
         global cam

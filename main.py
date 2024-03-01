@@ -1,4 +1,4 @@
-#version 0.6.3: DynaMarkX!
+#version 0.6.4: bugfix!
 import os
 import cv2
 import numpy as np
@@ -105,7 +105,7 @@ def benchmark(camera_select):
         return True
     #10 frames in 3 secs
 
-def start(camera_select, mode):
+def start(skipDMX, camera_select, mode):
     
     if mode == 0:
         print('mode is Fast')
@@ -120,7 +120,7 @@ def start(camera_select, mode):
     global beats
     start_t = int(time.time())
     cam = cv2.VideoCapture(camera_select)
-
+    cam.set(cv2.CAP_PROP_AUTO_EXPOSURE, 0.25)
     counting = 0
     chk_count = 0
     mx = 0
@@ -132,8 +132,9 @@ def start(camera_select, mode):
     beats = 0
     bpm = 0
     img = np.empty((300, 300, 3), np.uint8)
-    os.system('WCConfig.exe') #msvc120
-    
+    #os.system('WCConfig.exe') #msvc120
+    fatalError = 0
+
     while(True):
         time_now = time.time_ns()
         blank = "....."
@@ -146,6 +147,7 @@ def start(camera_select, mode):
             return False
         if cv2.waitKey(1) == ord('q'):
             print('Exiting...')
+            cv2.destroyAllWindows()
             break
         frm = cv2.resize(frm,(600,420))
         avgB, avgG, avgR, avgAlp = cv2.mean(frm)
@@ -209,8 +211,8 @@ def start(camera_select, mode):
                 bpm = beats * 4
 
         cv2.imshow('img', img)
-        
         print("\rR: %s, G: %s, B: %s, A: %s, MX: %d, MN: %d (reset in %d), FXL: %d, Finger Detected: %s, score: %d, Beats: %d, BPM: %d, Stored Frames: %d %s" %( (str(avgR)[:6]), str(avgG)[:6], (str(avgB)[:6]), str(bright)[:6], mx, mn, (30 - chk_count), bright_fixed, str(FDetect), counting, beats, bpm, len(bright_rec), blank ), end="")
+        
         if FDetect == True:
             with open('test.txt', 'a', encoding='utf-8') as data:
                 data.write(f'{str(bright)[:6]}\n')
@@ -224,20 +226,24 @@ def start(camera_select, mode):
 
         #檢測區塊
         time_then = time.time_ns()
-        time_passed = time_now - time_then
-        if time_passed < 0:
-            time_passed = time_passed*-1
-            print(time_passed)
-            if time_passed > 400000000:
-                print(f'偵測到效能問題(err1)\ntime_now = {time_now}\ntime_then = {time_then}\ntime passed = {time_passed}')
+        if skipDMX == False:
+            time_passed = time_then - time_now
+            if fatalError >= 5:
                 return False
-        elif time_passed > 400000000:
-            print(f'fps = {10 / time_passed}')
-            print('偵測到效能問題(err2)')
-            return False
-        else:
-            if time_passed == 0:
-                print('fps >= 10')
+            if time_passed < 0:
+                time_passed = time_passed*-1
+                print(time_passed)
+                if time_passed > 200000000:
+                    print(f'偵測到效能問題(err1, failCount = {4-fatalError})\ntime_now = {time_now}\ntime_then = {time_then}\ntime passed = {time_passed}')
+                    fatalError += 1
+            elif time_passed > 200000000:
+                print(f'fps = {10 / time_passed}')
+                print(f'偵測到效能問題(err2, failCount = {4-fatalError})\ntime_now = {time_now}\ntime_then = {time_then}\ntime passed = {time_passed}')
+                fatalError += 1
+            else:
+                if time_passed == 0:
+                    print('fps >= 10')
+        
 
 def HR_monitor(D_speed, bright_values, mx, mn, start_t, run_t):
     global beats
@@ -261,16 +267,13 @@ def HR_monitor(D_speed, bright_values, mx, mn, start_t, run_t):
             rest = True
         
         if D_speed == "Fast":
-            print('Mode now is Fast')
             if (run_t-start_t)%5 == 0 and (run_t-start_t) >= 5:
                 beats = 0
                 return beats
         elif D_speed == "Normal":
-            print('Mode now is Normal')
             if (run_t-start_t)%10 == 0 and (run_t-start_t) >= 10:
                 return beats
         else: # D_speed == "Slow"
-            print('Mode now is Slow')
             if (run_t-start_t)%15 == 0 and (run_t-start_t) >= 15:
                 return beats
     

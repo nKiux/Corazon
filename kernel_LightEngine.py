@@ -1,4 +1,4 @@
-#version 0.6.3: DynaMarkX!
+#version 0.6.4: Bugfix!
 import os
 from datetime import datetime
 
@@ -12,7 +12,7 @@ def pure_benchmark(camera_select):
         import cv2
         import numpy as np
         from tqdm.rich import tqdm
-        from main import start, benchmark
+        from main import benchmark
         
     except:
         os.system('pip install opencv-python')
@@ -20,18 +20,37 @@ def pure_benchmark(camera_select):
         os.system('pip install rich')
     return benchmark(camera_select = camera_select)
 
-def start(kernel_speedUP, camera_select, mode):
+def start(skipDMX, camera_select, mode):
     print(f'Checking Program... ({datetime.now()})')
     try:
         import cv2
         import numpy as np
         from tqdm.rich import tqdm
-        from main import start, benchmark
+        from main import start
     except:
         os.system('pip install opencv-python')
         os.system('pip install tqdm')
         os.system('pip install rich')
+    prog = tqdm(total=100)
+    prog.update(20)
+    print(f'Check Completed! ({datetime.now()})')
+    print(f'Initializing Program... ({datetime.now()})')
+    prog.update(20)
+    open('result.txt', 'a', encoding='utf-8').close()
+    prog.update(10)
+    open('result.txt', 'w', encoding='utf-8').close()
+    prog.update(10)
+    open('test.txt', 'a', encoding='utf-8').close()
+    prog.update(10)
+    open('test.txt', 'w', encoding='utf-8').close()
+    prog.update(10)
+    prog.close()
+    if start(skipDMX = skipDMX, camera_select = camera_select, mode = mode) == False:
+        cv2.destroyAllWindows()
+        return False
+    cv2.destroyAllWindows()
 
+"""
     if kernel_speedUP == False:
         print(f'Check Completed! ({datetime.now()})')
         print(f'Initializing Program... ({datetime.now()})')
@@ -68,6 +87,10 @@ def start(kernel_speedUP, camera_select, mode):
                 print(f'Test Failed... Closing ({datetime.now()})')
                 exit()
             '''
+            open('result.txt', 'a', encoding='utf-8').close()
+            open('result.txt', 'w', encoding='utf-8').close()
+            open('test.txt', 'a', encoding='utf-8').close()
+            open('test.txt', 'w', encoding='utf-8').close()
             start(camera_select=camera_select, mode = mode)
             cv2.destroyAllWindows()
         else:
@@ -81,6 +104,8 @@ def start(kernel_speedUP, camera_select, mode):
         open('test.txt', 'a', encoding='utf-8').close()
         open('test.txt', 'w', encoding='utf-8').close()
         if start(camera_select = camera_select, mode = mode) == False:
+            cv2.destroyAllWindows()
             return False
-        cv2.destroyAllWindows()
+        
 
+"""
