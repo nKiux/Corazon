@@ -1,5 +1,26 @@
 # 共寫更新
 最新版本請寫在最上面
+
+# 24/03/01 更新進度
+`Kai`
+`version v0.6.4 (Light Engine : DynaMarkX i)`
+- Kernel
+  - `DynaMarkX i`再次縮減啟動所需時間 (相較DMX減少80%以上啟動時間)
+  - 修正cv2無法正常關閉Bug
+- UI_Beta2
+  - 移除`快速啟動` (註：目前開啟速度與`快速啟動`相同)
+  - `快速啟動`改為`略過動態效能追蹤` (註：對效能影響極小，僅在啟動問題時開啟)
+- Main
+  - 開啟`自動曝光`
+  - 新增DMXi進行`動態效能追蹤`
+  - DMX現在目標更新率為5FPS(原為10FPS)
+## DynaMarkX i (intelligent)
+- 新增偵測閥，僅在幀間時間超過限定次數後強制關閉
+- 新增DMX開關，可在啟動前控制開閉
+![DMXi](https://github.com/nKiux/Bio-HRMonitor/assets/46084374/dde6edc8-95eb-43a3-b384-a2454408254b)
+
+
+
 # 24/02/29 更新進度
 `Kai`
 `version v0.6.3 (Light Engine : DynaMarkX!)`
@@ -17,7 +38,7 @@
 
 若偵測到效能問題則自動停止偵測
 
-目前`DynaMarkX`可允許的最小更新速度為2.5FPS
+目前`DynaMarkX`可允許的最小更新速度為10FPS
 
 `註：在開啟KernelSpeedUP的情況下仍會執行DMX`
 ![DMX](https://github.com/nKiux/Bio-HRMonitor/assets/46084374/813947f6-3af5-469f-ad49-199493767256)
