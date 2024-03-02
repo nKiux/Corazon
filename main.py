@@ -1,16 +1,17 @@
+#base version 0.6.4: bugfix!
 import os
 import cv2
 import numpy as np
 import time
 from datetime import datetime
 from tqdm.rich import tqdm
+from UI_Beta2 import Ui_DefaultWindow
 
 beats = 0
-
 def benchmark(camera_select):
+    fps = 0
     updates = 0
     cam = cv2.VideoCapture(camera_select)
-    check, frm = cam.read()
     counting = 0
     chk_count = 0
     mx = 0
@@ -22,15 +23,12 @@ def benchmark(camera_select):
     print(time_now)
     prog = tqdm(total=100)
     for i in range(10):
-        
         updates += 1
         check, frm = cam.read()
         if check:
             pass
-            
         else:
-            
-            break
+            return False
 
         if cv2.waitKey(1) == ord('q'):
             print('Exiting...')
@@ -42,8 +40,6 @@ def benchmark(camera_select):
         gray = cv2.cvtColor(frm, cv2.COLOR_BGR2GRAY)
         bright = cv2.mean(gray)[0]
 
-        blur = cv2.blur(gray, (10,5))
-        
         for row in range(300):
             for col in range(300):
                 img[row][col] = [avgB, avgG, avgR]
@@ -87,29 +83,44 @@ def benchmark(camera_select):
     time_then = int(str(datetime.now())[17:19])
     print(time_then)
     time_passed = time_then - time_now
-    
-    fps = updates / time_passed
-    print(f'fps = {fps}')
+    print(f'updates =  {updates}')
+    #fps = updates / time_passed
+    #print(f'fps = {fps}')
     if time_passed < 0:
         time_passed = 60 + time_passed
-        if time_passed > 3:
+        if time_passed > 1:
+            print(f'fps = {10 / time_passed}')
             print('Test Failed')
+            return False
+        else:
+            return True
     elif time_passed > 1:
+        print(f'fps = {10 / time_passed}')
         print('Test Failed')
         return False
     else:
+        if time_passed == 0:
+            print('fps >= 10')
         print('Test Passed')
         return True
     #10 frames in 3 secs
 
-def start(camera_select):
+def start(skipDMX, camera_select, mode):
+    
+    if mode == 0:
+        print('mode is Fast')
+        D_speed = "Fast"
+    elif mode == 1:
+        print('mode is Normal')
+        D_speed = "Normal"
+    else:
+        print('mode is Slow')
+        D_speed = "Slow"
+
     global beats
     start_t = int(time.time())
     cam = cv2.VideoCapture(camera_select)
-    check, frm = cam.read()
-    os.system("cam.exe")
-    # os.system("cam.exe --savedev")
-
+    cam.set(cv2.CAP_PROP_AUTO_EXPOSURE, 0.25)
     counting = 0
     chk_count = 0
     mx = 0
@@ -117,14 +128,15 @@ def start(camera_select):
     FDetect = False
     bright_rec = []
 
-    D_speed = "Fast" # Detection speed
     passed = False
     beats = 0
     bpm = 0
     img = np.empty((300, 300, 3), np.uint8)
-    os.system('WCConfig.exe') #msvc120
-    
+    #os.system('WCConfig.exe') #msvc120
+    fatalError = 0
+
     while(True):
+        time_now = time.time_ns()
         blank = "....."
         run_t = round(time.time())
         check, frm = cam.read()
@@ -132,10 +144,10 @@ def start(camera_select):
             cv2.imshow('cap', frm)
         else:
             print('Camera Start Failed!')
-            break
-
+            return False
         if cv2.waitKey(1) == ord('q'):
             print('Exiting...')
+            cv2.destroyAllWindows()
             break
         frm = cv2.resize(frm,(600,420))
         avgB, avgG, avgR, avgAlp = cv2.mean(frm)
@@ -199,8 +211,8 @@ def start(camera_select):
                 bpm = beats * 4
 
         cv2.imshow('img', img)
+        print(f"R: {str(avgR)[:6]}, G: {str(avgG)[:6]}, B: {str(avgB)[:6]}, A: {str(bright)[:6]}, MX: {mx}, MN: {mn} (reset in {30 - chk_count}), FXL: {bright_fixed}, Finger Detected: {str(FDetect)}, score: {counting}, Beats: {beats}, BPM: {bpm}, Stored Frames: {len(bright_rec)} .....", end="\r", flush=True)
         
-        print("\rR: %s, G: %s, B: %s, A: %s, MX: %d, MN: %d (reset in %d), FXL: %d, Finger Detected: %s, score: %d, Beats: %d, BPM: %d, Stored Frames: %d %s" %( (str(avgR)[:6]), str(avgG)[:6], (str(avgB)[:6]), str(bright)[:6], mx, mn, (30 - chk_count), bright_fixed, str(FDetect), counting, beats, bpm, len(bright_rec), blank ), end="")
         if FDetect == True:
             with open('test.txt', 'a', encoding='utf-8') as data:
                 data.write(f'{str(bright)[:6]}\n')
@@ -209,6 +221,29 @@ def start(camera_select):
             with open('test.txt', 'w', encoding='utf-8') as data:
                 data.write('\n')
                 data.close()
+
+        open('result.txt', 'w', encoding='utf-8').write(str(bpm))
+
+        #檢測區塊
+        time_then = time.time_ns()
+        if skipDMX == False:
+            time_passed = time_then - time_now
+            if fatalError >= 5:
+                return False
+            if time_passed < 0:
+                time_passed = time_passed*-1
+                print(time_passed)
+                if time_passed > 200000000:
+                    print(f'偵測到效能問題(err1, failCount = {4-fatalError})\ntime_now = {time_now}\ntime_then = {time_then}\ntime passed = {time_passed}')
+                    fatalError += 1
+            elif time_passed > 200000000:
+                print(f'fps = {10 / time_passed}')
+                print(f'偵測到效能問題(err2, failCount = {4-fatalError})\ntime_now = {time_now}\ntime_then = {time_then}\ntime passed = {time_passed}')
+                fatalError += 1
+            else:
+                if time_passed == 0:
+                    print('fps >= 10')
+        
 
 def HR_monitor(D_speed, bright_values, mx, mn, start_t, run_t):
     global beats
@@ -247,3 +282,4 @@ def HR_monitor(D_speed, bright_values, mx, mn, start_t, run_t):
 
 
         #print(frm)
+
