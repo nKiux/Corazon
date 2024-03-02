@@ -1,6 +1,12 @@
 # 共寫更新
 最新版本請寫在最上面
 
+# 24/03/02 更新進度
+`JT_0`
+`version v0.6.4 (Main : Terminal!)`
+- Main
+  - 更新終端機輸出模式，使用 f 字串 (Line 214)
+
 # 24/03/01 更新進度
 `Kai`
 `version v0.6.4 (Light Engine : DynaMarkX i)`
@@ -83,15 +89,15 @@
 `JT_0`
 `version v0.6(Light Engine : Algorithm)`
 - Main
-  - 加入了 `time` 函式庫。 (Line 4)
+  - 加入 `time` 函式庫。 (Line 4)
   - `benchmark()` 函式為舊版本，本次更新只對 `start()` 做更新。
-  - 更改了手指偵測的判斷方式。 (Line 156, 160)
-  - 加入了紀錄亮度值的陣列 `bright_rec`，紀錄的為 `bright` (浮點數, A)。 (Line 176)
-  - 加入了 `passed`，使用於時間計算。 (Line 177)
-  - 修改了終端機輸出方式，改為刷新，但未來需更改。 (Line 211)
+  - 更改手指偵測的判斷方式。 (Line 156, 160)
+  - 加入紀錄亮度值的陣列 `bright_rec`，紀錄的為 `bright` (浮點數, A)。 (Line 176)
+  - 加入 `passed`，使用於時間計算。 (Line 177)
+  - 修改終端機輸出方式，改為刷新，但未來需更改。 (Line 211)
   - 算法
-    - 新增了算法及心跳偵測。 (Line 190~207)
-    - 新增了 `HR_monitor()`心跳偵測函式。 (Line 219~251)
+    - 新增算法及心跳偵測。 (Line 190~207)
+    - 新增 `HR_monitor()`心跳偵測函式。 (Line 219~251)
 
 # 
 `Kai`

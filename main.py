@@ -1,4 +1,4 @@
-#version 0.6.4: bugfix!
+#version 0.6.5: Terminal!
 import os
 import cv2
 import numpy as np
@@ -211,7 +211,7 @@ def start(skipDMX, camera_select, mode):
                 bpm = beats * 4
 
         cv2.imshow('img', img)
-        print("\rR: %s, G: %s, B: %s, A: %s, MX: %d, MN: %d (reset in %d), FXL: %d, Finger Detected: %s, score: %d, Beats: %d, BPM: %d, Stored Frames: %d %s" %( (str(avgR)[:6]), str(avgG)[:6], (str(avgB)[:6]), str(bright)[:6], mx, mn, (30 - chk_count), bright_fixed, str(FDetect), counting, beats, bpm, len(bright_rec), blank ), end="")
+        print(f"R: {str(avgR)[:6]}, G: {str(avgG)[:6]}, B: {str(avgB)[:6]}, A: {str(bright)[:6]}, MX: {mx}, MN: {mn} (reset in {30 - chk_count}), FXL: {bright_fixed}, Finger Detected: {str(FDetect)}, score: {counting}, Beats: {beats}, BPM: {bpm}, Stored Frames: {len(bright_rec)} .....", end="\r", flush=True)
         
         if FDetect == True:
             with open('test.txt', 'a', encoding='utf-8') as data:
