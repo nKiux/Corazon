@@ -3,7 +3,7 @@
 
 # 24/03/02 更新進度
 `JT_0`
-`version v0.6.4 (Main : Terminal!)`
+`version v0.6.5 (Main : Terminal!)`
 - Main
   - 更新終端機輸出模式，使用 f 字串 (Line 214)
 
