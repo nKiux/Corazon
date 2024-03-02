@@ -3,23 +3,101 @@
 
 # 24/03/02 更新進度
 `JT_0`
-`Pull request`
+`version v0.6.4 (Main : Terminal!)`
 - Main
-  - 更新了終端機輸出模式，使用 f 字串 (Line 214)
+  - 更新終端機輸出模式，使用 f 字串 (Line 214)
+
+# 24/03/01 更新進度
+`Kai`
+`version v0.6.4 (Light Engine : DynaMarkX i)`
+- Kernel
+  - `DynaMarkX i`再次縮減啟動所需時間 (相較DMX減少80%以上啟動時間)
+  - 修正cv2無法正常關閉Bug
+- UI_Beta2
+  - 移除`快速啟動` (註：目前開啟速度與`快速啟動`相同)
+  - `快速啟動`改為`略過動態效能追蹤` (註：對效能影響極小，僅在啟動問題時開啟)
+- Main
+  - 開啟`自動曝光`
+  - 新增DMXi進行`動態效能追蹤`
+  - DMX現在目標更新率為5FPS(原為10FPS)
+## DynaMarkX i (intelligent)
+- 新增偵測閥，僅在幀間時間超過限定次數後強制關閉
+- 新增DMX開關，可在啟動前控制開閉
+![DMXi](https://github.com/nKiux/Bio-HRMonitor/assets/46084374/dde6edc8-95eb-43a3-b384-a2454408254b)
+
+
+
+# 24/02/29 更新進度
+`Kai`
+`version v0.6.3 (Light Engine : DynaMarkX!)`
+- UI_Beta2
+  - 修復Benchmark呼叫失敗Bug
+- main
+  - 修復模式選擇Bug
+  - 新增DynaMarkX
+- Kernel
+  - 縮減啟動所需步驟
+## 隆重介紹：DynaMarkX!
+在安全啟動下減少60%以上的啟動時間！ (完整啟動，即未開啟`KernelSpeedUP!`)
+
+透過**動態追蹤每一幀所花費的時間**進行判斷電腦效能是否符合需求
+
+若偵測到效能問題則自動停止偵測
+
+目前`DynaMarkX`可允許的最小更新速度為10FPS
+
+`註：在開啟KernelSpeedUP的情況下仍會執行DMX`
+![DMX](https://github.com/nKiux/Bio-HRMonitor/assets/46084374/813947f6-3af5-469f-ad49-199493767256)
+
+# 24/02/28 更新進度
+`Kai`
+`version v0.6.2(Light Engine : UI Update!)`
+- Kernel
+  - 新增`模式選擇`
+  - 改進開啟前清空檔案方式，空白檔案由第一行開始
+  - 相機啟動失敗回傳`False`
+- UI_Beta2
+  - 新增模式變數
+  - 重新設計UI
+  - 新增`相機選擇`轉盤(及函式)
+  - 新增`模式選擇`轉盤(及函式)
+  - `Result`於相機失敗時顯示相關訊息
+  - 新增`測試結束BPM顯示`，由`result.txt`讀取
+- main
+  - 若相機失敗回傳`False`
+  - 新增`模式轉譯`，減少架構改變
+  - 將BPM即時寫入`result.txt`，結束後轉交給UI輸出(UI_Beta2更新第6點) (註：需要算法配合，請於設定時間測試結束後將OpenCV結束，以便輸出)
+  - 新增`模式選擇即時輸出`
+
+- 舊UI
+
+![image](https://github.com/nKiux/Bio-HRMonitor/assets/46084374/d867ca59-8eeb-4e03-8ae1-c6f1d45c3a58)
+
+- 新UI
+
+![image](https://github.com/nKiux/Bio-HRMonitor/assets/46084374/850a845a-efb8-4e04-bb13-5d9ccecbb0ae)
+
+`Kai`
+`vesion v0.6.1(HotFix)`
+- Kernel
+  - 更新`FPS檢查`測試方式，避免除以0的情況發生
+- UI_Beta2
+  - 更新按鍵操作機制，避免重複點擊出現Bug
 
 # 24/02/27 更新進度
+
 `JT_0`
-`Pull request`
+`version v0.6(Light Engine : Algorithm)`
 - Main
-  - 加入了 `time` 函式庫。 (Line 4)
+  - 加入 `time` 函式庫。 (Line 4)
   - `benchmark()` 函式為舊版本，本次更新只對 `start()` 做更新。
-  - 更改了手指偵測的判斷方式。 (Line 156, 160)
-  - 加入了紀錄亮度值的陣列 `bright_rec`，紀錄的為 `bright` (浮點數, A)。 (Line 176)
-  - 加入了 `passed`，使用於時間計算。 (Line 177)
-  - 修改了終端機輸出方式，改為刷新，但未來需更改。 (Line 211)
+  - 更改手指偵測的判斷方式。 (Line 156, 160)
+  - 加入紀錄亮度值的陣列 `bright_rec`，紀錄的為 `bright` (浮點數, A)。 (Line 176)
+  - 加入 `passed`，使用於時間計算。 (Line 177)
+  - 修改終端機輸出方式，改為刷新，但未來需更改。 (Line 211)
   - 算法
-    - 新增了算法及心跳偵測。 (Line 190~207)
-    - 新增了 `HR_monitor()`心跳偵測函式。 (Line 219~251)
+    - 新增算法及心跳偵測。 (Line 190~207)
+    - 新增 `HR_monitor()`心跳偵測函式。 (Line 219~251)
 
 # 
 `Kai`

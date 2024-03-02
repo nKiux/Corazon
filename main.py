@@ -1,4 +1,4 @@
-#base version 0.6.4: bugfix!
+#version 0.6.5: Terminal!
 import os
 import cv2
 import numpy as np
@@ -282,4 +282,3 @@ def HR_monitor(D_speed, bright_values, mx, mn, start_t, run_t):
 
 
         #print(frm)
-
