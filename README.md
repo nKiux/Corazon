@@ -13,8 +13,7 @@
   - 拖動/縮放視窗自動停用DMX
   - 使用新函式分開定義DMX (部分不在函式內)
 
-##
-DynaMarkX 2iP (intelligent / Precise)
+## DynaMarkX 2iP (intelligent / Precise)
  - 新增偵測分數，當 **連續低更新率** 出現時才會自動關閉cv2
  - 新增視窗拖動偵測，自動停用DMX
  - 更新def區隔程式
