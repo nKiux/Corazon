@@ -1,4 +1,4 @@
-#version 0.6.4 BugFix!
+#version 0.6.6 DMX2i!
 import os
 import kernel_LightEngine
 from kernel_LightEngine import pure_benchmark
