@@ -1,6 +1,16 @@
 # 共寫更新
 最新版本請寫在最上面
 
+# 24/03/04 更新進度
+`Kai`
+`version v0.6.6 Beta (UI : Update)`
+- UI_Beta2
+  - 開啟時關閉Benchmark按鈕
+- Main
+  - 關閉`WaitKey`避免拖動視窗時影響效能
+
+`註：未驗證的版本`
+
 # 24/03/02 更新進度
 `JT_0`
 `version v0.6.5 (Main : Terminal!)`
