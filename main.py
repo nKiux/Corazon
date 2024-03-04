@@ -29,12 +29,12 @@ def benchmark(camera_select):
             pass
         else:
             return False
-
+        '''
         if cv2.waitKey(1) == ord('q'):
             print('Exiting...')
             cv2.destroyAllWindows()
             exit()
-        
+        '''
         frm = cv2.resize(frm,(600,420))
         avgB, avgG, avgR, avgAlp = cv2.mean(frm)
         gray = cv2.cvtColor(frm, cv2.COLOR_BGR2GRAY)
@@ -145,10 +145,12 @@ def start(skipDMX, camera_select, mode):
         else:
             print('Camera Start Failed!')
             return False
+        '''
         if cv2.waitKey(1) == ord('q'):
             print('Exiting...')
             cv2.destroyAllWindows()
             break
+        '''
         frm = cv2.resize(frm,(600,420))
         avgB, avgG, avgR, avgAlp = cv2.mean(frm)
         gray = cv2.cvtColor(frm, cv2.COLOR_BGR2GRAY)
