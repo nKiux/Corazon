@@ -1,6 +1,23 @@
 # 共寫更新
 最新版本請寫在最上面
 
+# 24/03/05 更新進度
+`JT_0`
+`Pull Request`
+- Main
+  - 刪除了多餘變數:
+    - `beats`
+    - `bright_rec`
+    - `blank`
+    - `avgAlp` (Line 158)
+  - 新增註解。 (Line 177, 212, 218, 231)
+  - 當未偵測到手指時，`beats`, `bpm` 設為 0。 (Line 198, 199)
+  - 當手指放上鏡頭過 15 秒且 `counting`(score) >= 10 時即 return False。 (Line 208~210)
+  - 記錄亮度值 `with open()` 區塊整合進同一個 if 判斷式，且更改了 `HR_monitor()` 呼叫方式。 (Line 212~229)
+  - 修改了未偵測到手指時寫入資料的字元。 (Line 241)
+  - 修改了終端機輸出。 (Line 246)
+  - 修改了 `HR_monitor()` 函式架構。 (Line 290~316)
+
 # 24/03/04 更新進度
 `Kai`
 `version v0.6.6 (DynaMark 2iP)`
