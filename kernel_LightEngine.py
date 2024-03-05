@@ -27,10 +27,14 @@ def start(skipDMX, camera_select, mode):
         import numpy as np
         from tqdm.rich import tqdm
         from main import start
+        import win32gui
     except:
         os.system('pip install opencv-python')
         os.system('pip install tqdm')
         os.system('pip install rich')
+        os.system('pip install pywin32')
+        os.system('pip install win32gui')
+        
     prog = tqdm(total=100)
     prog.update(20)
     print(f'Check Completed! ({datetime.now()})')
