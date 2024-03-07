@@ -1,4 +1,4 @@
-#version 0.6.7
+#version 0.6.8
 import os
 from datetime import datetime
 
@@ -13,11 +13,13 @@ def pure_benchmark(camera_select):
         import numpy as np
         from tqdm.rich import tqdm
         from main import benchmark
+        import matplotlib
         
     except:
         os.system('pip install opencv-python')
         os.system('pip install tqdm')
         os.system('pip install rich')
+        os.system('pip install matplotlib')
     return benchmark(camera_select = camera_select)
 
 def start(skipDMX, camera_select, mode):
@@ -27,10 +29,13 @@ def start(skipDMX, camera_select, mode):
         import numpy as np
         from tqdm.rich import tqdm
         from main import start
+        import matplotlib.pyplot as plt
     except:
         os.system('pip install opencv-python')
         os.system('pip install tqdm')
         os.system('pip install rich')
+        os.system('pip install matplotlib')
+
     prog = tqdm(total=100)
     prog.update(20)
     print(f'Check Completed! ({datetime.now()})')
@@ -47,6 +52,11 @@ def start(skipDMX, camera_select, mode):
     prog.close()
     start = start(skipDMX = skipDMX, camera_select = camera_select, mode = mode)
     if start == False:
+        with open('test.txt', 'r', encoding='utf-8') as res:
+            result = [(35 * float(line.strip())) - 500 for line in res if line]
+            res.close()
+        plt.plot(result)
+        plt.show()
         cv2.destroyAllWindows()
         return False
     cv2.destroyAllWindows()
