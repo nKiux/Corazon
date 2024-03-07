@@ -219,22 +219,18 @@ def start(skipDMX, camera_select, mode):
             if D_speed == "Fast":
                 if (run_t-start_t)%5 == 0 and (run_t-start_t) >= 5:
                     beats = HR_monitor(D_speed, mx, mn, start_t, run_t)
+                    bpm = beats * 12
 
             elif D_speed == "Normal":
                 if (run_t-start_t)%10 == 0 and (run_t-start_t) >= 10:
                     beats = HR_monitor(D_speed, mx, mn, start_t, run_t)
+                    bpm = beats * 6
 
             else: # D_speed == "Slow"
                 if (run_t-start_t)%15 == 0 and (run_t-start_t) >= 15:
                     beats = HR_monitor(D_speed, mx, mn, start_t, run_t)
-            
-            # bpm calculation
-            if D_speed == "Fast":
-                bpm = beats * 12
-            elif D_speed == "Normal":
-                bpm = beats * 6
-            else: # D_speed == "Slow"
-                bpm = beats * 4
+                    bpm = beats * 4
+
 
         else:
             with open('test.txt', 'w', encoding='utf-8') as data:
