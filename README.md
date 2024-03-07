@@ -1,9 +1,45 @@
 # 共寫更新
 最新版本請寫在最上面
 
+# 24/03/05 更新進度
+`JT_0`
+`version v0.6.7 (Main Update)`
+- Main
+  - 刪除多餘變數:
+    - `beats`
+    - `bright_rec`
+    - `blank`
+    - `avgAlp` (Line 158)
+  - 未偵測到手指時，`beats`, `bpm` 設為 0。 (Line 198, 199)
+  - 手指放上鏡頭過 15 秒且 `counting`(score) >= 10 時即 return False。 (Line 208~210)
+  - 記錄亮度值 `with open()` 區塊整合進同一個 if 判斷式，且更改 `HR_monitor()` 呼叫方式。 (Line 212~229)
+  - 修改未偵測到手指時寫入資料的字元。 (Line 241)
+  - 修改終端機輸出。 (Line 246)
+  - 修改 `HR_monitor()` 函式架構。 (Line 290~316)
+
+# 24/03/04 更新進度
+`Kai`
+`version v0.6.6 (DynaMark 2iP)`
+- UI_Beta2
+  - 開啟時關閉Benchmark按鈕避免誤觸導致程式崩潰
+- Main
+  - ~~關閉`WaitKey`避免拖動視窗時影響效能~~ (取消更動)
+  - 移除不必要影像處理，加速運行效率
+  - 新增win32gui應用於DMX2iP
+  - 拖動/縮放視窗自動停用DMX
+  - 使用新函式分開定義DMX (部分不在函式內)
+
+## DynaMarkX 2iP (intelligent / Precise)
+ - 新增偵測分數，當 **連續低更新率** 出現時才會自動關閉cv2
+ - 新增視窗拖動偵測，自動停用DMX
+ - 更新def區隔程式
+![DMX2iP](https://github.com/nKiux/Bio-HRMonitor/assets/46084374/2b51a7a6-6fbf-4c64-b8c2-6b99d7823547)
+
+
+
 # 24/03/02 更新進度
 `JT_0`
-`version v0.6.4 (Main : Terminal!)`
+`version v0.6.5 (Main : Terminal!)`
 - Main
   - 更新終端機輸出模式，使用 f 字串 (Line 214)
 

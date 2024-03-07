@@ -1,4 +1,4 @@
-#version 0.6.4 BugFix!
+#version 0.6.7
 import os
 import kernel_LightEngine
 from kernel_LightEngine import pure_benchmark
@@ -86,13 +86,16 @@ class Ui_DefaultWindow:
         global mode
         _translate = QtCore.QCoreApplication.translate
         self.pushButton.setGeometry(QtCore.QRect(10, 10, 0, 0))
+        self.pushButton_2.setGeometry(QtCore.QRect(290, 140, 0, 0))
         print(f'正在以模式{mode}執行')
-        if kernel_LightEngine.start(kernel_LightEngine.bnhmrk, camera_select=cam, mode=mode) == False:    
-            self.label_2.setText(_translate("DefaultWindow", "Result: 相機不存在"))
+        start = kernel_LightEngine.start(kernel_LightEngine.bnhmrk, camera_select=cam, mode=mode)
+        if start == False:    
+            self.label_2.setText(_translate("DefaultWindow", "Result: 相機不存在或更新率過低"))
         result = open('result.txt', 'r', encoding='utf-8').readline()
         print(f'BPM = {result}')
         self.lcdNumber.display(result)
         self.pushButton.setGeometry(QtCore.QRect(10, 50, 161, 61))
+        self.pushButton_2.setGeometry(QtCore.QRect(290, 140, 101, 23))
 
     def benchmark(self):
         global cam

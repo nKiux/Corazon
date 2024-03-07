@@ -1,4 +1,4 @@
-#version 0.6.4: Bugfix!
+#version 0.6.7
 import os
 from datetime import datetime
 
@@ -45,7 +45,8 @@ def start(skipDMX, camera_select, mode):
     open('test.txt', 'w', encoding='utf-8').close()
     prog.update(10)
     prog.close()
-    if start(skipDMX = skipDMX, camera_select = camera_select, mode = mode) == False:
+    start = start(skipDMX = skipDMX, camera_select = camera_select, mode = mode)
+    if start == False:
         cv2.destroyAllWindows()
         return False
     cv2.destroyAllWindows()

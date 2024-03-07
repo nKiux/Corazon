@@ -1,4 +1,4 @@
-#base version 0.6.6: DMX2i!
+#version 0.6.7: 
 import os
 import cv2
 import numpy as np
@@ -117,7 +117,6 @@ def start(skipDMX, camera_select, mode):
     else:
         print('mode is Slow')
         D_speed = "Slow"
-    
     start_t = int(time.time())
     cam = cv2.VideoCapture(camera_select)
     cam.set(cv2.CAP_PROP_AUTO_EXPOSURE, 0.25)
@@ -138,6 +137,7 @@ def start(skipDMX, camera_select, mode):
 
     while True:
         time_now = time.time_ns()
+        
         run_t = round(time.time())
         check, frm = cam.read()
         if check:
@@ -155,7 +155,7 @@ def start(skipDMX, camera_select, mode):
             break
         
         frm = cv2.resize(frm,(600,420))
-        avgB, avgG, avgR = cv2.mean(frm)
+        avgB, avgG, avgR, avgA = cv2.mean(frm)
         #v0.6.6
         gray = cv2.cvtColor(frm, cv2.COLOR_BGR2GRAY)
         bright = cv2.mean(gray)[0]
@@ -219,41 +219,25 @@ def start(skipDMX, camera_select, mode):
             if D_speed == "Fast":
                 if (run_t-start_t)%5 == 0 and (run_t-start_t) >= 5:
                     beats = HR_monitor(D_speed, mx, mn, start_t, run_t)
+                    bpm = beats * 12
 
             elif D_speed == "Normal":
                 if (run_t-start_t)%10 == 0 and (run_t-start_t) >= 10:
                     beats = HR_monitor(D_speed, mx, mn, start_t, run_t)
+                    bpm = beats * 6
 
             else: # D_speed == "Slow"
                 if (run_t-start_t)%15 == 0 and (run_t-start_t) >= 15:
                     beats = HR_monitor(D_speed, mx, mn, start_t, run_t)
-            
-            # bpm calculation
-            if D_speed == "Fast":
-                bpm = beats * 12
-            elif D_speed == "Normal":
-                bpm = beats * 6
-            else: # D_speed == "Slow"
-                bpm = beats * 4
-            
+                    bpm = beats * 4
+
+
         else:
             with open('test.txt', 'w', encoding='utf-8') as data:
                 data.write('')
                 data.close()
 
-        # cv2.imshow('img', img)
-        # v0.6.7
         print(f"R: {str(avgR)[:6]}, G: {str(avgG)[:6]}, B: {str(avgB)[:6]}, A: {str(bright)[:6]}, MX: {mx}, MN: {mn} (reset in {30 - chk_count}), FXL: {bright_fixed}, Finger Detected: {str(FDetect)}, score: {str(counting)[:6]}, Beats: {beats}, BPM: {bpm} .....", end="\r", flush=True)
-        
-        # if FDetect == True:
-        #     with open('test.txt', 'a', encoding='utf-8') as data:
-        #         data.write(f'{str(bright)[:6]}\n')
-        #         data.close()
-        # else:
-        #     with open('test.txt', 'w', encoding='utf-8') as data:
-        #         data.write('')
-        #         data.close()
-
         open('result.txt', 'w', encoding='utf-8').write(str(bpm))
 
         if DMXi2(time_now = time_now, skipDMX=skipDMX, Pos=win_rectPast) == False:
@@ -292,7 +276,6 @@ def HR_monitor(D_speed, mx, mn, start_t, run_t):
     with open('test.txt', 'r', encoding='utf-8') as data:
         bright_values =  data.readlines()
     # bright_values = [data[:6] for data in bright_values]
-
     Bump = False
     rest = True
     beats = 0
@@ -312,5 +295,5 @@ def HR_monitor(D_speed, mx, mn, start_t, run_t):
         if Bump == True and rest == False:
             beats += 1
             rest = True
-    
+
     return beats
