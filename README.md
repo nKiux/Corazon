@@ -2,8 +2,13 @@
 最新版本請寫在最上面
 
 # 24/03/05 更新進度
-`JT_0`
-`version v0.6.7 (Main Update)`
+`JT_0 & Kai`
+`version v0.6.7 (Main Update), v0.6.7b (Optimize)`
+**v0.6.7b**
+- Main
+  - 縮減219行~後面幾行
+
+**v0.6.7**
 - Main
   - 刪除多餘變數:
     - `beats`
