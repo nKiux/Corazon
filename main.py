@@ -1,4 +1,4 @@
-#version 0.6.6: DMX2i!
+#version 0.6.7: 
 import os
 import cv2
 import numpy as np
@@ -8,7 +8,6 @@ from datetime import datetime
 from tqdm.rich import tqdm
 from UI_Beta2 import Ui_DefaultWindow
 
-beats = 0
 def benchmark(camera_select):
     fps = 0
     updates = 0
@@ -118,7 +117,6 @@ def start(skipDMX, camera_select, mode):
     else:
         print('mode is Slow')
         D_speed = "Slow"
-    global beats
     start_t = int(time.time())
     cam = cv2.VideoCapture(camera_select)
     cam.set(cv2.CAP_PROP_AUTO_EXPOSURE, 0.25)
@@ -127,7 +125,6 @@ def start(skipDMX, camera_select, mode):
     mx = 0
     mn = 255
     FDetect = False
-    bright_rec = []
 
     passed = False
     beats = 0
@@ -138,9 +135,9 @@ def start(skipDMX, camera_select, mode):
     global fatalError
     fatalError = 0
 
-    while(True):
+    while True:
         time_now = time.time_ns()
-        blank = "....."
+        
         run_t = round(time.time())
         check, frm = cam.read()
         if check:
@@ -158,7 +155,7 @@ def start(skipDMX, camera_select, mode):
             break
         
         frm = cv2.resize(frm,(600,420))
-        avgB, avgG, avgR, avgAlp = cv2.mean(frm)
+        avgB, avgG, avgR, avgA = cv2.mean(frm)
         #v0.6.6
         gray = cv2.cvtColor(frm, cv2.COLOR_BGR2GRAY)
         bright = cv2.mean(gray)[0]
@@ -177,7 +174,7 @@ def start(skipDMX, camera_select, mode):
         else:
             bright_fixed = int(str(bright)[0:3])
         
-        
+        # Finger detection
         if avgR > 60 and avgR > (avgB+avgG)*2 and counting <= 10:
             FDetect = True
             counting += 0.2
@@ -197,21 +194,41 @@ def start(skipDMX, camera_select, mode):
             mx = 0
             mn = 255
             chk_count = 30
-            bright_rec = []
             passed = False
+            beats = 0
+            bpm = 0
             if counting >= 0:
                 counting -= 2
+        
         if FDetect:
             if passed == False:
                 start_t = run_t
                 passed = True
             
-            bright_rec.append(bright)
-            if (run_t-start_t) >= 5:
-                # bright_rec.pop(0)
+            # v0.6.7
+            if run_t - start_t == 15 and counting >= 10:
+                return False
             
-                beats = HR_monitor(D_speed, bright_rec, mx, mn, start_t, run_t)
-            # print(f"bright_rec: {len(bright_rec)}")
+            # Write the brightness values
+            with open('test.txt', 'a', encoding='utf-8') as data:
+                data.write(f'{str(bright)[:6]}\n')
+                data.close()
+            # bright_rec.append(str(bright)[:6])
+            
+            # bump detection v0.6.7
+            if D_speed == "Fast":
+                if (run_t-start_t)%5 == 0 and (run_t-start_t) >= 5:
+                    beats = HR_monitor(D_speed, mx, mn, start_t, run_t)
+
+            elif D_speed == "Normal":
+                if (run_t-start_t)%10 == 0 and (run_t-start_t) >= 10:
+                    beats = HR_monitor(D_speed, mx, mn, start_t, run_t)
+
+            else: # D_speed == "Slow"
+                if (run_t-start_t)%15 == 0 and (run_t-start_t) >= 15:
+                    beats = HR_monitor(D_speed, mx, mn, start_t, run_t)
+            
+            # bpm calculation
             if D_speed == "Fast":
                 bpm = beats * 12
             elif D_speed == "Normal":
@@ -219,25 +236,18 @@ def start(skipDMX, camera_select, mode):
             else: # D_speed == "Slow"
                 bpm = beats * 4
 
-        #cv2.imshow('img', img)
-        print(f"R: {str(avgR)[:6]}, G: {str(avgG)[:6]}, B: {str(avgB)[:6]}, A: {str(bright)[:6]}, MX: {mx}, MN: {mn} (reset in {30 - chk_count}), FXL: {bright_fixed}, Finger Detected: {str(FDetect)}, score: {counting}, Beats: {beats}, BPM: {bpm}, Stored Frames: {len(bright_rec)} .....", end="\r", flush=True)
-        
-        if FDetect == True:
-            with open('test.txt', 'a', encoding='utf-8') as data:
-                data.write(f'{str(bright)[:6]}\n')
-                data.close()
         else:
             with open('test.txt', 'w', encoding='utf-8') as data:
-                data.write('\n')
+                data.write('')
                 data.close()
 
+        print(f"R: {str(avgR)[:6]}, G: {str(avgG)[:6]}, B: {str(avgB)[:6]}, A: {str(bright)[:6]}, MX: {mx}, MN: {mn} (reset in {30 - chk_count}), FXL: {bright_fixed}, Finger Detected: {str(FDetect)}, score: {str(counting)[:6]}, Beats: {beats}, BPM: {bpm} .....", end="\r", flush=True)
         open('result.txt', 'w', encoding='utf-8').write(str(bpm))
 
         if DMXi2(time_now = time_now, skipDMX=skipDMX, Pos=win_rectPast) == False:
             return False
         #檢測區塊
 
-        
 
 def DMXi2(time_now, skipDMX, Pos):
     global fatalError
@@ -265,41 +275,29 @@ def DMXi2(time_now, skipDMX, Pos):
             elif fatalError >= 0:
                 fatalError -= 0.2
 
-
-def HR_monitor(D_speed, bright_values, mx, mn, start_t, run_t):
-    global beats
+# v0.6.7
+def HR_monitor(D_speed, mx, mn, start_t, run_t):
+    with open('test.txt', 'r', encoding='utf-8') as data:
+        bright_values =  data.readlines()
+    # bright_values = [data[:6] for data in bright_values]
     Bump = False
     rest = True
-    # beats = 0
+    beats = 0
     chk_delay = 0
 
     for i in bright_values:
-        # if pow(i, 2) <= 0.3*(pow(mx, 2)-pow(mn, 2))+pow(mn, 2):
-        if pow(i, 2) <= pow(0.3*(mx-mn)+mn, 2):
-        # if i*i <= 0.3*(mx*mx-mn*mn)+mn*mn:
+        i = i[:6]
+        # if pow(i, 2) <= pow(0.3*(mx-mn)+mn, 2):
+        # if float(i)*float(i) <= 0.3*(mx*mx-mn*mn)+mn*mn:
+        if 5*float(i) <= 0.3*(5*mx-5*mn)+5*mn:
             Bump = True
-            rest = False    
+            rest = False
             chk_delay += 1
         else:
             chk_delay = 0
         
-        if Bump == True and rest == False and chk_delay == 3:
+        if Bump == True and rest == False:
             beats += 1
             rest = True
-        
-        if D_speed == "Fast":
-            if (run_t-start_t)%5 == 0 and (run_t-start_t) >= 5:
-                beats = 0
-                return beats
-        elif D_speed == "Normal":
-            if (run_t-start_t)%10 == 0 and (run_t-start_t) >= 10:
-                return beats
-        else: # D_speed == "Slow"
-            if (run_t-start_t)%15 == 0 and (run_t-start_t) >= 15:
-                return beats
-    
+
     return beats
-
-
-
-        #print(frm)
