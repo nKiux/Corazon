@@ -1,6 +1,12 @@
 # 共寫更新
 最新版本請寫在最上面
 
+# 24/03/07 更新進度
+`Kai`
+`version v0.6.8 (Kernel : visualize)`
+- Kernel
+  - 新增matplotlib將成果作圖
+
 # 24/03/05 更新進度
 `JT_0 & Kai`
 `version v0.6.7 (Main Update), v0.6.7b (Optimize)`
