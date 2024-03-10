@@ -1,6 +1,27 @@
 # 共寫更新
 最新版本請寫在最上面
 
+# 23/3/10 更新進度
+`Kai`
+`version v0.9 : Before Release / branch 1`
+- Kernel
+  - 新增較穩定的心率監測
+  - 經**40+**筆資料統計，準確度約90%
+- Main
+  - 移除測試模式選擇
+  - 移除舊算法
+  - 移除**win32gui**模組
+  - 調整手指偵測
+  - 手指偵測評分大於10時開始記錄
+  - 修改終端機輸出
+  - DMX原則調整
+- UI_Beta2
+  - 顯示正確心率
+- Requirements
+  - 啟動時安裝包含所需的所有module
+- Runner
+  - 啟動該啟動的啟動程式
+
 # 24/03/07 更新進度
 `Kai`
 `version v0.6.8 (Kernel : visualize)`
