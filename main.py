@@ -1,9 +1,20 @@
 #version 0.6.7: 
 import os
+try:
+    import cv2
+    import numpy as np
+    import time
+    #import win32gui
+    from datetime import datetime
+    from tqdm.rich import tqdm
+    from UI_Beta2 import Ui_DefaultWindow
+except:
+    os.system('pip install pywin32')
+
 import cv2
 import numpy as np
 import time
-import win32gui
+#import win32gui
 from datetime import datetime
 from tqdm.rich import tqdm
 from UI_Beta2 import Ui_DefaultWindow
@@ -53,11 +64,11 @@ def benchmark(camera_select):
             bright_fixed = int(str(bright)[0:3])
         
         
-        if avgR > 100 and avgB < 50 and avgG < 50 and counting <= 10:
+        if avgR > 100 and avgR > (avgB + avgG) and counting <= 10:
             FDetect = True
             counting += 0.2
             
-        elif avgR > 100 and avgB < 50 and avgG < 50 and counting > 10:
+        elif avgR > 100 and avgR > (avgB + avgG) and counting > 10:
             
             if mx < bright_fixed:
                 mx = bright_fixed
@@ -71,7 +82,6 @@ def benchmark(camera_select):
                 
                 chk_count += 1
         else:
-            
             FDetect = False
             mx = 0
             mn = 255
@@ -108,7 +118,7 @@ def benchmark(camera_select):
 
 def start(skipDMX, camera_select, mode):
     
-    if mode == 0:
+    '''if mode == 0:
         print('mode is Fast')
         D_speed = "Fast"
     elif mode == 1:
@@ -116,7 +126,7 @@ def start(skipDMX, camera_select, mode):
         D_speed = "Normal"
     else:
         print('mode is Slow')
-        D_speed = "Slow"
+        D_speed = "Slow"'''
     start_t = int(time.time())
     cam = cv2.VideoCapture(camera_select)
     cam.set(cv2.CAP_PROP_AUTO_EXPOSURE, 0.25)
@@ -146,8 +156,8 @@ def start(skipDMX, camera_select, mode):
             print('Camera Start Failed!')
             return False
         
-        window = win32gui.FindWindow(None, 'Camera_Capture')
-        win_rectPast = win32gui.GetWindowRect(window)
+        #window = win32gui.FindWindow(None, 'Camera_Capture')
+        #win_rectPast = win32gui.GetWindowRect(window)
         
         if cv2.waitKey(1) == ord('q'):
             print('Exiting...')
@@ -175,10 +185,10 @@ def start(skipDMX, camera_select, mode):
             bright_fixed = int(str(bright)[0:3])
         
         # Finger detection
-        if avgR > 60 and avgR > (avgB+avgG)*2 and counting <= 10:
+        if avgR > 90 and avgR > (avgB + avgG) and counting <= 10:
             FDetect = True
             counting += 0.2
-        elif avgR > 60 and avgR > (avgB+avgG)*2 and counting > 10:
+        elif avgR > 90 and avgR > (avgB + avgG) and counting > 10:
             if mx < bright_fixed:
                 mx = bright_fixed
             if mn > bright_fixed:
@@ -201,22 +211,23 @@ def start(skipDMX, camera_select, mode):
                 counting -= 2
         
         if FDetect:
-            if passed == False:
+            if passed == False and counting >= 10:
                 start_t = run_t
                 passed = True
             
             # v0.6.7
-            if run_t - start_t == 15 and counting >= 10:
+            if run_t - start_t == 10 and counting >= 10:
                 return False
             
             # Write the brightness values
-            with open('test.txt', 'a', encoding='utf-8') as data:
-                data.write(f'{str(bright)[:6]}\n')
-                data.close()
+            if counting >= 10:
+                with open('test.txt', 'a', encoding='utf-8') as data:
+                    data.write(f'{str(bright)[:6]}\n')
+                    data.close()
             # bright_rec.append(str(bright)[:6])
             
             # bump detection v0.6.7
-            if D_speed == "Fast":
+            '''if D_speed == "Fast":
                 if (run_t-start_t)%5 == 0 and (run_t-start_t) >= 5:
                     beats = HR_monitor(D_speed, mx, mn, start_t, run_t)
                     bpm = beats * 12
@@ -229,7 +240,7 @@ def start(skipDMX, camera_select, mode):
             else: # D_speed == "Slow"
                 if (run_t-start_t)%15 == 0 and (run_t-start_t) >= 15:
                     beats = HR_monitor(D_speed, mx, mn, start_t, run_t)
-                    bpm = beats * 4
+                    bpm = beats * 4'''
 
 
         else:
@@ -237,39 +248,39 @@ def start(skipDMX, camera_select, mode):
                 data.write('')
                 data.close()
 
-        print(f"R: {str(avgR)[:6]}, G: {str(avgG)[:6]}, B: {str(avgB)[:6]}, A: {str(bright)[:6]}, MX: {mx}, MN: {mn} (reset in {30 - chk_count}), FXL: {bright_fixed}, Finger Detected: {str(FDetect)}, score: {str(counting)[:6]}, Beats: {beats}, BPM: {bpm} .....", end="\r", flush=True)
+        print(f"R: {str(avgR)[:6]}, G: {str(avgG)[:6]}, B: {str(avgB)[:6]}, A: {str(bright)[:6]}, MX: {mx}, MN: {mn} (reset in {30 - chk_count}), FXL: {bright_fixed}, Finger Detected: {str(FDetect)}, score: {str(counting)[:6]}, timeR: {10-(run_t - start_t)} ...", end="\r", flush=True)
         open('result.txt', 'w', encoding='utf-8').write(str(bpm))
 
-        if DMXi2(time_now = time_now, skipDMX=skipDMX, Pos=win_rectPast) == False:
+        if DMXi2(time_now = time_now, skipDMX=skipDMX) == False:
             return False
         #檢測區塊
 
 
-def DMXi2(time_now, skipDMX, Pos):
+def DMXi2(time_now, skipDMX):
     global fatalError
     time_then = time.time_ns()
-    window = win32gui.FindWindow(None, 'Camera_Capture')
-    win_rectNow = win32gui.GetWindowRect(window)
+    #window = win32gui.FindWindow(None, 'Camera_Capture')
+    #win_rectNow = win32gui.GetWindowRect(window)
     #print(Pos[0], win_rectNow[0], Pos[1], win_rectNow[1], Pos[2], win_rectNow[2], Pos[3], win_rectNow[3])
     if skipDMX == False:
-        if Pos[0] == win_rectNow[0] and Pos[1] == win_rectNow[1] and Pos[2] == win_rectNow[2] and Pos[3] == win_rectNow[3]:
-            time_passed = time_then - time_now
-            if fatalError >= 5:
-                return False
-            if time_passed < 0:
-                time_passed = time_passed*-1
-                print(time_passed)
-                if time_passed > 200000000:
-                    print(f'偵測到效能問題(err1, failCount = {4-fatalError})\ntime_now = {time_now}\ntime_then = {time_then}\ntime passed = {time_passed}')
-                    fatalError += 1
-            elif time_passed > 200000000:
-                print(f'fps = {10 / time_passed}')
-                print(f'偵測到效能問題(err2, failCount = {4-fatalError})\ntime_now = {time_now}\ntime_then = {time_then}\ntime passed = {time_passed}')
+        #if Pos[0] == win_rectNow[0] and Pos[1] == win_rectNow[1] and Pos[2] == win_rectNow[2] and Pos[3] == win_rectNow[3]:
+        time_passed = time_then - time_now
+        if fatalError >= 5:
+            return False
+        if time_passed < 0:
+            time_passed = time_passed*-1
+            print(time_passed)
+            if time_passed > 200000000:
+                print(f'偵測到效能問題(err1, failCount = {4-fatalError})\ntime_now = {time_now}\ntime_then = {time_then}\ntime passed = {time_passed}')
                 fatalError += 1
-            elif time_passed == 0:
-                print('fps >= 10')
-            elif fatalError >= 0:
-                fatalError -= 0.2
+        elif time_passed > 200000000:
+            print(f'fps = {10 / time_passed}')
+            print(f'偵測到效能問題(err2, failCount = {4-fatalError})\ntime_now = {time_now}\ntime_then = {time_then}\ntime passed = {time_passed}')
+            fatalError += 1
+        elif time_passed == 0:
+            print('fps >= 10')
+        elif fatalError >= 0:
+            fatalError -= 0.2
 
 # v0.6.7
 def HR_monitor(D_speed, mx, mn, start_t, run_t):
