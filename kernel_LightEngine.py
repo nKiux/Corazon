@@ -1,6 +1,7 @@
-#version 0.6.8
+#version 0.9
 import os
 from datetime import datetime
+import main
 
 mode = 0
 camera_select = 0
@@ -23,18 +24,20 @@ def pure_benchmark(camera_select):
     return benchmark(camera_select = camera_select)
 
 def start(skipDMX, camera_select, mode):
+    import main
     print(f'Checking Program... ({datetime.now()})')
     try:
         import cv2
         import numpy as np
         from tqdm.rich import tqdm
-        from main import start
         import matplotlib.pyplot as plt
+        from scipy.signal import find_peaks
     except:
         os.system('pip install opencv-python')
         os.system('pip install tqdm')
         os.system('pip install rich')
         os.system('pip install matplotlib')
+        os.system('pip install scipy')
 
     prog = tqdm(total=100)
     prog.update(20)
@@ -50,16 +53,27 @@ def start(skipDMX, camera_select, mode):
     open('test.txt', 'w', encoding='utf-8').close()
     prog.update(10)
     prog.close()
-    start = start(skipDMX = skipDMX, camera_select = camera_select, mode = mode)
-    if start == False:
+    
+    if main.start(skipDMX = skipDMX, camera_select = camera_select, mode = mode) == False:
         with open('test.txt', 'r', encoding='utf-8') as res:
-            result = [(35 * float(line.strip())) - 500 for line in res if line]
+            result = [int((300 * float(line.strip()))) - 500 for line in res if line]
             res.close()
-        plt.plot(result)
+        datacount = len(np.array(result))
+        peak, _ = find_peaks(np.array(result), distance = (11*(datacount/200)))
+        #peak= find_peaks_cwt(np.array(result), widths=result)
+        print(peak)
+        plt.plot(np.array(result))
+        plt.xlabel('frames')
+        plt.ylabel('Brightness (300X)')
+        plt.plot(peak, np.array(result)[peak], 'x')
         plt.show()
+        finalResult = (len(peak)*6)
+        print(finalResult)
+        open('result.txt', 'w', encoding='utf-8').write(str(finalResult))
         cv2.destroyAllWindows()
         return False
-    cv2.destroyAllWindows()
+    else:
+        cv2.destroyAllWindows()
 
 """
     if kernel_speedUP == False:
