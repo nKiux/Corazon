@@ -1,6 +1,7 @@
-#version 0.6.7
+# base version 0.6.8
 import os
 from datetime import datetime
+import numpy as np
 
 mode = 0
 camera_select = 0
@@ -13,11 +14,13 @@ def pure_benchmark(camera_select):
         import numpy as np
         from tqdm.rich import tqdm
         from main import benchmark
+        import matplotlib
         
     except:
         os.system('pip install opencv-python')
         os.system('pip install tqdm')
         os.system('pip install rich')
+        os.system('pip install matplotlib')
     return benchmark(camera_select = camera_select)
 
 def start(skipDMX, camera_select, mode):
@@ -26,11 +29,14 @@ def start(skipDMX, camera_select, mode):
         import cv2
         import numpy as np
         from tqdm.rich import tqdm
-        from main import start
+        from main import start, peak_index_global
+        import matplotlib.pyplot as plt
     except:
         os.system('pip install opencv-python')
         os.system('pip install tqdm')
         os.system('pip install rich')
+        os.system('pip install matplotlib')
+
     prog = tqdm(total=100)
     prog.update(20)
     print(f'Check Completed! ({datetime.now()})')
@@ -47,7 +53,28 @@ def start(skipDMX, camera_select, mode):
     prog.close()
     start = start(skipDMX = skipDMX, camera_select = camera_select, mode = mode)
     if start == False:
+        with open('test.txt', 'r', encoding='utf-8') as res:
+            # result = [(32 * float(line.strip())) - 500 for line in res if line]
+            result  = res.readlines()
+            result = [float(data[:6]) for data in result]
+            # peaks = scipy.signal.find_peaks(result)[0]
+            peaks = peak_index_global
+            res.close()
+        
+        plt.plot(result)
+        plt.plot(peaks, np.array(result)[peaks], "o")
+        plt.title('Brightness Line Chart')
+        plt.xlabel('Frame')
+        plt.ylabel('Value w/ Peaks')
+        plt.show()
+        
         cv2.destroyAllWindows()
+
+        # clear the data
+        with open('test.txt', 'w', encoding='utf-8') as data:
+            data.write('')
+            data.close()
+        
         return False
     cv2.destroyAllWindows()
 
