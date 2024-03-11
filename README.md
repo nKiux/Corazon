@@ -2,6 +2,28 @@
 最新版本請寫在最上面
 
 # 23/3/11 更新進度
+`JT_0`
+`Pull Request`
+- Main
+  - import `scipy.signal` (Line 5)
+  - 新增全域陣列 `peak_index_global`，存取 `peak` 的 index 值。 (Line 12)
+  - 註解舊版本 `D_speed`。 (Line 113~121)
+  - 新增 `h_std` 高度標準。 (Line 131)
+  - 更改了 `bright_fixed` data type。 (Line 175~179)
+  - 偵測到手指且 `counting >= 10` 才會開始做寫入數據及之後操作。 (Line 208)
+  - 修改了經過 15 秒後所做的操作 (Line 213~217)
+    - 將 `counting >= 10` 移至 Line 208
+    - 到此時才開始做數據分析並寫入結果
+  - 寫入 `h_std` 數據。 (Line 225)
+  - 註解了舊偵測呼叫模式。 (Line 227~241)
+  - 修改了輸出。 (Line 248)
+  - 新心律偵測函式 (Line 283~296)
+- Kernel
+  - 修改了折線圖呈現資料，改為使用原始數據。 (Line 59)
+  - 加入了 `peak`。 (Line 61)
+  - 新增了折線圖標題、軸標題、`peak` 點。 (Line 64~69)
+  - 清空明暗資料。 (Line 73~76)
+
 `Kai`
 `version v0.9.1 : Before Release / branch 1`
 - UI_Beta2
