@@ -1,7 +1,6 @@
 #version 0.9
 import os
 import kernel_LightEngine
-from kernel_LightEngine import pure_benchmark
 try:
     from PyQt5 import QtCore, QtGui, QtWidgets
 except:
@@ -101,7 +100,7 @@ class Ui_DefaultWindow:
         global cam
         global mode
         self.pushButton_2.setGeometry(QtCore.QRect(10, 140, 0, 0))
-        if pure_benchmark(camera_select=cam):
+        if kernel_LightEngine.pure_benchmark(camera_select=cam):
             title = "Passed"
         else:
             title = "性能低於要求或相機不存在"

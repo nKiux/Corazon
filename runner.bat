@@ -1,2 +1,6 @@
-start requirements.bat
-start python.exe UI_Beta2.py 
+@echo off
+echo initialize...
+echo installing requirements
+start /wait requirements.bat
+echo Running...
+start /wait python.exe UI_Beta2.py 
