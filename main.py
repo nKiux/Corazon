@@ -1,12 +1,15 @@
-#version 0.6.7: 
+# base version 0.6.7: 
 import os
 import cv2
 import numpy as np
+import scipy.signal
 import time
 import win32gui
 from datetime import datetime
 from tqdm.rich import tqdm
 from UI_Beta2 import Ui_DefaultWindow
+
+peak_index_global = []
 
 def benchmark(camera_select):
     fps = 0
@@ -107,16 +110,16 @@ def benchmark(camera_select):
     #10 frames in 3 secs
 
 def start(skipDMX, camera_select, mode):
+    # if mode == 0:
+    #     print('mode is Fast')
+    #     D_speed = "Fast"
+    # elif mode == 1:
+    #     print('mode is Normal')
+    #     D_speed = "Normal"
+    # else:
+    #     print('mode is Slow')
+    #     D_speed = "Slow"
     
-    if mode == 0:
-        print('mode is Fast')
-        D_speed = "Fast"
-    elif mode == 1:
-        print('mode is Normal')
-        D_speed = "Normal"
-    else:
-        print('mode is Slow')
-        D_speed = "Slow"
     start_t = int(time.time())
     cam = cv2.VideoCapture(camera_select)
     cam.set(cv2.CAP_PROP_AUTO_EXPOSURE, 0.25)
@@ -125,6 +128,7 @@ def start(skipDMX, camera_select, mode):
     mx = 0
     mn = 255
     FDetect = False
+    h_std = [] # 高度標準
 
     passed = False
     beats = 0
@@ -168,16 +172,17 @@ def start(skipDMX, camera_select, mode):
         '''
 
         if str(bright)[1] == '.':
-            bright_fixed = int(str(bright)[0])
+            bright_fixed = float(str(bright)[0:2])
         elif str(bright)[2] == '.':
-            bright_fixed = int(str(bright)[0:2])
+            bright_fixed = float(str(bright)[0:3])
         else:
-            bright_fixed = int(str(bright)[0:3])
+            bright_fixed = float(str(bright)[0:4])
+        # bright_fixed = float(np.round(bright, 1))
         
         # Finger detection
         if avgR > 60 and avgR > (avgB+avgG)*2 and counting <= 10:
             FDetect = True
-            counting += 0.2
+            counting += 0.20
         elif avgR > 60 and avgR > (avgB+avgG)*2 and counting > 10:
             if mx < bright_fixed:
                 mx = bright_fixed
@@ -200,44 +205,47 @@ def start(skipDMX, camera_select, mode):
             if counting >= 0:
                 counting -= 2
         
-        if FDetect:
+        if FDetect and counting >= 10:
             if passed == False:
                 start_t = run_t
                 passed = True
             
-            # v0.6.7
-            if run_t - start_t == 15 and counting >= 10:
+            if run_t - start_t == 15:
+                beats = HR_monitor(h_std)
+                bpm = beats * 4
+                open('result.txt', 'w', encoding='utf-8').write(str(bpm))
+                print(f"\nBeats: {beats}, BPM: {bpm}", flush=True)
                 return False
             
             # Write the brightness values
             with open('test.txt', 'a', encoding='utf-8') as data:
                 data.write(f'{str(bright)[:6]}\n')
                 data.close()
-            # bright_rec.append(str(bright)[:6])
             
-            # bump detection v0.6.7
-            if D_speed == "Fast":
-                if (run_t-start_t)%5 == 0 and (run_t-start_t) >= 5:
-                    beats = HR_monitor(D_speed, mx, mn, start_t, run_t)
-                    bpm = beats * 12
+            h_std.append(np.round(0.8*(mx-mn)+mn, 2))
+            
+            # bump detection v0.6.7 (unused)
+            # if D_speed == "Fast":
+            #     if (run_t-start_t)%5 == 0 and (run_t-start_t) >= 5:
+            #         beats = HR_monitor(mx, mn)
+            #         bpm = beats * 12
 
-            elif D_speed == "Normal":
-                if (run_t-start_t)%10 == 0 and (run_t-start_t) >= 10:
-                    beats = HR_monitor(D_speed, mx, mn, start_t, run_t)
-                    bpm = beats * 6
+            # elif D_speed == "Normal":
+            #     if (run_t-start_t)%10 == 0 and (run_t-start_t) >= 10:
+            #         beats = HR_monitor(mx, mn)
+            #         bpm = beats * 6
 
-            else: # D_speed == "Slow"
-                if (run_t-start_t)%15 == 0 and (run_t-start_t) >= 15:
-                    beats = HR_monitor(D_speed, mx, mn, start_t, run_t)
-                    bpm = beats * 4
-
+            # else: # D_speed == "Slow"
+            #     if (run_t-start_t)%15 == 0 and (run_t-start_t) >= 15:
+            #         beats = HR_monitor(mx, mn)
+            #         bpm = beats * 4
 
         else:
             with open('test.txt', 'w', encoding='utf-8') as data:
                 data.write('')
                 data.close()
 
-        print(f"R: {str(avgR)[:6]}, G: {str(avgG)[:6]}, B: {str(avgB)[:6]}, A: {str(bright)[:6]}, MX: {mx}, MN: {mn} (reset in {30 - chk_count}), FXL: {bright_fixed}, Finger Detected: {str(FDetect)}, score: {str(counting)[:6]}, Beats: {beats}, BPM: {bpm} .....", end="\r", flush=True)
+        print(f"R: {str(avgR)[:6]}, G: {str(avgG)[:6]}, B: {str(avgB)[:6]}, A: {str(bright)[:6]}, MX: {mx}, MN: {mn} (reset in {30 - chk_count}), FXL: {bright_fixed}, Finger Detected: {str(FDetect)}, score: {str(counting)[:6]} .....", end="\r", flush=True)
         open('result.txt', 'w', encoding='utf-8').write(str(bpm))
 
         if DMXi2(time_now = time_now, skipDMX=skipDMX, Pos=win_rectPast) == False:
@@ -272,28 +280,48 @@ def DMXi2(time_now, skipDMX, Pos):
                 fatalError -= 0.2
 
 # v0.6.7
-def HR_monitor(D_speed, mx, mn, start_t, run_t):
+def HR_monitor(height_standard):
+    global peak_index_global
+    peak_index_global = []
+
+    # read file
     with open('test.txt', 'r', encoding='utf-8') as data:
         bright_values =  data.readlines()
-    # bright_values = [data[:6] for data in bright_values]
-    Bump = False
+    
+    bright_values = [float(data[:6]) for data in bright_values]
+    
+    peak_idx = scipy.signal.find_peaks(bright_values, height=np.array(height_standard), distance=16)[0] # peak indexes
+    peak_index_global = peak_idx
+
+    return len(peak_idx)
+
+# old ver
+"""    Bump = False
     rest = True
     beats = 0
-    chk_delay = 0
 
-    for i in bright_values:
-        i = i[:6]
-        # if pow(i, 2) <= pow(0.3*(mx-mn)+mn, 2):
-        # if float(i)*float(i) <= 0.3*(mx*mx-mn*mn)+mn*mn:
-        if 5*float(i) <= 0.3*(5*mx-5*mn)+5*mn:
+    # i = index, x = value
+    for i, x in enumerate(bright_values):
+        x = float(x[:6]) # x = bright_values[i]
+        
+        peaks = scipy.signal.find_peaks_cwt(bright_values, 5)
+
+        if i == len(bright_values)-3:
+            break
+
+        if x >= float(bright_values[i-1][:6]) and x >= float(bright_values[i+1][:6]) and x > float(bright_values[i-2][:6]) and x > float(bright_values[i+2][:6]) and x > 0.5*(mx-mn)+mn:
             Bump = True
             rest = False
-            chk_delay += 1
-        else:
-            chk_delay = 0
         
         if Bump == True and rest == False:
             beats += 1
             rest = True
+        # if float(i)*float(i) <= 0.3*(mx*mx-mn*mn)+mn*mn:
+        # if 5*float(i) <= 0.3*(5*mx-5*mn)+5*mn:
+        #     Bump = True
+        #     rest = False
+        #     chk_delay += 1
+        # else:
+        #     chk_delay = 0
 
-    return beats
+    return beats"""
