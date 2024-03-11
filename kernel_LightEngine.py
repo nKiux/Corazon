@@ -1,7 +1,6 @@
 # base version 0.6.8
 import os
 from datetime import datetime
-import numpy as np
 
 mode = 0
 camera_select = 0
@@ -67,7 +66,7 @@ def start(skipDMX, camera_select, mode):
         plt.xlabel('Frame')
         plt.ylabel('Value w/ Peaks')
         plt.show()
-        
+
         cv2.destroyAllWindows()
 
         # clear the data
