@@ -1,6 +1,16 @@
 # 共寫更新
 最新版本請寫在最上面
 
+# 23/3/11 更新進度
+`Kai`
+`version v0.9.1 : Before Release / branch 1`
+- UI_Beta2
+  - 修正無法啟動
+- Runner
+  - 修正輸出
+- Requirements
+  - 修正輸出
+
 # 23/3/10 更新進度
 `Kai`
 `version v0.9 : Before Release / branch 1`
