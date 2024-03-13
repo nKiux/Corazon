@@ -9,19 +9,19 @@
   - 新增全域陣列 `peak_index_global`，存取 `peak` 的 index 值。 (Line 12)
   - 註解舊版本 `D_speed`。 (Line 113~121)
   - 新增 `h_std` 高度標準。 (Line 131)
-  - 更改了 `bright_fixed` data type。 (Line 175~179)
+  - 更改 `bright_fixed` data type。 (Line 175~179)
   - 偵測到手指且 `counting >= 10` 才會開始做寫入數據及之後操作。 (Line 208)
-  - 修改了經過 15 秒後所做的操作 (Line 213~217)
+  - 修改經過 15 秒後所做的操作 (Line 213~217)
     - 將 `counting >= 10` 移至 Line 208
     - 到此時才開始做數據分析並寫入結果
   - 寫入 `h_std` 數據。 (Line 225)
-  - 註解了舊偵測呼叫模式。 (Line 227~241)
-  - 修改了輸出。 (Line 248)
+  - 註解舊偵測呼叫模式。 (Line 227~241)
+  - 修改輸出。 (Line 248)
   - 新心律偵測函式 (Line 283~296)
 - Kernel
-  - 修改了折線圖呈現資料，改為使用原始數據。 (Line 57~58)
-  - 加入了 `peak`。 (Line 60)
-  - 新增了折線圖標題、軸標題、`peak` 點。 (Line 63~68)
+  - 修改折線圖呈現資料，改為使用原始數據。 (Line 57~58)
+  - 加入 `peak`。 (Line 60)
+  - 新增折線圖標題、軸標題、`peak` 點。 (Line 63~68)
   - 清空明暗資料。 (Line 72~75)
 
 `Kai`
