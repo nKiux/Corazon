@@ -1,9 +1,23 @@
 # 共寫更新
 最新版本請寫在最上面
 
+# 23/3/21 更新進度
+`Kai`
+`UI Py >> C# Prepare`
+僅預上傳示範執行檔
+
+# 第一版本釋出
+`里程碑`
+### 包含前述所有更新
+
+v1.0備註：
+測試60~80BPM之間
+結果準確度僅約90+%，請勿用做醫療參考
+
+
 # 23/3/11 更新進度
 `JT_0`
-`Pull Request`
+`Merged >> v1.0 Release`
 - Main
   - import `scipy.signal` (Line 5)
   - 新增全域陣列 `peak_index_global`，存取 `peak` 的 index 值。 (Line 12)
