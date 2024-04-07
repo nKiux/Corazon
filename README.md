@@ -1,7 +1,14 @@
 # 共寫更新
 最新版本請寫在最上面
 
-# 23/3/21 更新進度
+# 24/4/7 更新進度
+`Kai`
+`version v1.1 : Stable Release / 1.1`
+- Kernel_LightEngine
+  - 更新穩定性算法
+  - 於非運動心律`(55~100 BPM)` 準確率可達96%以上
+
+# 24/3/21 更新進度
 `Kai`
 `UI Py >> C# Prepare`
 僅預上傳示範執行檔
@@ -15,7 +22,7 @@ v1.0備註：
 結果準確度僅約90+%，請勿用做醫療參考
 
 
-# 23/3/11 更新進度
+# 24/3/11 更新進度
 `JT_0`
 `Merged >> v1.0 Release`
 - Main
@@ -47,7 +54,7 @@ v1.0備註：
 - Requirements
   - 修正輸出
 
-# 23/3/10 更新進度
+# 24/3/10 更新進度
 `Kai`
 `version v0.9 : Before Release / branch 1`
 - Kernel
