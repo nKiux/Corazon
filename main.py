@@ -1,4 +1,4 @@
-#version 0.6.7: 
+#version 1.1: 
 import os
 try:
     import cv2
