@@ -9,7 +9,11 @@ try:
     from tqdm.rich import tqdm
     from UI_Beta2 import Ui_DefaultWindow
 except:
-    os.system('pip install pywin32')
+    os.system('pip install opencv-python')
+    os.system('pip install tqdm')
+    os.system('pip install rich')
+    os.system('pip install matplotlib')
+    os.system('pip install scipy')
 
 import cv2
 import numpy as np
@@ -17,7 +21,6 @@ import time
 #import win32gui
 from datetime import datetime
 from tqdm.rich import tqdm
-from UI_Beta2 import Ui_DefaultWindow
 
 def benchmark(camera_select):
     fps = 0

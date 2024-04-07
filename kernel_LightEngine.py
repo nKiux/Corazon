@@ -8,6 +8,16 @@ camera_select = 0
 bnhmrk = False #僅在 KernelSpeedUP! 開啟時可使用
 spd_up_start = True
 
+import cv2
+import numpy as np
+from tqdm.rich import tqdm
+import matplotlib.pyplot as plt
+from scipy.signal import find_peaks
+from scipy.signal import find_peaks_cwt
+from scipy.signal import iirfilter
+from scipy.signal import sosfiltfilt
+
+
 def pure_benchmark(camera_select):
     try:
         import cv2
@@ -32,6 +42,9 @@ def start(skipDMX, camera_select, mode):
         from tqdm.rich import tqdm
         import matplotlib.pyplot as plt
         from scipy.signal import find_peaks
+        from scipy.signal import find_peaks_cwt
+        from scipy.signal import iirfilter
+        from scipy.signal import sosfiltfilt
     except:
         os.system('pip install opencv-python')
         os.system('pip install tqdm')
@@ -56,16 +69,22 @@ def start(skipDMX, camera_select, mode):
     
     if main.start(skipDMX = skipDMX, camera_select = camera_select, mode = mode) == False:
         with open('test.txt', 'r', encoding='utf-8') as res:
-            result = [int((300 * float(line.strip()))) - 500 for line in res if line]
+            result = [float(line.strip()) for line in res if line]
             res.close()
         datacount = len(np.array(result))
-        peak, _ = find_peaks(np.array(result), distance = (11*(datacount/200)))
+        
+        #peak = find_peaks_cwt(np.array(result), widths=np.arange(5,11))
+
         #peak= find_peaks_cwt(np.array(result), widths=result)
+        x = np.arange(len(result))
+        p = np.poly1d(np.polyfit(x, result, 18))
+        peak, _ = find_peaks(np.array(result), distance=(8.5*(datacount/200)), height=p(x) - 0.02)
         print(peak)
         plt.plot(np.array(result))
         plt.xlabel('frames')
-        plt.ylabel('Brightness (300X)')
+        plt.ylabel('Brightness')
         plt.plot(peak, np.array(result)[peak], 'x')
+        plt.plot(x, p(x) - 0.03, '-')
         plt.show()
         finalResult = (len(peak)*6)
         print(finalResult)
@@ -75,62 +94,27 @@ def start(skipDMX, camera_select, mode):
     else:
         cv2.destroyAllWindows()
 
-"""
-    if kernel_speedUP == False:
-        print(f'Check Completed! ({datetime.now()})')
-        print(f'Initializing Program... ({datetime.now()})')
-        #initialize
-        counting = 0
-        chk_count = 0
-        prog = tqdm(total=100)
-        prog.update(20)
-        cam = cv2.VideoCapture(camera_select)
-        img = np.empty((300, 300, 3), np.uint8)
-        mx = 0
-        mn = 255
-        FDetect = False
-        prog.update(20)
-        print(f'Initialize Completed! ({datetime.now()})')
-        print(f'Starting Camera... ({datetime.now()})')
-        #initial finished
-        #start camera
-        check, frm = cam.read()
-        if check:
-            print(f'Camera Initialize Finished! ({datetime.now()})')
-            prog.update(30)
-            cam.release()
-            cam = cv2.VideoCapture(camera_select)
-            prog.update(30)
-            prog.close()
-            '''
-            print(f'Testing... ({datetime.now()})')
-            if benchmark(camera_select = camera_select) == True:
-                open('result.txt', 'a', encoding='utf-8').close()
-                open('result.txt', 'w').close()
-                start(camera_select=camera_select, mode = mode)
-            else:
-                print(f'Test Failed... Closing ({datetime.now()})')
-                exit()
-            '''
-            open('result.txt', 'a', encoding='utf-8').close()
-            open('result.txt', 'w', encoding='utf-8').close()
-            open('test.txt', 'a', encoding='utf-8').close()
-            open('test.txt', 'w', encoding='utf-8').close()
-            start(camera_select=camera_select, mode = mode)
-            cv2.destroyAllWindows()
-        else:
-            print(f'Camera Start Failed! ({datetime.now()})')
-            return False
-        
-    else:
-        open('result.txt', 'a', encoding='utf-8').close()
-        open('result.txt', 'w', encoding='utf-8').close()
+'''
+with open('test.txt', 'r', encoding='utf-8') as res:
+        result = [float(line.strip()) for line in res if line]
+        res.close()
+datacount = len(np.array(result))
+#peak, _ = find_peaks(np.array(result), distance = (11*(datacount/200)))
+peak = find_peaks_cwt(np.array(result), widths=np.arange(5,11))
 
-        open('test.txt', 'a', encoding='utf-8').close()
-        open('test.txt', 'w', encoding='utf-8').close()
-        if start(camera_select = camera_select, mode = mode) == False:
-            cv2.destroyAllWindows()
-            return False
-        
+#peak= find_peaks_cwt(np.array(result), widths=result)
+print(peak)
+plt.plot(np.array(result))
+plt.xlabel('frames')
+plt.ylabel('Brightness (300X)')
+plt.plot(peak, np.array(result)[peak], 'x')
 
-"""
+x = np.arange(len(result))
+p = np.poly1d(np.polyfit(x, result, 16))
+plt.plot(x - 0.05, p(x) - 0.05, '-')
+
+plt.show()
+finalResult = (len(peak)*6)
+print(finalResult)
+open('result.txt', 'w', encoding='utf-8').write(str(finalResult))
+'''
