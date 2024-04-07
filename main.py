@@ -9,8 +9,6 @@ from datetime import datetime
 from tqdm.rich import tqdm
 from UI_Beta2 import Ui_DefaultWindow
 
-peak_index_global = []
-
 def benchmark(camera_select):
     fps = 0
     updates = 0
@@ -109,16 +107,8 @@ def benchmark(camera_select):
         return True
     #10 frames in 3 secs
 
+
 def start(skipDMX, camera_select, mode):
-    # if mode == 0:
-    #     print('mode is Fast')
-    #     D_speed = "Fast"
-    # elif mode == 1:
-    #     print('mode is Normal')
-    #     D_speed = "Normal"
-    # else:
-    #     print('mode is Slow')
-    #     D_speed = "Slow"
     
     start_t = int(time.time())
     cam = cv2.VideoCapture(camera_select)
@@ -128,6 +118,8 @@ def start(skipDMX, camera_select, mode):
     mx = 0
     mn = 255
     FDetect = False
+    
+    bright_rec = []
     h_std = [] # 高度標準
 
     passed = False
@@ -202,6 +194,8 @@ def start(skipDMX, camera_select, mode):
             passed = False
             beats = 0
             bpm = 0
+            h_std = []
+            bright_rec = []
             if counting >= 0:
                 counting -= 2
         
@@ -210,9 +204,25 @@ def start(skipDMX, camera_select, mode):
                 start_t = run_t
                 passed = True
             
+            # if run_t - start_t <= 5:
+            #     bright_rec.append(bright)
+
+            # else: # run_t - start_t > 5
+
             if run_t - start_t == 15:
+                with open('h_std.txt', 'a', encoding='utf-8') as data:
+                    for i, bri in enumerate(bright_rec):
+                        if i >= len(bright_rec)-16:
+                            h_std.append(avg_bri)
+                        else:
+                            avg_bri = np.average(bright_rec[i:i+15]) + 0.2
+                            h_std.append(avg_bri)
+                        data.write(f'{avg_bri}\n')
+                    
+                    data.close()
+
                 beats = HR_monitor(h_std)
-                bpm = beats * 4
+                bpm = beats * 4 
                 open('result.txt', 'w', encoding='utf-8').write(str(bpm))
                 print(f"\nBeats: {beats}, BPM: {bpm}", flush=True)
                 return False
@@ -222,26 +232,21 @@ def start(skipDMX, camera_select, mode):
                 data.write(f'{str(bright)[:6]}\n')
                 data.close()
             
-            h_std.append(np.round(0.8*(mx-mn)+mn, 2))
+            bright_rec.append(bright)
+
+            # avg_bri = str(np.average(bright_rec))[:6] # delete l8r
+            # h_std.append(float(avg_bri)) # delete l8r
+            # with open('h_std.txt', 'a', encoding='utf-8') as data:
+            #     data.write(f'{avg_bri}\n')
+            #     data.close() # delete l8r
+
+            # h_std.append(0.8*(mx-mn)+mn)
             
-            # bump detection v0.6.7 (unused)
-            # if D_speed == "Fast":
-            #     if (run_t-start_t)%5 == 0 and (run_t-start_t) >= 5:
-            #         beats = HR_monitor(mx, mn)
-            #         bpm = beats * 12
-
-            # elif D_speed == "Normal":
-            #     if (run_t-start_t)%10 == 0 and (run_t-start_t) >= 10:
-            #         beats = HR_monitor(mx, mn)
-            #         bpm = beats * 6
-
-            # else: # D_speed == "Slow"
-            #     if (run_t-start_t)%15 == 0 and (run_t-start_t) >= 15:
-            #         beats = HR_monitor(mx, mn)
-            #         bpm = beats * 4
-
         else:
             with open('test.txt', 'w', encoding='utf-8') as data:
+                data.write('')
+                data.close()
+            with open('h_std.txt', 'w', encoding='utf-8') as data:
                 data.write('')
                 data.close()
 
@@ -279,49 +284,18 @@ def DMXi2(time_now, skipDMX, Pos):
             elif fatalError >= 0:
                 fatalError -= 0.2
 
-# v0.6.7
-def HR_monitor(height_standard):
-    global peak_index_global
-    peak_index_global = []
 
+def HR_monitor(height_standard):
     # read file
     with open('test.txt', 'r', encoding='utf-8') as data:
         bright_values =  data.readlines()
     
     bright_values = [float(data[:6]) for data in bright_values]
     
-    peak_idx = scipy.signal.find_peaks(bright_values, height=np.array(height_standard), distance=16)[0] # peak indexes
-    peak_index_global = peak_idx
+    peak_idx = scipy.signal.find_peaks(bright_values, height=np.array(height_standard), distance=7)[0] # peak indexes
+    with open('peaks.txt', 'w', encoding='utf-8') as data:
+        for i in peak_idx:
+            data.write(f'{i} ')
+        data.close()
 
     return len(peak_idx)
-
-# old ver
-"""    Bump = False
-    rest = True
-    beats = 0
-
-    # i = index, x = value
-    for i, x in enumerate(bright_values):
-        x = float(x[:6]) # x = bright_values[i]
-        
-        peaks = scipy.signal.find_peaks_cwt(bright_values, 5)
-
-        if i == len(bright_values)-3:
-            break
-
-        if x >= float(bright_values[i-1][:6]) and x >= float(bright_values[i+1][:6]) and x > float(bright_values[i-2][:6]) and x > float(bright_values[i+2][:6]) and x > 0.5*(mx-mn)+mn:
-            Bump = True
-            rest = False
-        
-        if Bump == True and rest == False:
-            beats += 1
-            rest = True
-        # if float(i)*float(i) <= 0.3*(mx*mx-mn*mn)+mn*mn:
-        # if 5*float(i) <= 0.3*(5*mx-5*mn)+5*mn:
-        #     Bump = True
-        #     rest = False
-        #     chk_delay += 1
-        # else:
-        #     chk_delay = 0
-
-    return beats"""

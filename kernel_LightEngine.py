@@ -28,7 +28,7 @@ def start(skipDMX, camera_select, mode):
         import cv2
         import numpy as np
         from tqdm.rich import tqdm
-        from main import start, peak_index_global
+        from main import start
         import matplotlib.pyplot as plt
     except:
         os.system('pip install opencv-python')
@@ -57,14 +57,23 @@ def start(skipDMX, camera_select, mode):
             result  = res.readlines()
             result = [float(data[:6]) for data in result]
             # peaks = scipy.signal.find_peaks(result)[0]
-            peaks = peak_index_global
             res.close()
-        
+        with open('h_std.txt', 'r', encoding='utf-8') as tmp:
+            avg = tmp.readlines()
+            avg = [float(data[:6]) for data in avg]
+            tmp.close()
+        with open('peaks.txt', 'r', encoding='utf-8') as tmp:
+            peaks = tmp.readline()
+            peaks = peaks.split()
+            peaks = [int(data) for data in peaks]
+            tmp.close()
+
         plt.plot(result)
+        plt.plot(avg)
         plt.plot(peaks, np.array(result)[peaks], "o")
         plt.title('Brightness Line Chart')
         plt.xlabel('Frame')
-        plt.ylabel('Value w/ Peaks')
+        plt.ylabel('Value w/ avg')
         plt.show()
 
         cv2.destroyAllWindows()
