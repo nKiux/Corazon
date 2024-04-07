@@ -1,6 +1,81 @@
 # 共寫更新
 最新版本請寫在最上面
 
+# 24/04/07 更新進度
+`JT_0`
+- Main
+  - 刪除陣列 `peak_index_global` (Line 12)
+  - 新增 `bright_rec` 陣列 (Line 122)
+  - 手指放開時清空 `h_std`, `bright_rec` (Line 197, 198)
+  - 更改高度標準寫入 (Line 213~222)
+  - 刪除註解和舊高度標準 (Line 225~236)
+  - 寫入預處裡亮度數據 (Line 235)
+  - 清空高度標準 (Line 249~251)
+  - 修改 peak finder 函式 (Line 288~301)
+- Kernel
+  - 取消 import `peak_index_global` (Line 31, 60)
+  - 修改讀取 (Line 61~70)
+  - 修改圖表 (Line 72, 76)
+
+# 24/3/11 更新進度
+`JT_0`
+`Merged >> v1.0 Release`
+- Main
+  - import `scipy.signal` (Line 5)
+  - 新增全域陣列 `peak_index_global`，存取 `peak` 的 index 值。 (Line 12)
+  - 註解舊版本 `D_speed`。 (Line 113~121)
+  - 新增 `h_std` 高度標準。 (Line 131)
+  - 更改 `bright_fixed` data type。 (Line 175~179)
+  - 偵測到手指且 `counting >= 10` 才會開始做寫入數據及之後操作。 (Line 208)
+  - 修改經過 15 秒後所做的操作 (Line 213~217)
+    - 將 `counting >= 10` 移至 Line 208
+    - 到此時才開始做數據分析並寫入結果
+  - 寫入 `h_std` 數據。 (Line 225)
+  - 註解舊偵測呼叫模式。 (Line 227~241)
+  - 修改輸出。 (Line 248)
+  - 新心律偵測函式 (Line 283~296)
+- Kernel
+  - 修改折線圖呈現資料，改為使用原始數據。 (Line 57~58)
+  - 加入 `peak`。 (Line 60)
+  - 新增折線圖標題、軸標題、`peak` 點。 (Line 63~68)
+  - 清空明暗資料。 (Line 72~75)
+
+`Kai`
+`version v0.9.1 : Before Release / branch 1`
+- UI_Beta2
+  - 修正無法啟動
+- Runner
+  - 修正輸出
+- Requirements
+  - 修正輸出
+
+# 24/3/10 更新進度
+`Kai`
+`version v0.9 : Before Release / branch 1`
+- Kernel
+  - 新增較穩定的心率監測
+  - 經 *40+* 筆資料統計，準確度約90%
+- Main
+  - 移除測試模式選擇
+  - 移除舊算法
+  - 移除**win32gui**模組
+  - 調整手指偵測
+  - 手指偵測評分大於10時開始記錄
+  - 修改終端機輸出
+  - DMX原則調整
+- UI_Beta2
+  - 顯示正確心率
+- Requirements
+  - 啟動時安裝包含所需的所有module
+- Runner
+  - 啟動該啟動的啟動程式
+
+# 24/03/07 更新進度
+`Kai`
+`version v0.6.8 (Kernel : visualize)`
+- Kernel
+  - 新增matplotlib將成果作圖
+
 # 24/03/05 更新進度
 `JT_0`
 `version v0.6.7 (Main Update)`
