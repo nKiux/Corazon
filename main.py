@@ -1,4 +1,4 @@
-# base version 0.6.7: 
+# base version 0.6.7:
 import os
 import cv2
 import numpy as np
@@ -121,6 +121,7 @@ def start(skipDMX, camera_select, mode):
     
     bright_rec = []
     h_std = [] # 高度標準
+    h_mov = 0.200 # height vertical translating amount
 
     passed = False
     beats = 0
@@ -195,6 +196,7 @@ def start(skipDMX, camera_select, mode):
             beats = 0
             bpm = 0
             h_std = []
+            h_mov = 0.200
             bright_rec = []
             if counting >= 0:
                 counting -= 2
@@ -211,11 +213,12 @@ def start(skipDMX, camera_select, mode):
 
             if run_t - start_t == 15:
                 with open('h_std.txt', 'a', encoding='utf-8') as data:
-                    for i, bri in enumerate(bright_rec):
+                    for i, bri in enumerate(bright_rec): # appending brightness avg
                         if i >= len(bright_rec)-16:
                             h_std.append(avg_bri)
                         else:
-                            avg_bri = np.average(bright_rec[i:i+15]) + 0.2
+                            h_mov = 0.2*(max(bright_rec[i:i+15]) - min(bright_rec[i:i+15]))
+                            avg_bri = np.average(bright_rec[i:i+15]) + h_mov
                             h_std.append(avg_bri)
                         data.write(f'{avg_bri}\n')
                     
@@ -225,7 +228,7 @@ def start(skipDMX, camera_select, mode):
                 bpm = beats * 4 
                 open('result.txt', 'w', encoding='utf-8').write(str(bpm))
                 print(f"\nBeats: {beats}, BPM: {bpm}", flush=True)
-                return False
+                return True
             
             # Write the brightness values
             with open('test.txt', 'a', encoding='utf-8') as data:
