@@ -17,22 +17,6 @@ from scipy.signal import find_peaks_cwt
 from scipy.signal import iirfilter
 from scipy.signal import sosfiltfilt
 
-
-def pure_benchmark(camera_select):
-    try:
-        import cv2
-        import numpy as np
-        from tqdm.rich import tqdm
-        from main import benchmark
-        import matplotlib
-        
-    except:
-        os.system('pip install opencv-python')
-        os.system('pip install tqdm')
-        os.system('pip install rich')
-        os.system('pip install matplotlib')
-    return benchmark(camera_select = camera_select)
-
 def start(skipDMX, camera_select, mode):
     import main
     print(f'Checking Program... ({datetime.now()})')
@@ -67,54 +51,37 @@ def start(skipDMX, camera_select, mode):
     prog.update(10)
     prog.close()
     
-    if main.start(skipDMX = skipDMX, camera_select = camera_select, mode = mode) == False:
+    if main.start(skipDMX = skipDMX, camera_select = camera_select, mode = mode) == True:
         with open('test.txt', 'r', encoding='utf-8') as res:
             result = [float(line.strip()) for line in res if line]
             res.close()
         datacount = len(np.array(result))
-        
         #peak = find_peaks_cwt(np.array(result), widths=np.arange(5,11))
-
         #peak= find_peaks_cwt(np.array(result), widths=result)
         x = np.arange(len(result))
-        p = np.poly1d(np.polyfit(x, result, 18))
-        peak, _ = find_peaks(np.array(result), distance=(8.5*(datacount/200)), height=p(x) - 0.02)
+        p = np.poly1d(np.polyfit(x, result, 13))
+        pfix = p(x)[:]
+        for i in range(30):
+            pfix[i] = np.average(pfix[i:i+15])
+        for i in range(-25, 0, 1):
+            pfix[i] = np.average(pfix[i-15:i])
+        peak, _ = find_peaks(np.array(result), distance=(8.5*(datacount/200)), height=pfix)
         print(peak)
+        
         plt.plot(np.array(result))
         plt.xlabel('frames')
         plt.ylabel('Brightness')
         plt.plot(peak, np.array(result)[peak], 'x')
-        plt.plot(x, p(x) - 0.03, '-')
+        plt.plot(x, pfix - 0.02, '-')
         plt.show()
+        
         finalResult = (len(peak)*6)
         print(finalResult)
         open('result.txt', 'w', encoding='utf-8').write(str(finalResult))
         cv2.destroyAllWindows()
-        return False
+        return True
     else:
         cv2.destroyAllWindows()
+        return False
 
-'''
-with open('test.txt', 'r', encoding='utf-8') as res:
-        result = [float(line.strip()) for line in res if line]
-        res.close()
-datacount = len(np.array(result))
-#peak, _ = find_peaks(np.array(result), distance = (11*(datacount/200)))
-peak = find_peaks_cwt(np.array(result), widths=np.arange(5,11))
-
-#peak= find_peaks_cwt(np.array(result), widths=result)
-print(peak)
-plt.plot(np.array(result))
-plt.xlabel('frames')
-plt.ylabel('Brightness (300X)')
-plt.plot(peak, np.array(result)[peak], 'x')
-
-x = np.arange(len(result))
-p = np.poly1d(np.polyfit(x, result, 16))
-plt.plot(x - 0.05, p(x) - 0.05, '-')
-
-plt.show()
-finalResult = (len(peak)*6)
-print(finalResult)
-open('result.txt', 'w', encoding='utf-8').write(str(finalResult))
-'''
+#start(False, 0 , 0)

@@ -22,103 +22,6 @@ import time
 from datetime import datetime
 from tqdm.rich import tqdm
 
-def benchmark(camera_select):
-    fps = 0
-    updates = 0
-    cam = cv2.VideoCapture(camera_select)
-    counting = 0
-    chk_count = 0
-    mx = 0
-    mn = 255
-    FDetect = False
-    img = np.empty((300, 300, 3), np.uint8)
-    print(str(datetime.now()))
-    time_now = int(str(datetime.now())[17:19])
-    print(time_now)
-    prog = tqdm(total=100)
-    for i in range(10):
-        updates += 1
-        check, frm = cam.read()
-        if check:
-            pass
-        else:
-            return False
-        '''
-        if cv2.waitKey(1) == ord('q'):
-            print('Exiting...')
-            cv2.destroyAllWindows()
-            exit()
-        '''
-        frm = cv2.resize(frm,(600,420))
-        avgB, avgG, avgR, avgAlp = cv2.mean(frm)
-        gray = cv2.cvtColor(frm, cv2.COLOR_BGR2GRAY)
-        bright = cv2.mean(gray)[0]
-        #v0.6.6
-        '''
-        for row in range(300):
-            for col in range(300):
-                img[row][col] = [avgB, avgG, avgR]
-        '''
-        if str(bright)[1] == '.':
-            bright_fixed = int(str(bright)[0])
-        elif str(bright)[2] == '.':
-            bright_fixed = int(str(bright)[0:2])
-        else:
-            bright_fixed = int(str(bright)[0:3])
-        
-        
-        if avgR > 100 and avgR > (avgB + avgG) and counting <= 10:
-            FDetect = True
-            counting += 0.2
-            
-        elif avgR > 100 and avgR > (avgB + avgG) and counting > 10:
-            
-            if mx < bright_fixed:
-                mx = bright_fixed
-            if mn > bright_fixed:
-                mn = bright_fixed
-            if chk_count == 30:
-                chk_count = 0
-                mx = 0
-                mn = 255
-            else:
-                
-                chk_count += 1
-        else:
-            FDetect = False
-            mx = 0
-            mn = 255
-            chk_count = 30
-            if counting >= 0:
-                counting -= 2
-        prog.update(10)
-        #print(f"R: {str(avgR)[:6]}, G: {str(avgG)[:6]}, B: {str(avgB)[:6]}, A: {str(bright)[:6]}, MX: {str(mx)}, MN: {str(mn)} (reset in {30 - chk_count}), FXL: {bright_fixed}, Finger Detected: {FDetect}, score: {counting}")
-    
-    time_then = int(str(datetime.now())[17:19])
-    print(time_then)
-    time_passed = time_then - time_now
-    print(f'updates =  {updates}')
-    #fps = updates / time_passed
-    #print(f'fps = {fps}')
-    if time_passed < 0:
-        time_passed = 60 + time_passed
-        if time_passed > 1:
-            print(f'fps = {10 / time_passed}')
-            print('Test Failed')
-            return False
-        else:
-            return True
-    elif time_passed > 1:
-        print(f'fps = {10 / time_passed}')
-        print('Test Failed')
-        return False
-    else:
-        if time_passed == 0:
-            print('fps >= 10')
-        print('Test Passed')
-        return True
-    #10 frames in 3 secs
-
 def start(skipDMX, camera_select, mode):
     
     '''if mode == 0:
@@ -132,7 +35,7 @@ def start(skipDMX, camera_select, mode):
         D_speed = "Slow"'''
     start_t = int(time.time())
     cam = cv2.VideoCapture(camera_select)
-    cam.set(cv2.CAP_PROP_AUTO_EXPOSURE, 0.25)
+    cam.set(cv2.CAP_PROP_AUTO_EXPOSURE, 1)
     counting = 0
     chk_count = 0
     mx = 0
@@ -142,6 +45,7 @@ def start(skipDMX, camera_select, mode):
     passed = False
     beats = 0
     bpm = 0
+    expo = 0
     #v0.6.6
     #img = np.empty((300, 300, 3), np.uint8)
     #os.system('WCConfig.exe') #msvc120
@@ -172,14 +76,6 @@ def start(skipDMX, camera_select, mode):
         #v0.6.6
         gray = cv2.cvtColor(frm, cv2.COLOR_BGR2GRAY)
         bright = cv2.mean(gray)[0]
-        '''
-        blur = cv2.blur(gray, (10,5))
-        cv2.imshow('denoise', blur)
-        for row in range(300):
-            for col in range(300):
-                img[row][col] = [avgB, avgG, avgR]
-        '''
-
         if str(bright)[1] == '.':
             bright_fixed = int(str(bright)[0])
         elif str(bright)[2] == '.':
@@ -188,21 +84,18 @@ def start(skipDMX, camera_select, mode):
             bright_fixed = int(str(bright)[0:3])
         
         # Finger detection
-        if avgR > 90 and avgR > (avgB + avgG) and counting <= 10:
+        if avgR > 50 and avgR > (avgB + avgG) and counting <= 10:
+            if counting > 6:
+                cam.set(cv2.CAP_PROP_EXPOSURE, -4)
+                cam.set(cv2.CAP_PROP_BRIGHTNESS, 100)
             FDetect = True
             counting += 0.2
-        elif avgR > 90 and avgR > (avgB + avgG) and counting > 10:
-            if mx < bright_fixed:
-                mx = bright_fixed
-            if mn > bright_fixed:
-                mn = bright_fixed
-            if chk_count == 30:
-                chk_count = 0
-                mx = 0
-                mn = 255
-            else:
-                chk_count += 1
+        elif avgR > 50 and avgR > (avgB + avgG) and counting > 10:
+            cam.set(cv2.CAP_PROP_EXPOSURE, -4)
+            cam.set(cv2.CAP_PROP_BRIGHTNESS, 100)
         else:
+            cam.set(cv2.CAP_PROP_AUTO_EXPOSURE, 1)
+            cam.set(cv2.CAP_PROP_BRIGHTNESS, 15)
             FDetect = False
             mx = 0
             mn = 255
@@ -220,7 +113,7 @@ def start(skipDMX, camera_select, mode):
             
             # v0.6.7
             if run_t - start_t == 10 and counting >= 10:
-                return False
+                return True
             
             # Write the brightness values
             if counting >= 10:
@@ -251,7 +144,7 @@ def start(skipDMX, camera_select, mode):
                 data.write('')
                 data.close()
 
-        print(f"R: {str(avgR)[:6]}, G: {str(avgG)[:6]}, B: {str(avgB)[:6]}, A: {str(bright)[:6]}, MX: {mx}, MN: {mn} (reset in {30 - chk_count}), FXL: {bright_fixed}, Finger Detected: {str(FDetect)}, score: {str(counting)[:6]}, timeR: {10-(run_t - start_t)} ...", end="\r", flush=True)
+        print(f"R: {str(avgR)[:6]}, G: {str(avgG)[:6]}, B: {str(avgB)[:6]}, A: {str(bright)[:6]}, FXL: {bright_fixed}, FD: {str(FDetect)}, S: {str(counting)[:6]}, TR: {10-(run_t - start_t)}, AE:{cam.get(cv2.CAP_PROP_AUTO_EXPOSURE)}, EXPO:{expo}", flush=True)
         open('result.txt', 'w', encoding='utf-8').write(str(bpm))
 
         if DMXi2(time_now = time_now, skipDMX=skipDMX) == False:
