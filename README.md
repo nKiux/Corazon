@@ -1,6 +1,15 @@
 # 共寫更新
 最新版本請寫在最上面
-
+# 24/4/23 更新進度
+`Kai` `version v1.2 : Unstable Release / 1.2 FstR`
+- Kernel_LightEngine
+  - 算法更新.減少數據頭尾被忽視問題
+  - 移除`Benchmark`
+- UI_Beta_2
+  - 更新UI.減少操作與更新顯示訊息
+- Main
+  - 移除`Benchmark`
+  - 更新鎖定曝光優化
 # 24/4/7 更新進度
 `Kai`
 `version v1.1 : Stable Release / 1.1`
