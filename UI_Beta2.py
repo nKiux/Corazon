@@ -69,7 +69,7 @@ class Ui_DefaultWindow:
         self.label_2.setText(_translate("DefaultWindow", "測試中..."))
         start = kernel_LightEngine.start(kernel_LightEngine.bnhmrk, camera_select=cam, mode=mode)
         if start == False:    
-            self.label_2.setText(_translate("DefaultWindow", "相機不存在或更新率過低"))
+            self.label_2.setText(_translate("DefaultWindow", "相機不存在或更新率過低(亮度不足)"))
         elif start == True:
             self.label_2.setText(_translate("DefaultWindow", "測試完成"))
             result = open('result.txt', 'r', encoding='utf-8').readline()
@@ -78,39 +78,10 @@ class Ui_DefaultWindow:
         self.pushButton.setGeometry(QtCore.QRect(10, 50, 161, 61))
         #self.pushButton_2.setGeometry(QtCore.QRect(290, 140, 101, 23))
 
-    def benchmark(self):
-        global cam
-        global mode
-        #self.pushButton_2.setGeometry(QtCore.QRect(10, 140, 0, 0))
-        if kernel_LightEngine.pure_benchmark(camera_select=cam):
-            title = "Passed"
-        else:
-            title = "性能低於要求或相機不存在"
-        _translate = QtCore.QCoreApplication.translate
-        #self.label_2.setText(_translate("DefaultWindow", f"Result: {title}"))
-        #self.pushButton_2.setGeometry(QtCore.QRect(290, 140, 101, 23))
-
-
-    def KernelSpeedUP(self):
-        if self.checkBox.isChecked():
-            kernel_LightEngine.bnhmrk = True
-            print('略過效能檢查 is set to true')
-        else:
-            kernel_LightEngine.bnhmrk = False
-            print('略過效能檢查 is set to false')
-
     def camChange(self):
         global cam
         cam = self.camSpin.value()
         print(f'cam has been set to {cam}')
-    
-    def modeChange(self):
-        global mode
-        mode = self.modeSpin.value()
-        if mode > 2:
-            self.modeSpin.setValue(2)
-        print(f'mode has been set to {mode}')
-
 
 
 if __name__ == "__main__":

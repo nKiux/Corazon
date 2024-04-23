@@ -45,7 +45,10 @@ def start(skipDMX, camera_select, mode):
     passed = False
     beats = 0
     bpm = 0
-    expo = 0
+    brit = -4
+    bright_fail_count = 0
+    britFailContrl = False
+    autobrit = False
     #v0.6.6
     #img = np.empty((300, 300, 3), np.uint8)
     #os.system('WCConfig.exe') #msvc120
@@ -84,18 +87,30 @@ def start(skipDMX, camera_select, mode):
             bright_fixed = int(str(bright)[0:3])
         
         # Finger detection
-        if avgR > 50 and avgR > (avgB + avgG) and counting <= 10:
+        if avgR > 70 and avgR > (avgB + avgG) and counting <= 10:
             if counting > 6:
-                cam.set(cv2.CAP_PROP_EXPOSURE, -4)
+                britFailContrl = False
+                if brit <= -3:
+                    brit = -4 + bright_fail_count
+                    cam.set(cv2.CAP_PROP_EXPOSURE, brit)
+                elif brit > -3:
+                    cam.set(cv2.CAP_PROP_AUTO_EXPOSURE, 1)
+                    autobrit = True
                 cam.set(cv2.CAP_PROP_BRIGHTNESS, 100)
             FDetect = True
             counting += 0.2
-        elif avgR > 50 and avgR > (avgB + avgG) and counting > 10:
-            cam.set(cv2.CAP_PROP_EXPOSURE, -4)
-            cam.set(cv2.CAP_PROP_BRIGHTNESS, 100)
+        elif avgR > 70 and avgR > (avgB + avgG) and counting > 10:
+            if brit > -3:
+                cam.set(cv2.CAP_PROP_AUTO_EXPOSURE, 1)
+            else:
+                cam.set(cv2.CAP_PROP_EXPOSURE, brit)
+                cam.set(cv2.CAP_PROP_BRIGHTNESS, 100)
         else:
+            if britFailContrl == False:
+                bright_fail_count += 1
+            britFailContrl = True
             cam.set(cv2.CAP_PROP_AUTO_EXPOSURE, 1)
-            cam.set(cv2.CAP_PROP_BRIGHTNESS, 15)
+            cam.set(cv2.CAP_PROP_BRIGHTNESS, 100)
             FDetect = False
             mx = 0
             mn = 255
@@ -121,30 +136,13 @@ def start(skipDMX, camera_select, mode):
                     data.write(f'{str(bright)[:6]}\n')
                     data.close()
             # bright_rec.append(str(bright)[:6])
-            
-            # bump detection v0.6.7
-            '''if D_speed == "Fast":
-                if (run_t-start_t)%5 == 0 and (run_t-start_t) >= 5:
-                    beats = HR_monitor(D_speed, mx, mn, start_t, run_t)
-                    bpm = beats * 12
-
-            elif D_speed == "Normal":
-                if (run_t-start_t)%10 == 0 and (run_t-start_t) >= 10:
-                    beats = HR_monitor(D_speed, mx, mn, start_t, run_t)
-                    bpm = beats * 6
-
-            else: # D_speed == "Slow"
-                if (run_t-start_t)%15 == 0 and (run_t-start_t) >= 15:
-                    beats = HR_monitor(D_speed, mx, mn, start_t, run_t)
-                    bpm = beats * 4'''
-
 
         else:
             with open('test.txt', 'w', encoding='utf-8') as data:
                 data.write('')
                 data.close()
 
-        print(f"R: {str(avgR)[:6]}, G: {str(avgG)[:6]}, B: {str(avgB)[:6]}, A: {str(bright)[:6]}, FXL: {bright_fixed}, FD: {str(FDetect)}, S: {str(counting)[:6]}, TR: {10-(run_t - start_t)}, AE:{cam.get(cv2.CAP_PROP_AUTO_EXPOSURE)}, EXPO:{expo}", flush=True)
+        print(f"R: {str(avgR)[:6]}, G: {str(avgG)[:6]}, B: {str(avgB)[:6]}, A: {str(bright)[:6]}, FXL: {bright_fixed}, FD: {str(FDetect)}, S: {str(counting)[:6]}, TR: {10-(run_t - start_t)}, EXPO:{cam.get(cv2.CAP_PROP_EXPOSURE)} , ectrl: {britFailContrl}, {bright_fail_count}, {brit}, AE:{autobrit}", flush=True)
         open('result.txt', 'w', encoding='utf-8').write(str(bpm))
 
         if DMXi2(time_now = time_now, skipDMX=skipDMX) == False:
