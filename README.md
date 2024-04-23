@@ -2,6 +2,11 @@
 最新版本請寫在最上面
 # 24/4/23 更新進度
 `Kai` `version v1.2 : Unstable Release / 1.2 FstR`
+
+`1.2 HotFix`
+- Main
+  - 更新自動曝光原則
+
 - Kernel_LightEngine
   - 算法更新.減少數據頭尾被忽視問題
   - 移除`Benchmark`
