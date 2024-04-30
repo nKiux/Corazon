@@ -1,5 +1,13 @@
 # 共寫更新
 最新版本請寫在最上面
+
+# 24/4/30 更新進度
+`Kai` `version v1.3 : Stable Release / 1.3`
+- DMX3
+  - 架構改進
+  - 視窗移動後重設計時與數據
+  - 修改錯誤偵測輸出
+
 # 24/4/23 更新進度
 `Kai` `version v1.2 : Unstable Release / 1.2 FstR`
 
