@@ -7,6 +7,10 @@
   - 架構改進
   - 視窗移動後重設計時與數據
   - 修改錯誤偵測輸出
+  - 改善數據蒐集穩定性
+
+![DMX3Logo](https://github.com/nKiux/Bio-HRMonitor/assets/46084374/54a5e3ab-c6ef-4dd3-80f4-4f5653de7425)
+
 
 # 24/4/23 更新進度
 `Kai` `version v1.2 : Unstable Release / 1.2 FstR`
