@@ -1,4 +1,4 @@
-#version 1.1: 
+#version 1.3
 import os
 try:
     import cv2
@@ -41,7 +41,8 @@ def start(skipDMX, camera_select, mode):
     mx = 0
     mn = 255
     FDetect = False
-
+    if_reset = False
+    reset = False
     passed = False
     beats = 0
     bpm = 0
@@ -65,7 +66,7 @@ def start(skipDMX, camera_select, mode):
         else:
             print('Camera Start Failed!')
             return False
-        
+
         #window = win32gui.FindWindow(None, 'Camera_Capture')
         #win_rectPast = win32gui.GetWindowRect(window)
         
@@ -121,7 +122,7 @@ def start(skipDMX, camera_select, mode):
             if counting >= 0:
                 counting -= 2
         
-        if FDetect:
+        if FDetect and reset == False:
             if passed == False and counting >= 10:
                 start_t = run_t
                 passed = True
@@ -138,67 +139,50 @@ def start(skipDMX, camera_select, mode):
             # bright_rec.append(str(bright)[:6])
 
         else:
+            if reset == True:
+                reset = False
+                counting = 7
+            passed = False
             with open('test.txt', 'w', encoding='utf-8') as data:
                 data.write('')
                 data.close()
 
-        print(f"R: {str(avgR)[:6]}, G: {str(avgG)[:6]}, B: {str(avgB)[:6]}, A: {str(bright)[:6]}, FXL: {bright_fixed}, FD: {str(FDetect)}, S: {str(counting)[:6]}, TR: {10-(run_t - start_t)}, EXPO:{cam.get(cv2.CAP_PROP_EXPOSURE)} , ectrl: {britFailContrl}, {bright_fail_count}, {brit}, AE:{autobrit}", flush=True)
+        print(f"R: {str(avgR)[:6]}, G: {str(avgG)[:6]}, B: {str(avgB)[:6]}, A: {str(bright)[:6]}, FXL: {bright_fixed}, FD: {str(FDetect)}, S: {str(counting)[:6]}, TR: {10-(run_t - start_t)}, EXPO:{cam.get(cv2.CAP_PROP_EXPOSURE)} , ectrl: {britFailContrl}, {bright_fail_count}, {brit}, AE:{autobrit}, res:{if_reset}",flush=True)
         open('result.txt', 'w', encoding='utf-8').write(str(bpm))
 
-        if DMXi2(time_now = time_now, skipDMX=skipDMX) == False:
+        if_reset = DMX3(time_now = time_now, skipDMX=skipDMX)
+        if if_reset == 102:
+            reset = True
+        elif if_reset == False:
             return False
         #檢測區塊
 
 
-def DMXi2(time_now, skipDMX):
+def DMX3(time_now, skipDMX):
     global fatalError
     time_then = time.time_ns()
     #window = win32gui.FindWindow(None, 'Camera_Capture')
     #win_rectNow = win32gui.GetWindowRect(window)
     #print(Pos[0], win_rectNow[0], Pos[1], win_rectNow[1], Pos[2], win_rectNow[2], Pos[3], win_rectNow[3])
-    if skipDMX == False:
-        #if Pos[0] == win_rectNow[0] and Pos[1] == win_rectNow[1] and Pos[2] == win_rectNow[2] and Pos[3] == win_rectNow[3]:
-        time_passed = time_then - time_now
-        if fatalError >= 5:
-            return False
-        if time_passed < 0:
+    
+    #if Pos[0] == win_rectNow[0] and Pos[1] == win_rectNow[1] and Pos[2] == win_rectNow[2] and Pos[3] == win_rectNow[3]:
+    time_passed = time_then - time_now
+    if fatalError >= 5:
+        return False
+        """
+            if time_passed < 0:
             time_passed = time_passed*-1
             print(time_passed)
             if time_passed > 200000000:
-                print(f'偵測到效能問題(err1, failCount = {4-fatalError})\ntime_now = {time_now}\ntime_then = {time_then}\ntime passed = {time_passed}')
-                fatalError += 1
-        elif time_passed > 200000000:
-            print(f'fps = {10 / time_passed}')
-            print(f'偵測到效能問題(err2, failCount = {4-fatalError})\ntime_now = {time_now}\ntime_then = {time_then}\ntime passed = {time_passed}')
+            print(f'偵測到效能問題(err1, failCount = {4-fatalError})\ntime_now = {time_now}\ntime_then = {time_then}\ntime passed = {time_passed}')
             fatalError += 1
-        elif time_passed == 0:
-            print('fps >= 10')
-        elif fatalError >= 0:
-            fatalError -= 0.2
-
-# v0.6.7
-def HR_monitor(D_speed, mx, mn, start_t, run_t):
-    with open('test.txt', 'r', encoding='utf-8') as data:
-        bright_values =  data.readlines()
-    # bright_values = [data[:6] for data in bright_values]
-    Bump = False
-    rest = True
-    beats = 0
-    chk_delay = 0
-
-    for i in bright_values:
-        i = i[:6]
-        # if pow(i, 2) <= pow(0.3*(mx-mn)+mn, 2):
-        # if float(i)*float(i) <= 0.3*(mx*mx-mn*mn)+mn*mn:
-        if 5*float(i) <= 0.3*(5*mx-5*mn)+5*mn:
-            Bump = True
-            rest = False
-            chk_delay += 1
-        else:
-            chk_delay = 0
-        
-        if Bump == True and rest == False:
-            beats += 1
-            rest = True
-
-    return beats
+        """
+    if time_passed > 200000000:
+        print(f'fps = {10 / time_passed}')
+        print(f'偵測到效能問題(failCount = {4-fatalError})\ntime_now = {time_now}\ntime_then = {time_then}\ntime passed = {time_passed}')
+        fatalError += 1
+        return 102
+    elif time_passed == 0:
+        print('fps >= 10')
+    elif fatalError >= 0:
+        fatalError -= 0.2
