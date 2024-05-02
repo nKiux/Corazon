@@ -8,8 +8,8 @@
   - 視窗移動後重設計時與數據
   - 修改錯誤偵測輸出
   - 改善數據蒐集穩定性
-
-![DMX3Logo](https://github.com/nKiux/Bio-HRMonitor/assets/46084374/54a5e3ab-c6ef-4dd3-80f4-4f5653de7425)
+  
+![DMX3Logo_bw_2](https://github.com/nKiux/Bio-HRMonitor/assets/46084374/5110f85d-e979-47da-a8f4-2f8b873d911f)
 
 
 # 24/4/23 更新進度
