@@ -1,7 +1,7 @@
 # 共寫更新
 最新版本請寫在最上面
 
-# 23/5/14 更新進度
+# 24/5/14 更新進度
 `Kai` `version 13A2 : Algorithm Test / 1.3 Algorithm 2`
 - kernel_Litxtre
   - 重寫數據優化算法
