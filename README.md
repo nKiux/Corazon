@@ -1,6 +1,19 @@
 # 共寫更新
 最新版本請寫在最上面
 
+# 23/5/14 更新進度
+`Kai` `version 13A2 : Algorithm Test / 1.3 Algorithm 2`
+- kernel_Litxtre
+  - 重寫數據優化算法
+    - 使用區間平均平滑數據
+    - 使用區間平均設定Height
+- 已知問題：
+  - 未接上UI輸出結果
+- Main
+  - 移除未使用區塊
+![Litxtre_logo_2](https://github.com/nKiux/Bio-HRMonitor/assets/46084374/6080c1b2-f5ae-4234-9b66-644b33e41017)
+
+
 # 24/4/30 更新進度
 `Kai` `version v1.3 : Stable Release / 1.3`
 - DMX3
