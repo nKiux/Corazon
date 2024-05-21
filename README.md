@@ -1,6 +1,13 @@
 # 共寫更新
 最新版本請寫在最上面
 
+# 24/5/21 更新進度
+`Kai` `version v1.3.2 : Stable Release / 1.3.2`
+- DMX3.1
+  - 改進效能
+- Kernel
+  - 建立def準備合併算法
+
 # 24/4/30 更新進度
 `Kai` `version v1.3 : Stable Release / 1.3`
 - DMX3
