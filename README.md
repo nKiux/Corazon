@@ -2,6 +2,10 @@
 最新版本請寫在最上面
 
 # 24/5/21 更新進度
+`Kai` `version v1.3.3 : unstable`
+- DMX3.2
+  - 減少重複設定自動曝光次數
+
 `Kai` `version v1.3.2 : Stable Release / 1.3.2`
 - DMX3.1
   - 改進效能
