@@ -1,7 +1,6 @@
-#version 0.6.7
+#version 1.3
 import os
 import kernel_LightEngine
-from kernel_LightEngine import pure_benchmark
 try:
     from PyQt5 import QtCore, QtGui, QtWidgets
 except:
@@ -17,7 +16,7 @@ mode = 0
 class Ui_DefaultWindow:
     def setupUi(self, DefaultWindow):
         DefaultWindow.setObjectName("DefaultWindow")
-        DefaultWindow.resize(411, 198)
+        DefaultWindow.resize(411, 160)
         self.pushButton = QtWidgets.QPushButton(DefaultWindow)
         self.pushButton.setGeometry(QtCore.QRect(10, 50, 161, 61))
         self.pushButton.setObjectName("pushButton")
@@ -32,18 +31,8 @@ class Ui_DefaultWindow:
         self.label.setGeometry(QtCore.QRect(180, 10, 221, 16))
         self.label.setObjectName("label")
 
-        self.checkBox = QtWidgets.QCheckBox(DefaultWindow)
-        self.checkBox.setGeometry(QtCore.QRect(10, 120, 181, 16))
-        self.checkBox.setObjectName("checkBox")
-        self.checkBox.clicked.connect(self.KernelSpeedUP)
-
-        self.pushButton_2 = QtWidgets.QPushButton(DefaultWindow)
-        self.pushButton_2.setGeometry(QtCore.QRect(290, 140, 101, 23))
-        self.pushButton_2.setObjectName("pushButton_2")
-        self.pushButton_2.clicked.connect(self.benchmark)
-
         self.label_2 = QtWidgets.QLabel(DefaultWindow)
-        self.label_2.setGeometry(QtCore.QRect(150, 160, 250, 21))
+        self.label_2.setGeometry(QtCore.QRect(150, 130, 250, 21))
         self.label_2.setObjectName("label_2")
 
 
@@ -57,17 +46,6 @@ class Ui_DefaultWindow:
         self.label_3.setObjectName("label_3")
 
 
-
-        self.modeSpin = QtWidgets.QSpinBox(DefaultWindow)
-        self.modeSpin.setGeometry(QtCore.QRect(10, 160, 42, 22))
-        self.modeSpin.setObjectName("modeSpin")
-        self.modeSpin.valueChanged.connect(self.modeChange)
-
-
-        self.label_4 = QtWidgets.QLabel(DefaultWindow)
-        self.label_4.setGeometry(QtCore.QRect(10, 140, 271, 16))
-        self.label_4.setObjectName("label_4")
-
         self.retranslateUi(DefaultWindow)
         QtCore.QMetaObject.connectSlotsByName(DefaultWindow)
 
@@ -76,60 +54,34 @@ class Ui_DefaultWindow:
         DefaultWindow.setWindowTitle(_translate("DefaultWindow", "HRMonitor Beta"))
         self.pushButton.setText(_translate("DefaultWindow", "Start"))
         self.label.setText(_translate("DefaultWindow", "BPM"))
-        self.checkBox.setText(_translate("DefaultWindow", "略過動態效能追蹤"))
-        self.pushButton_2.setText(_translate("DefaultWindow", "Benchmark"))
-        self.label_2.setText(_translate("DefaultWindow", "Result:"))
+        #self.checkBox.setText(_translate("DefaultWindow", "略過動態效能追蹤"))
+        #self.pushButton_2.setText(_translate("DefaultWindow", "Benchmark"))
+        self.label_2.setText(_translate("DefaultWindow", ""))
         self.label_3.setText(_translate("DefaultWindow", "選擇相機"))
-        self.label_4.setText(_translate("DefaultWindow", "測試模式：0 = Fast | 1 = Normal | 2 = Slow"))
+        #self.label_4.setText(_translate("DefaultWindow", "測試模式：0 = Fast | 1 = Normal | 2 = Slow"))
     
     def call_Kernel(self):
         global mode
         _translate = QtCore.QCoreApplication.translate
         self.pushButton.setGeometry(QtCore.QRect(10, 10, 0, 0))
-        self.pushButton_2.setGeometry(QtCore.QRect(290, 140, 0, 0))
+        #self.pushButton_2.setGeometry(QtCore.QRect(290, 140, 0, 0))
         print(f'正在以模式{mode}執行')
+        self.label_2.setText(_translate("DefaultWindow", "測試中..."))
         start = kernel_LightEngine.start(kernel_LightEngine.bnhmrk, camera_select=cam, mode=mode)
         if start == False:    
-            self.label_2.setText(_translate("DefaultWindow", "Result: 相機不存在或更新率過低"))
-        result = open('result.txt', 'r', encoding='utf-8').readline()
-        print(f'BPM = {result}')
-        self.lcdNumber.display(result)
+            self.label_2.setText(_translate("DefaultWindow", "相機不存在或更新率過低(亮度不足)"))
+        elif start == True:
+            self.label_2.setText(_translate("DefaultWindow", "測試完成"))
+            result = open('result.txt', 'r', encoding='utf-8').readline()
+            print(f'BPM = {result}')
+            self.lcdNumber.display(result)
         self.pushButton.setGeometry(QtCore.QRect(10, 50, 161, 61))
-        self.pushButton_2.setGeometry(QtCore.QRect(290, 140, 101, 23))
-
-    def benchmark(self):
-        global cam
-        global mode
-        self.pushButton_2.setGeometry(QtCore.QRect(10, 140, 0, 0))
-        if pure_benchmark(camera_select=cam):
-            title = "Passed"
-        else:
-            title = "性能低於要求或相機不存在"
-        _translate = QtCore.QCoreApplication.translate
-        self.label_2.setText(_translate("DefaultWindow", f"Result: {title}"))
-        self.pushButton_2.setGeometry(QtCore.QRect(290, 140, 101, 23))
-
-
-    def KernelSpeedUP(self):
-        if self.checkBox.isChecked():
-            kernel_LightEngine.bnhmrk = True
-            print('略過效能檢查 is set to true')
-        else:
-            kernel_LightEngine.bnhmrk = False
-            print('略過效能檢查 is set to false')
+        #self.pushButton_2.setGeometry(QtCore.QRect(290, 140, 101, 23))
 
     def camChange(self):
         global cam
         cam = self.camSpin.value()
         print(f'cam has been set to {cam}')
-    
-    def modeChange(self):
-        global mode
-        mode = self.modeSpin.value()
-        if mode > 2:
-            self.modeSpin.setValue(2)
-        print(f'mode has been set to {mode}')
-
 
 
 if __name__ == "__main__":
