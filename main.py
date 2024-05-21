@@ -1,4 +1,5 @@
-#version 1.3.2
+# base version 1.3.2
+# version 1.3.3
 import os
 try:
     import cv2
@@ -80,6 +81,7 @@ def start(skipDMX, camera_select, mode):
             bright_fixed = int(str(bright)[0:3])
         
         # Finger detection
+        # version 1.3.2
         if avgR > 70 and avgR > (avgB + avgG) and counting <= 10:
             if counting > 6:
                 if brit <= -3:
@@ -128,7 +130,7 @@ def start(skipDMX, camera_select, mode):
                 start_t = run_t
                 passed = True
             
-            # v0.6.7
+            # version 1.3.3
             if run_t - start_t == 15:
                 with open('h_std.txt', 'a', encoding='utf-8') as data:
                     with open('test.txt', 'r', encoding='utf-8') as tmp:
