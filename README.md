@@ -1,6 +1,19 @@
 # 共寫更新
 最新版本請寫在最上面
 
+# 24/05/21 更新進度
+`JT_0`
+`Base version: 1.3.2 (main branch)`
+- Main
+  - new Finger_Detection Auto Exposure method (Line 83~124)
+  - 修改經過 15 秒後所做的操作 (Line 132~151)
+  - 移除 `HR_monitor()`，現 `main.py` 僅做數據紀錄
+- Kernel
+  - 分離雙算法至 `subseq_algo()`, `polft_algorithm()` (Line 65~130)
+  - 計算最後雙算法整合結果 (Line 51~57)
+- UI_Beta2
+  - 同步 main branch 最新版本
+
 # 24/04/09 更新進度
 `JT_0`
 - Main
