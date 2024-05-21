@@ -1,4 +1,5 @@
-#version 1.3.2
+# version 1.3.3_algo
+# base version 1.3.2
 import os
 from datetime import datetime
 import main
@@ -48,6 +49,7 @@ def start(skipDMX, camera_select, mode):
     prog.update(10)
     prog.close()
     
+    # version 1.3.3_algo
     if main.start(skipDMX = skipDMX, camera_select = camera_select, mode = mode) == True:
         polft = polft_algorithm()
         subseq = subseq_algo()
@@ -62,6 +64,7 @@ def start(skipDMX, camera_select, mode):
         return False
 #start(False, 0 , 0)
 
+# version 1.3.3_algo
 # ----------- algorithms ----------- #
 figure, axis = plt.subplots(1, 2) # rows, columns
 def subseq_algo():
