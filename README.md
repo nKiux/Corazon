@@ -1,6 +1,14 @@
 # 共寫更新
 最新版本請寫在最上面
 
+# 24/5/21 更新進度
+`Kai` `version 13A3 : Algorithm Test / 1.3 Algorithm 3`
+- kernel_Litxtre
+  - 數據寫入`result.txt`
+  - UI顯示測試結果
+- DMX 3.1 Beta
+  - 更新DMX條件，測試修復效能異常Bug
+
 # 24/5/14 更新進度
 `Kai` `version 13A2 : Algorithm Test / 1.3 Algorithm 2`
 - kernel_Litxtre
