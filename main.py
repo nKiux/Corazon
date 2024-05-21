@@ -1,10 +1,9 @@
-#version 1.3.2
+#version 13A3
 import os
 try:
     import cv2
     import numpy as np
     import time
-    #import win32gui
     from datetime import datetime
     from tqdm.rich import tqdm
     from UI_Beta2 import Ui_DefaultWindow
@@ -18,7 +17,6 @@ except:
 import cv2
 import numpy as np
 import time
-#import win32gui
 from datetime import datetime
 from tqdm.rich import tqdm
 
@@ -26,12 +24,16 @@ def start(skipDMX, camera_select, mode):
     
     start_t = int(time.time())
     cam = cv2.VideoCapture(camera_select)
-    cam.set(cv2.CAP_PROP_AUTO_EXPOSURE, 1)
+    #cam.set(cv2.CAP_PROP_AUTO_EXPOSURE, 1)
     counting = 0
+    chk_count = 0
+    mx = 0
+    mn = 255
     FDetect = False
     if_reset = False
     reset = False
     passed = False
+    beats = 0
     bpm = 0
     brit = -4
     bright_fail_count = 0
@@ -58,7 +60,7 @@ def start(skipDMX, camera_select, mode):
         
         frm = cv2.resize(frm,(600,420))
         avgB, avgG, avgR, avgA = cv2.mean(frm)
-        
+        #v0.6.6
         gray = cv2.cvtColor(frm, cv2.COLOR_BGR2GRAY)
         bright = cv2.mean(gray)[0]
         if str(bright)[1] == '.':
@@ -71,42 +73,37 @@ def start(skipDMX, camera_select, mode):
         # Finger detection
         if avgR > 70 and avgR > (avgB + avgG) and counting <= 10:
             if counting > 6:
+                britFailContrl = False
                 if brit <= -3:
                     brit = -4 + bright_fail_count
                     cam.set(cv2.CAP_PROP_EXPOSURE, brit)
-                elif brit > -3:
-                    if aeset == False:
-                        cam.set(cv2.CAP_PROP_AUTO_EXPOSURE, 1)
+                elif brit > -3 and autobrit == False:
+                    cam.set(cv2.CAP_PROP_AUTO_EXPOSURE, 1)
                     autobrit = True
-                    aeset = True
                 cam.set(cv2.CAP_PROP_BRIGHTNESS, 100)
             FDetect = True
             counting += 0.2
-        elif avgR > 70 and avgR > (avgB + avgG) and counting > 10 and aeset == False:
-            if brit > -3:
-                cam.set(cv2.CAP_PROP_AUTO_EXPOSURE, 1)
-                aeset = True
-            else:
-                cam.set(cv2.CAP_PROP_EXPOSURE, brit)
-                cam.set(cv2.CAP_PROP_BRIGHTNESS, 100)
-                aeset = True
-        elif avgR > 70 and avgR > (avgB + avgG) and counting > 10 and aeset == True:
+        elif avgR > 70 and avgR > (avgB + avgG) and counting > 10:
             pass
         else:
             if britFailContrl == False:
                 bright_fail_count += 1
             britFailContrl = True
-            if aeset == False:
-                cam.set(cv2.CAP_PROP_AUTO_EXPOSURE, 1)
-                cam.set(cv2.CAP_PROP_BRIGHTNESS, 100)
-                aeset = True
+            cam.set(cv2.CAP_PROP_AUTO_EXPOSURE, 1)
+            cam.set(cv2.CAP_PROP_BRIGHTNESS, 100)
             FDetect = False
+            mx = 0
+            mn = 255
+            chk_count = 30
             passed = False
+            beats = 0
             bpm = 0
             if counting >= 0:
                 counting -= 2
+   
+
         
-        if FDetect and reset == False:
+        if FDetect == True and reset == False:
             if passed == False and counting >= 10:
                 start_t = run_t
                 passed = True
@@ -145,22 +142,9 @@ def start(skipDMX, camera_select, mode):
 def DMX3(time_now, skipDMX):
     global fatalError
     time_then = time.time_ns()
-    #window = win32gui.FindWindow(None, 'Camera_Capture')
-    #win_rectNow = win32gui.GetWindowRect(window)
-    #print(Pos[0], win_rectNow[0], Pos[1], win_rectNow[1], Pos[2], win_rectNow[2], Pos[3], win_rectNow[3])
-    
-    #if Pos[0] == win_rectNow[0] and Pos[1] == win_rectNow[1] and Pos[2] == win_rectNow[2] and Pos[3] == win_rectNow[3]:
     time_passed = time_then - time_now
     if fatalError >= 5:
         return False
-        """
-            if time_passed < 0:
-            time_passed = time_passed*-1
-            print(time_passed)
-            if time_passed > 200000000:
-            print(f'偵測到效能問題(err1, failCount = {4-fatalError})\ntime_now = {time_now}\ntime_then = {time_then}\ntime passed = {time_passed}')
-            fatalError += 1
-        """
     if time_passed > 200000000:
         print(f'fps = {10 / time_passed}')
         print(f'偵測到效能問題(failCount = {4-fatalError})\ntime_now = {time_now}\ntime_then = {time_then}\ntime passed = {time_passed}')
