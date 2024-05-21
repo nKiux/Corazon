@@ -7,6 +7,7 @@
   - 改進效能
 - Kernel
   - 建立def準備合併算法
+  - 下一個版本合併 Kernel_Litxtre (Light Extreme)
 
 # 24/4/30 更新進度
 `Kai` `version v1.3 : Stable Release / 1.3`
