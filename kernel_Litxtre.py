@@ -75,6 +75,8 @@ def start(skipDMX, camera_select, mode):
         
 
         peak, _ = find_peaks(np.array(avg), distance=(8.5*(datacount/200)), height=np.array(avg2))
+        peaks = len(peak)
+        open("result.txt", 'w', encoding="utf-8").write(str(peaks*6))
         #peak2, _ = find_peaks(np.array(result), distance=(8.5*(datacount/200)), height=np.array(avg2))
         plt.plot(np.array(result))
         plt.plot(peak, np.array(avg)[peak], "o")

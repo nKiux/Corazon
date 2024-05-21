@@ -41,7 +41,7 @@ def start(skipDMX, camera_select, mode):
     autobrit = False
     global fatalError
     fatalError = 0
-
+    aeset = False
     while True:
         time_now = time.time_ns()
         
@@ -73,34 +73,37 @@ def start(skipDMX, camera_select, mode):
         # Finger detection
         if avgR > 70 and avgR > (avgB + avgG) and counting <= 10:
             if counting > 6:
-                britFailContrl = False
                 if brit <= -3:
                     brit = -4 + bright_fail_count
                     cam.set(cv2.CAP_PROP_EXPOSURE, brit)
                 elif brit > -3:
-                    cam.set(cv2.CAP_PROP_AUTO_EXPOSURE, 1)
+                    if aeset == False:
+                        cam.set(cv2.CAP_PROP_AUTO_EXPOSURE, 1)
                     autobrit = True
+                    aeset = True
                 cam.set(cv2.CAP_PROP_BRIGHTNESS, 100)
             FDetect = True
             counting += 0.2
-        elif avgR > 70 and avgR > (avgB + avgG) and counting > 10:
+        elif avgR > 70 and avgR > (avgB + avgG) and counting > 10 and aeset == False:
             if brit > -3:
                 cam.set(cv2.CAP_PROP_AUTO_EXPOSURE, 1)
+                aeset = True
             else:
                 cam.set(cv2.CAP_PROP_EXPOSURE, brit)
                 cam.set(cv2.CAP_PROP_BRIGHTNESS, 100)
+                aeset = True
+        elif avgR > 70 and avgR > (avgB + avgG) and counting > 10 and aeset == True:
+            pass
         else:
             if britFailContrl == False:
                 bright_fail_count += 1
             britFailContrl = True
-            cam.set(cv2.CAP_PROP_AUTO_EXPOSURE, 1)
-            cam.set(cv2.CAP_PROP_BRIGHTNESS, 100)
+            if aeset == False:
+                cam.set(cv2.CAP_PROP_AUTO_EXPOSURE, 1)
+                cam.set(cv2.CAP_PROP_BRIGHTNESS, 100)
+                aeset = True
             FDetect = False
-            mx = 0
-            mn = 255
-            chk_count = 30
             passed = False
-            beats = 0
             bpm = 0
             if counting >= 0:
                 counting -= 2
