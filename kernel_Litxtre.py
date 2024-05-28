@@ -1,4 +1,4 @@
-#version 13A2
+#version 13A3
 import os
 from datetime import datetime
 import main
@@ -69,8 +69,8 @@ def start(skipDMX, camera_select, mode):
         avg = []
         avg2 = []
         for i in range(datacount):
-            avg.append(np.average(result[i:i+3]))
-            avg2.append(np.average(result[i:i+15]))
+            avg.append(np.average(result[i:i+5]))
+            avg2.append(np.average(result[i:i+20]))
 
         
 
@@ -81,8 +81,8 @@ def start(skipDMX, camera_select, mode):
         plt.plot(np.array(result))
         plt.plot(peak, np.array(avg)[peak], "o")
         #plt.plot(peak2, np.array(result)[peak2], "o")
-        plt.plot(np.array(avg), label = "10 steps")
-        plt.plot(np.array(avg2), label = "height")
+        plt.plot(np.array(avg), label = "5 steps")
+        plt.plot(np.array(avg2), label = "height (20 steps)")
         #plt.plot(np.array(avg2), label = "3 steps")
         plt.legend()
         plt.show()

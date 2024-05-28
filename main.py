@@ -1,4 +1,4 @@
-#version 13A2
+#version 13A3
 import os
 try:
     import cv2
@@ -24,7 +24,7 @@ def start(skipDMX, camera_select, mode):
     
     start_t = int(time.time())
     cam = cv2.VideoCapture(camera_select)
-    cam.set(cv2.CAP_PROP_AUTO_EXPOSURE, 1)
+    #cam.set(cv2.CAP_PROP_AUTO_EXPOSURE, 1)
     counting = 0
     chk_count = 0
     mx = 0
@@ -72,43 +72,42 @@ def start(skipDMX, camera_select, mode):
         
         # Finger detection
         if avgR > 70 and avgR > (avgB + avgG) and counting <= 10:
+            '''
             if counting > 6:
+                britFailContrl = False
                 if brit <= -3:
                     brit = -4 + bright_fail_count
                     cam.set(cv2.CAP_PROP_EXPOSURE, brit)
-                elif brit > -3:
-                    if aeset == False:
-                        cam.set(cv2.CAP_PROP_AUTO_EXPOSURE, 1)
+                elif brit > -3 and autobrit == False:
+                    cam.set(cv2.CAP_PROP_AUTO_EXPOSURE, 1)
                     autobrit = True
-                    aeset = True
                 cam.set(cv2.CAP_PROP_BRIGHTNESS, 100)
+            '''
             FDetect = True
             counting += 0.2
-        elif avgR > 70 and avgR > (avgB + avgG) and counting > 10 and aeset == False:
-            if brit > -3:
-                cam.set(cv2.CAP_PROP_AUTO_EXPOSURE, 1)
-                aeset = True
-            else:
-                cam.set(cv2.CAP_PROP_EXPOSURE, brit)
-                cam.set(cv2.CAP_PROP_BRIGHTNESS, 100)
-                aeset = True
-        elif avgR > 70 and avgR > (avgB + avgG) and counting > 10 and aeset == True:
-            pass
+        elif avgR > 70 and avgR > (avgB + avgG) and counting > 10:
+            FDetect = True
         else:
+            '''
             if britFailContrl == False:
                 bright_fail_count += 1
             britFailContrl = True
-            if aeset == False:
-                cam.set(cv2.CAP_PROP_AUTO_EXPOSURE, 1)
-                cam.set(cv2.CAP_PROP_BRIGHTNESS, 100)
-                aeset = True
+            cam.set(cv2.CAP_PROP_AUTO_EXPOSURE, 1)
+            cam.set(cv2.CAP_PROP_BRIGHTNESS, 100)
+            '''
             FDetect = False
+            mx = 0
+            mn = 255
+            chk_count = 30
             passed = False
+            beats = 0
             bpm = 0
             if counting >= 0:
                 counting -= 2
+   
+
         
-        if FDetect and reset == False:
+        if FDetect == True and reset == False:
             if passed == False and counting >= 10:
                 start_t = run_t
                 passed = True
