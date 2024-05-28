@@ -1,4 +1,4 @@
-#version 13A3
+#version 13US1 (13A4 Merge)
 import os
 try:
     import cv2
@@ -24,7 +24,7 @@ def start(skipDMX, camera_select, mode):
     
     start_t = int(time.time())
     cam = cv2.VideoCapture(camera_select)
-    #cam.set(cv2.CAP_PROP_AUTO_EXPOSURE, 1)
+    cam.set(cv2.CAP_PROP_AUTO_EXPOSURE, 1)
     counting = 0
     chk_count = 0
     mx = 0
@@ -72,6 +72,7 @@ def start(skipDMX, camera_select, mode):
         
         # Finger detection
         if avgR > 70 and avgR > (avgB + avgG) and counting <= 10:
+            '''
             if counting > 6:
                 britFailContrl = False
                 if brit <= -3:
@@ -81,16 +82,19 @@ def start(skipDMX, camera_select, mode):
                     cam.set(cv2.CAP_PROP_AUTO_EXPOSURE, 1)
                     autobrit = True
                 cam.set(cv2.CAP_PROP_BRIGHTNESS, 100)
+            '''
             FDetect = True
             counting += 0.2
         elif avgR > 70 and avgR > (avgB + avgG) and counting > 10:
-            pass
+            FDetect = True
         else:
+            '''
             if britFailContrl == False:
                 bright_fail_count += 1
             britFailContrl = True
             cam.set(cv2.CAP_PROP_AUTO_EXPOSURE, 1)
             cam.set(cv2.CAP_PROP_BRIGHTNESS, 100)
+            '''
             FDetect = False
             mx = 0
             mn = 255
