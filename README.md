@@ -5,7 +5,7 @@
 `JT_0`
 `Base version: 1.3.3 (algo branch)`
 - Main
-  - 註解掉調整亮度 (Line 127~135, 141~145)
+  - 註解掉調整亮度 (Line 127\~135, 141\~145)
 - Kernel
   - `plt.show()` 更改位置，解決無法繪出圖表問題 (Line 54)
   - `subseq_algo()` 新增數據平滑 (Line 80~90)
