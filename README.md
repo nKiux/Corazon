@@ -3,6 +3,20 @@
 
 # 24/05/28 更新進度
 `JT_0`
+`Base version: 13US1 (main branch)`
+- Main
+  - 同步版本號 (main branch)
+  - 將偵測時間改為 10 秒 (Line 115)
+- Kernel (Litxtre)
+  - 同步版本號&更名 (main branch)
+  - 整合三算法 `Subsequence Algorithm`, `Average Calculation`, `Ployfit Algorithms` (Line 94~199)
+  - 繪製圖表顯示函式 `plt.show()` 移至 `start()` 內 (Line 55)
+  - 三算法結果整合計算移至 `start()` 內 (Line 57~59)
+  - 新增(更改)結果比較方式 (Line 61~78)
+
+
+# 24/05/28 更新進度
+`JT_0`
 `Base version: 1.3.3 (algo branch)`
 - Main
   - 註解掉調整亮度 (Line 127\~135, 141\~145)
