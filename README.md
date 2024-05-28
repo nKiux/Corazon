@@ -1,6 +1,18 @@
 # 共寫更新
 最新版本請寫在最上面
 
+# 24/5/28 更新進度
+`Kai` `version 13US1 : 1.3 Unstable 1`
+- Main
+  - 開啟時重設自動亮度
+  - DMX3.3
+    - 移除自動鎖定亮度
+  - 修改空條件式
+- Kernel_LightEngine >> Litxtre (LightEngine Extreme)
+  - 結合比對 Main函式與新平均算法
+  - 若結果超過12 BPM輸出不準確通知
+<img src="https://github.com/nKiux/Bio-HRMonitor/assets/46084374/7e28222c-6078-4689-8de0-22dc2536b88f" width="630" height="270">
+
 # 24/5/21 更新進度
 `Kai` `version v1.3.3 : unstable`
 - DMX3.2
