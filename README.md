@@ -1,6 +1,13 @@
 # 共寫更新
 最新版本請寫在最上面
 
+# 24/5/28 更新進度
+`Kai` `version 13A4 : Algorithm Test / 1.3 Algorithm 4`
+- kernel_Litxtre
+  - 平滑高度15 >> 20
+  - 平滑原始數據 3 >> 5
+- Main
+  - 移除自動固定亮度 (DMX3新增)
 # 24/5/21 更新進度
 `Kai` `version 13A3 : Algorithm Test / 1.3 Algorithm 3`
 - kernel_Litxtre
