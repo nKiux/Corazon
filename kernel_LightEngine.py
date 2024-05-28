@@ -1,5 +1,4 @@
-# version 1.3.3_algo
-# base version 1.3.2
+#version 1.3.2
 import os
 from datetime import datetime
 import main
@@ -49,10 +48,10 @@ def start(skipDMX, camera_select, mode):
     prog.update(10)
     prog.close()
     
-    # version 1.3.3_algo
     if main.start(skipDMX = skipDMX, camera_select = camera_select, mode = mode) == True:
         polft = polft_algorithm()
         subseq = subseq_algo()
+        plt.show()
 
         finalResult = (polft + subseq) / 2
         print(finalResult)
@@ -64,7 +63,6 @@ def start(skipDMX, camera_select, mode):
         return False
 #start(False, 0 , 0)
 
-# version 1.3.3_algo
 # ----------- algorithms ----------- #
 figure, axis = plt.subplots(1, 2) # rows, columns
 def subseq_algo():
@@ -79,9 +77,20 @@ def subseq_algo():
         tmp.close()
     
     bright_values = np.array([float(data[:6]) for data in bright_values])
+    for i, x in enumerate(bright_values):
+        if i==0 or i==len(bright_values)-1:
+            continue
+        else:
+            bright_values[i] = np.average(bright_values[i-1:i+1])
+    
+    for i, x in enumerate(height_standard):
+        if i==len(height_standard)-1: # last digit
+            break
+        else:
+            height_standard[i] = np.average(height_standard[i:i+1]) # avg of current and next one
     # height_standard = np.array(height_standard)
     
-    peak_idx = find_peaks(bright_values, height=np.array(height_standard), distance=7)[0] # peak indexes
+    peak_idx = find_peaks(bright_values, height=height_standard, distance=7)[0] # peak indexes
     
     # # hand-made peak finder BETA
     # peak_idx = []
@@ -125,7 +134,6 @@ def polft_algorithm():
     # plt.ylabel('Brightness')
     axis[1].plot(peak, np.array(result)[peak], 'x')
     axis[1].plot(x, pfix - 0.02, '-')
-    plt.show()
     
     Result2 = (len(peak)*4)
     # print(finalResult)

@@ -1,5 +1,4 @@
-# base version 1.3.2
-# version 1.3.3
+#version 1.3.2
 import os
 try:
     import cv2
@@ -80,8 +79,7 @@ def start(skipDMX, camera_select, mode):
         else:
             bright_fixed = int(str(bright)[0:3])
         
-        # Finger detection
-        # version 1.3.2
+        """# Finger detection
         if avgR > 70 and avgR > (avgB + avgG) and counting <= 10:
             if counting > 6:
                 if brit <= -3:
@@ -123,6 +121,36 @@ def start(skipDMX, camera_select, mode):
             passed = False
             bpm = 0
             if counting >= 0:
+                counting -= 2"""
+
+        if avgR > 60 and avgR > (avgB + avgG) and counting <= 10:
+            """if counting > 6:
+                britFailContrl = False
+                if brit <= -3:
+                    brit = -4 + bright_fail_count
+                    cam.set(cv2.CAP_PROP_EXPOSURE, brit)
+                elif brit > -3 and autobrit == False:
+                    cam.set(cv2.CAP_PROP_AUTO_EXPOSURE, 1)
+                    autobrit = True
+                cam.set(cv2.CAP_PROP_BRIGHTNESS, 100)"""
+            FDetect = True
+            counting += 0.2
+        elif avgR > 60 and avgR > (avgB + avgG) and counting > 10:
+            pass
+        else:
+            """if britFailContrl == False:
+                bright_fail_count += 1
+            britFailContrl = True
+            cam.set(cv2.CAP_PROP_AUTO_EXPOSURE, 1)
+            cam.set(cv2.CAP_PROP_BRIGHTNESS, 100)"""
+            FDetect = False
+            mx = 0
+            mn = 255
+            chk_count = 30
+            passed = False
+            beats = 0
+            bpm = 0
+            if counting >= 0:
                 counting -= 2
         
         if FDetect and counting >= 10 and reset == False:
@@ -130,7 +158,7 @@ def start(skipDMX, camera_select, mode):
                 start_t = run_t
                 passed = True
             
-            # version 1.3.3
+            # v0.6.7
             if run_t - start_t == 15:
                 with open('h_std.txt', 'a', encoding='utf-8') as data:
                     with open('test.txt', 'r', encoding='utf-8') as tmp:
