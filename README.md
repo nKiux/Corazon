@@ -1,6 +1,15 @@
 # 共寫更新
 最新版本請寫在最上面
 
+# 24/5/31 更新進度
+`Kai & JT Lin` `version 13S3 : 1.3 Stable 3`
+- Main
+  - 合併 [13US2](https://github.com/nKiux/Bio-HRMonitor/blob/algo/main.py) 算法數據寫入
+- Litxtre (LightEngine_Extreme)
+  - 結合比對三算法並繪製曲線
+  - 修復 [13US2](https://github.com/nKiux/Bio-HRMonitor/blob/algo/kernel_Litxtre.py) 內Bug
+  - 分析三算法結果並輸出
+
 # 24/5/28 更新進度
 `Kai` `version 13US1 : 1.3 Unstable 1`
 - Main
