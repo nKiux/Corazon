@@ -1,4 +1,4 @@
-#version 13US1 (13A4 Merge)
+#version 13S3
 import os
 try:
     import cv2
@@ -114,6 +114,20 @@ def start(skipDMX, camera_select, mode):
             
             # v0.6.7
             if run_t - start_t == 10 and counting >= 10:
+                with open('h_std.txt', 'a', encoding='utf-8') as data:
+                    with open('test.txt', 'r', encoding='utf-8') as tmp:
+                        bright_rec = tmp.readlines()
+                        bright_rec = [float(x) for x in bright_rec]
+                        tmp.close()
+                    
+                    for i, bri in enumerate(bright_rec): # appending brightness avg of 15 sec
+                        if i >= len(bright_rec)-16:
+                            data.write(f'{avg_bri}\n')
+                        else:
+                            h_mov = 0.2*(max(bright_rec[i:i+15]) - min(bright_rec[i:i+15])) # height vertical translating amount
+                            avg_bri = np.average(bright_rec[i:i+15]) + h_mov
+                            data.write(f'{avg_bri}\n')
+                    data.close()
                 return True
             
             # Write the brightness values
@@ -129,6 +143,10 @@ def start(skipDMX, camera_select, mode):
                 counting = 7
             passed = False
             with open('test.txt', 'w', encoding='utf-8') as data:
+                data.write('')
+                data.close()
+            
+            with open('h_std.txt', 'w', encoding='utf-8') as data:
                 data.write('')
                 data.close()
 
