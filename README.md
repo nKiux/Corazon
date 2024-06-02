@@ -177,9 +177,6 @@ v1.0備註：
  - 新增偵測分數，當 **連續低更新率** 出現時才會自動關閉cv2
  - 新增視窗拖動偵測，自動停用DMX
  - 更新def區隔程式
-![DMX2iP](https://github.com/nKiux/Bio-HRMonitor/assets/46084374/2b51a7a6-6fbf-4c64-b8c2-6b99d7823547)
-
-
 
 # 24/03/02 更新進度
 `JT_0`
