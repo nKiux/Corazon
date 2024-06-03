@@ -1,85 +1,63 @@
 # 共寫更新
 最新版本請寫在最上面
 
-# 24/5/31 更新進度
-`Kai & JT Lin` `version 13S3 : 1.3 Stable 3`
+# 24/05/29 更新進度
+`JT_0`
+`Base version: 13US1 (main branch)`
 - Main
-  - 合併 [13US2](https://github.com/nKiux/Bio-HRMonitor/blob/algo/main.py) 算法數據寫入
-- Litxtre (LightEngine_Extreme)
-  - 結合比對三算法並繪製曲線
-  - 修復 [13US2](https://github.com/nKiux/Bio-HRMonitor/blob/algo/kernel_Litxtre.py) 內Bug
-  - 分析三算法結果並輸出
+  - 同步版本號 (main branch)
+  - 將偵測時間改為 10 秒 (Line 115)
+- Kernel (Litxtre)
+  - 同步版本號&更名 (main branch)
+  - 整合三算法 `Subsequence Algorithm`, `Average Calculation`, `Ployfit Algorithms` (Line 94~199)
+  - 繪製圖表顯示函式 `plt.show()` 移至 `start()` 內 (Line 55)
+  - 三算法結果整合計算移至 `start()` 內 (Line 57~59)
+  - 新增(更改)結果比較方式 (Line 61~78)
 
-# 24/5/28 更新進度
-`Kai` `version 13US1 : 1.3 Unstable 1`
+
+# 24/05/28 更新進度
+`JT_0`
+`Base version: 1.3.3 (algo branch)`
 - Main
-  - 開啟時重設自動亮度
-  - DMX3.3
-    - 移除自動鎖定亮度
-  - 修改空條件式
-- Kernel_LightEngine >> Litxtre (LightEngine Extreme)
-  - 結合比對 Main函式與新平均算法
-  - 若結果超過12 BPM輸出不準確通知
-<img src="https://github.com/nKiux/Bio-HRMonitor/assets/46084374/7e28222c-6078-4689-8de0-22dc2536b88f" width="630" height="270">
-
-# 24/5/21 更新進度
-`Kai` `version v1.3.3 : unstable`
-- DMX3.2
-  - 減少重複設定自動曝光次數
-
-`Kai` `version v1.3.2 : Stable Release / 1.3.2`
-- DMX3.1
-  - 改進效能
+  - 註解掉調整亮度 (Line 127\~135, 141\~145)
 - Kernel
-  - 建立def準備合併算法
-  - 下一個版本合併 Kernel_Litxtre (Light Extreme)
+  - `plt.show()` 更改位置，解決無法繪出圖表問題 (Line 54)
+  - `subseq_algo()` 新增數據平滑 (Line 80~90)
 
-# 24/4/30 更新進度
-`Kai` `version v1.3 : Stable Release / 1.3`
-- DMX3
-  - 架構改進
-  - 視窗移動後重設計時與數據
-  - 修改錯誤偵測輸出
-  - 改善數據蒐集穩定性
-  
-![DMX3Logo_bw_2](https://github.com/nKiux/Bio-HRMonitor/assets/46084374/5110f85d-e979-47da-a8f4-2f8b873d911f)
-
-
-# 24/4/23 更新進度
-`Kai` `version v1.2 : Unstable Release / 1.2 FstR`
-
-`1.2 HotFix`
+# 24/05/21 更新進度
+`JT_0`
+`Base version: 1.3.2 (main branch)`
 - Main
-  - 更新自動曝光原則
+  - new Finger_Detection Auto Exposure method (Line 83~124)
+  - 修改經過 15 秒後所做的操作 (Line 132~151)
+  - 移除 `HR_monitor()`，現 `main.py` 僅做數據紀錄
+- Kernel
+  - 分離雙算法至 `subseq_algo()`, `polft_algorithm()` (Line 65~130)
+  - 計算最後雙算法整合結果 (Line 51~57)
+- UI_Beta2
+  - 同步 main branch 最新版本
 
-- Kernel_LightEngine
-  - 算法更新.減少數據頭尾被忽視問題
-  - 移除`Benchmark`
-- UI_Beta_2
-  - 更新UI.減少操作與更新顯示訊息
+# 24/04/09 更新進度
+`JT_0`
 - Main
-  - 移除`Benchmark`
-  - 更新鎖定曝光優化
-# 24/4/7 更新進度
-`Kai`
-`version v1.1 : Stable Release / 1.1`
-- Kernel_LightEngine
-  - 更新穩定性算法
-  - 於非運動心律`(55~100 BPM)` 準確率可達96%以上
+  - 新增鉛直高度偏移量 `h_mov` (Line 124, 199, 222)
+  - `h_mov` 計算方式 (Line 221)
 
-# 24/3/21 更新進度
-`Kai`
-`UI Py >> C# Prepare`
-僅預上傳示範執行檔
-
-# 第一版本釋出
-`里程碑`
-### 包含前述所有更新
-
-v1.0備註：
-測試60~80BPM之間
-結果準確度僅約90+%，請勿用做醫療參考
-
+# 24/04/07 更新進度
+`JT_0`
+- Main
+  - 刪除陣列 `peak_index_global` (Line 12)
+  - 新增 `bright_rec` 陣列 (Line 122)
+  - 手指放開時清空 `h_std`, `bright_rec` (Line 197, 198)
+  - 更改高度標準寫入 (Line 213~222)
+  - 刪除註解和舊高度標準 (Line 225~236)
+  - 寫入預處裡亮度數據 (Line 235)
+  - 清空高度標準 (Line 249~251)
+  - 修改 peak finder 函式 (Line 288~301)
+- Kernel
+  - 取消 import `peak_index_global` (Line 31, 60)
+  - 修改讀取 (Line 61~70)
+  - 修改圖表 (Line 72, 76)
 
 # 24/3/11 更新進度
 `JT_0`
@@ -141,13 +119,8 @@ v1.0備註：
   - 新增matplotlib將成果作圖
 
 # 24/03/05 更新進度
-`JT_0 & Kai`
-`version v0.6.7 (Main Update), v0.6.7b (Optimize)`
-**v0.6.7b**
-- Main
-  - 縮減219行~後面幾行
-
-**v0.6.7**
+`JT_0`
+`version v0.6.7 (Main Update)`
 - Main
   - 刪除多餘變數:
     - `beats`
@@ -177,6 +150,9 @@ v1.0備註：
  - 新增偵測分數，當 **連續低更新率** 出現時才會自動關閉cv2
  - 新增視窗拖動偵測，自動停用DMX
  - 更新def區隔程式
+![DMX2iP](https://github.com/nKiux/Bio-HRMonitor/assets/46084374/2b51a7a6-6fbf-4c64-b8c2-6b99d7823547)
+
+
 
 # 24/03/02 更新進度
 `JT_0`
