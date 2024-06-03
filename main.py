@@ -1,4 +1,4 @@
-#version 13US2 (13A4 Merge)
+#version 13S3
 import os
 try:
     import cv2
@@ -21,6 +21,7 @@ from datetime import datetime
 from tqdm.rich import tqdm
 
 def start(skipDMX, camera_select, mode):
+    
     start_t = int(time.time())
     cam = cv2.VideoCapture(camera_select)
     cam.set(cv2.CAP_PROP_AUTO_EXPOSURE, 1)
@@ -41,7 +42,6 @@ def start(skipDMX, camera_select, mode):
     global fatalError
     fatalError = 0
     aeset = False
-    
     while True:
         time_now = time.time_ns()
         
@@ -60,11 +60,9 @@ def start(skipDMX, camera_select, mode):
         
         frm = cv2.resize(frm,(600,420))
         avgB, avgG, avgR, avgA = cv2.mean(frm)
-
         #v0.6.6
         gray = cv2.cvtColor(frm, cv2.COLOR_BGR2GRAY)
         bright = cv2.mean(gray)[0]
-
         if str(bright)[1] == '.':
             bright_fixed = int(str(bright)[0])
         elif str(bright)[2] == '.':
@@ -106,13 +104,16 @@ def start(skipDMX, camera_select, mode):
             bpm = 0
             if counting >= 0:
                 counting -= 2
+   
+
         
-        if FDetect == True and counting >= 10 and reset == False:
-            if passed == False:
+        if FDetect == True and reset == False:
+            if passed == False and counting >= 10:
                 start_t = run_t
                 passed = True
             
-            if run_t - start_t == 10:
+            # v0.6.7
+            if run_t - start_t == 10 and counting >= 10:
                 with open('h_std.txt', 'a', encoding='utf-8') as data:
                     with open('test.txt', 'r', encoding='utf-8') as tmp:
                         bright_rec = tmp.readlines()
@@ -127,29 +128,29 @@ def start(skipDMX, camera_select, mode):
                             avg_bri = np.average(bright_rec[i:i+15]) + h_mov
                             data.write(f'{avg_bri}\n')
                     data.close()
-                
                 return True
             
             # Write the brightness values
-            with open('test.txt', 'a', encoding='utf-8') as data:
-                data.write(f'{str(bright)[:6]}\n')
-                # data.close()
+            if counting >= 10:
+                with open('test.txt', 'a', encoding='utf-8') as data:
+                    data.write(f'{str(bright)[:6]}\n')
+                    data.close()
+            # bright_rec.append(str(bright)[:6])
 
         else:
             if reset == True:
                 reset = False
                 counting = 7
             passed = False
-
-            # clear data
             with open('test.txt', 'w', encoding='utf-8') as data:
                 data.write('')
                 data.close()
+            
             with open('h_std.txt', 'w', encoding='utf-8') as data:
                 data.write('')
                 data.close()
 
-        print(f"R: {str(avgR)[:6]}, G: {str(avgG)[:6]}, B: {str(avgB)[:6]}, A: {str(bright)[:6]}, FXL: {bright_fixed}, FD: {str(FDetect)}, S: {str(counting)[:6]}, TR: {10-(run_t - start_t)}, EXPO:{cam.get(cv2.CAP_PROP_EXPOSURE)} , ectrl: {britFailContrl}, {bright_fail_count}, {brit}, AE:{autobrit}, res:{if_reset} .....", end = '\r', flush = True)
+        print(f"R: {str(avgR)[:6]}, G: {str(avgG)[:6]}, B: {str(avgB)[:6]}, A: {str(bright)[:6]}, FXL: {bright_fixed}, FD: {str(FDetect)}, S: {str(counting)[:6]}, TR: {10-(run_t - start_t)}, EXPO:{cam.get(cv2.CAP_PROP_EXPOSURE)} , ectrl: {britFailContrl}, {bright_fail_count}, {brit}, AE:{autobrit}, res:{if_reset}",flush=True)
         open('result.txt', 'w', encoding='utf-8').write(str(bpm))
 
         if_reset = DMX3(time_now = time_now, skipDMX=skipDMX)

@@ -1,6 +1,6 @@
-#version 1.3
+#version 13S3
 import os
-import kernel_LightEngine
+import kernel_Litxtre
 try:
     from PyQt5 import QtCore, QtGui, QtWidgets
 except:
@@ -67,7 +67,7 @@ class Ui_DefaultWindow:
         #self.pushButton_2.setGeometry(QtCore.QRect(290, 140, 0, 0))
         print(f'正在以模式{mode}執行')
         self.label_2.setText(_translate("DefaultWindow", "測試中..."))
-        start = kernel_LightEngine.start(kernel_LightEngine.bnhmrk, camera_select=cam, mode=mode)
+        start = kernel_Litxtre.start(kernel_Litxtre.bnhmrk, camera_select=cam, mode=mode)
         if start == False:    
             self.label_2.setText(_translate("DefaultWindow", "相機不存在或更新率過低(亮度不足)"))
         elif start == True:

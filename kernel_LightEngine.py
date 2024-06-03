@@ -50,67 +50,11 @@ def start(skipDMX, camera_select, mode):
     
     if main.start(skipDMX = skipDMX, camera_select = camera_select, mode = mode) == True:
         polft = polft_algorithm()
-        subseq = subseq_algo()
-        plt.show()
-
-        finalResult = (polft + subseq) / 2
-        print(finalResult)
-        open('result.txt', 'w', encoding='utf-8').write(str(finalResult))
         cv2.destroyAllWindows()
         return True
     else:
         cv2.destroyAllWindows()
         return False
-#start(False, 0 , 0)
-
-# ----------- algorithms ----------- #
-figure, axis = plt.subplots(1, 2) # rows, columns
-def subseq_algo():
-    # read file
-    with open('test.txt', 'r', encoding='utf-8') as data:
-        bright_values =  data.readlines()
-
-    with open('h_std.txt', 'r', encoding='utf-8') as tmp:
-        avg = tmp.readlines()
-        avg = [float(data[:6]) for data in avg]
-        height_standard = np.array(avg)
-        tmp.close()
-    
-    bright_values = np.array([float(data[:6]) for data in bright_values])
-    for i, x in enumerate(bright_values):
-        if i==0 or i==len(bright_values)-1:
-            continue
-        else:
-            bright_values[i] = np.average(bright_values[i-1:i+1])
-    
-    for i, x in enumerate(height_standard):
-        if i==len(height_standard)-1: # last digit
-            break
-        else:
-            height_standard[i] = np.average(height_standard[i:i+1]) # avg of current and next one
-    # height_standard = np.array(height_standard)
-    
-    peak_idx = find_peaks(bright_values, height=height_standard, distance=7)[0] # peak indexes
-    
-    # # hand-made peak finder BETA
-    # peak_idx = []
-    # for i, x in enumerate(bright_values):
-    #     if i == 0 or i == len(bright_values)-1: # first & last
-    #         continue
-    #     else:
-    #         if x > bright_values[i-1] and x > bright_values[i+1]: # peak == True
-    #             if x >= height_standard[i] and i > peak_idx[len(peak_idx)-1]+7: # the peak we want
-    #                 peak_idx.append(i) # write the peak
-
-    axis[0].plot(bright_values)
-    axis[0].plot(height_standard)
-    axis[0].plot(peak_idx, np.array(bright_values)[peak_idx], "o")
-    axis[0].set_title('Brightness Line Chart')
-
-    Result1 = (len(peak_idx)*4)
-
-    return Result1
-
 
 def polft_algorithm():
     with open('test.txt', 'r', encoding='utf-8') as res:
@@ -129,13 +73,16 @@ def polft_algorithm():
     peak, _ = find_peaks(np.array(result), distance=(8.5*(datacount/200)), height=pfix)
     print(peak)
     
-    axis[1].plot(np.array(result))
-    # plt.xlabel('frames')
-    # plt.ylabel('Brightness')
-    axis[1].plot(peak, np.array(result)[peak], 'x')
-    axis[1].plot(x, pfix - 0.02, '-')
+    plt.plot(np.array(result))
+    plt.xlabel('frames')
+    plt.ylabel('Brightness')
+    plt.plot(peak, np.array(result)[peak], 'x')
+    plt.plot(x, pfix - 0.02, '-')
+    plt.show()
     
-    Result2 = (len(peak)*4)
-    # print(finalResult)
-    # open('result.txt', 'w', encoding='utf-8').write(str(finalResult))
-    return Result2
+    finalResult = (len(peak)*6)
+    print(finalResult)
+    open('result.txt', 'w', encoding='utf-8').write(str(finalResult))
+    return finalResult
+
+#start(False, 0 , 0)

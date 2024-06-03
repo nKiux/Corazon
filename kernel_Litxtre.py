@@ -1,4 +1,4 @@
-#version 13US2 (13A4 Merge)
+#version 13S3
 import os
 from datetime import datetime
 import main
@@ -49,14 +49,13 @@ def start(skipDMX, camera_select, mode):
     prog.close()
     
     if main.start(skipDMX = skipDMX, camera_select = camera_select, mode = mode) == True:
+        global figure
+        global axis
+        figure, axis = plt.subplots(2, 2) # rows, columns
         subseq = subseq_algo() # Result1
         avgcalc = avg_calc() # Result2
         polft = polft_algorithm() # Result3
         plt.show()
-
-        finalResult = (subseq + avgcalc + polft) / 3 # temporary solution
-        print(finalResult)
-        open('result.txt', 'w', encoding='utf-8').write(str(finalResult))
 
         # check the results
         # 3 types of situation: all the same (x, x, x), one difference (x, x, y), two difference (x, y, z) 
@@ -66,16 +65,35 @@ def start(skipDMX, camera_select, mode):
         distinct_values = len(set([subseq, polft, avgcalc]))
         if distinct_values == 1: # [x, x, x] >> {x}
             print("通知：結果一致")
+            finalResult = subseq
+            print(finalResult)
+            open('result.txt', 'w', encoding='utf-8').write(str(finalResult))
         elif distinct_values == 2: # [x, x, y] >> {x, y}
-            if abs(res_set[0] - res_set[1]) > 8:
-                print("警告：結果不一致")
-            else:
-                print("通知：結果一致")
+            print("通知：結果一致")
+            if subseq == polft:
+                finalResult = subseq
+                print(finalResult)
+                open('result.txt', 'w', encoding='utf-8').write(str(finalResult))
+            elif subseq == avgcalc:
+                finalResult = avgcalc
+                print(finalResult)
+                open('result.txt', 'w', encoding='utf-8').write(str(finalResult))
+            elif polft == avgcalc:
+                finalResult = polft
+                print(finalResult)
+                open('result.txt', 'w', encoding='utf-8').write(str(finalResult))
         else: # [x, y, z] >> {x, y, z}
-            if abs(res_set[0] - res_set[2]) > 12:
-                print("警告：結果不一致")
-            else:
+            if abs(res_set[0] - res_set[2]) <= 12 and abs(res_set[0] - res_set[1]) <= 12:
+                finalResult = (subseq + avgcalc + polft) / 3
+                print(finalResult)
+                open('result.txt', 'w', encoding='utf-8').write(str(finalResult))
                 print("通知：結果一致")
+                
+            else:
+                finalResult = 0
+                print(finalResult)
+                open('result.txt', 'w', encoding='utf-8').write(str(finalResult))
+                print("警告：結果不一致")
 
 
         
@@ -92,7 +110,7 @@ def start(skipDMX, camera_select, mode):
     
 
 # ----------- algorithms ----------- #
-figure, axis = plt.subplots(2, 2) # rows, columns
+
 def subseq_algo():
     # read file
     with open('test.txt', 'r', encoding='utf-8') as data:
