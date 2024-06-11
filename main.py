@@ -72,29 +72,11 @@ def start(skipDMX, camera_select, mode):
         
         # Finger detection
         if avgR > 70 and avgR > (avgB + avgG) and counting <= 10:
-            '''
-            if counting > 6:
-                britFailContrl = False
-                if brit <= -3:
-                    brit = -4 + bright_fail_count
-                    cam.set(cv2.CAP_PROP_EXPOSURE, brit)
-                elif brit > -3 and autobrit == False:
-                    cam.set(cv2.CAP_PROP_AUTO_EXPOSURE, 1)
-                    autobrit = True
-                cam.set(cv2.CAP_PROP_BRIGHTNESS, 100)
-            '''
             FDetect = True
             counting += 0.2
         elif avgR > 70 and avgR > (avgB + avgG) and counting > 10:
             FDetect = True
         else:
-            '''
-            if britFailContrl == False:
-                bright_fail_count += 1
-            britFailContrl = True
-            cam.set(cv2.CAP_PROP_AUTO_EXPOSURE, 1)
-            cam.set(cv2.CAP_PROP_BRIGHTNESS, 100)
-            '''
             FDetect = False
             mx = 0
             mn = 255
@@ -104,7 +86,6 @@ def start(skipDMX, camera_select, mode):
             bpm = 0
             if counting >= 0:
                 counting -= 2
-   
 
         
         if FDetect == True and reset == False:
@@ -112,7 +93,6 @@ def start(skipDMX, camera_select, mode):
                 start_t = run_t
                 passed = True
             
-            # v0.6.7
             if run_t - start_t == 10 and counting >= 10:
                 with open('h_std.txt', 'a', encoding='utf-8') as data:
                     with open('test.txt', 'r', encoding='utf-8') as tmp:
@@ -135,7 +115,6 @@ def start(skipDMX, camera_select, mode):
                 with open('test.txt', 'a', encoding='utf-8') as data:
                     data.write(f'{str(bright)[:6]}\n')
                     data.close()
-            # bright_rec.append(str(bright)[:6])
 
         else:
             if reset == True:
@@ -150,8 +129,7 @@ def start(skipDMX, camera_select, mode):
                 data.write('')
                 data.close()
 
-        print(f"R: {str(avgR)[:6]}, G: {str(avgG)[:6]}, B: {str(avgB)[:6]}, A: {str(bright)[:6]}, FXL: {bright_fixed}, FD: {str(FDetect)}, S: {str(counting)[:6]}, TR: {10-(run_t - start_t)}, EXPO:{cam.get(cv2.CAP_PROP_EXPOSURE)} , ectrl: {britFailContrl}, {bright_fail_count}, {brit}, AE:{autobrit}, res:{if_reset}",flush=True)
-        open('result.txt', 'w', encoding='utf-8').write(str(bpm))
+        print(f"R: {str(avgR)[:6]}, G: {str(avgG)[:6]}, B: {str(avgB)[:6]}, A: {str(bright)[:6]}, FXL: {bright_fixed}, FD: {str(FDetect)}, S: {str(counting)[:6]}, TR: {10-(run_t - start_t)}, EXPO:{cam.get(cv2.CAP_PROP_EXPOSURE)} , ectrl: {britFailContrl}, {bright_fail_count}, {brit}, AE:{autobrit}, res:{if_reset} .....", end = "\r", flush=True)
 
         if_reset = DMX3(time_now = time_now, skipDMX=skipDMX)
         if if_reset == 102:
