@@ -1,6 +1,12 @@
 # 共寫更新
 最新版本請寫在最上面
 
+# 24/6/11 更新進度
+`JT Lin` `version 13S4 : 1.3 Stable 4`
+- Main
+  - Fixed some bug. (deleted line 133)
+  - Updated output. (Line 132)
+
 # 24/5/31 更新進度
 `Kai & JT Lin` `version 13S3 : 1.3 Stable 3`
 - Main
