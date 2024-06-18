@@ -48,7 +48,7 @@ def start(skipDMX, camera_select, mode):
     prog.update(10)
     prog.close()
     
-    if main.start(skipDMX = skipDMX, camera_select = camera_select, mode = mode) == True:
+    if main.start(skipDMX = skipDMX, camera_select = camera_select, mode = mode):
         global figure
         global axis
         figure, axis = plt.subplots(2, 2) # rows, columns

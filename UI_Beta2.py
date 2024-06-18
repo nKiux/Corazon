@@ -1,12 +1,12 @@
-#version 13S3
+#version 20S1
 import os
 import kernel_Litxtre
 try:
-    from PyQt5 import QtCore, QtGui, QtWidgets
+    from PyQt5 import QtCore, QtWidgets
 except:
     os.system('pip install PyQt5')
 
-from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5 import QtCore, QtWidgets
 
 global mode
 global cam
