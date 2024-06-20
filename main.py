@@ -91,14 +91,17 @@ class FingerControl:
         avgB, avgG, avgR, avgA = cv2.mean(frame)
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         bright = int(cv2.mean(gray)[0])
-        print(bright,"...",end="\r",flush=True)
-        if avgR > 70 and avgR > (avgB + avgG):
+        if avgR > (avgB + avgG):#avgR > 70 and 
             if bright >= 50:
                 self.page.instruction.setText(self.page._translate("HRMonitor","正在紀錄..."))
+                self.page.instruction.setStyleSheet("color: green;")
             else:
                 self.page.instruction.setText(self.page._translate("HRMonitor","請提高背景亮度!"))
+                self.page.instruction.setStyleSheet("color: red;")
         else:
             self.page.instruction.setText(self.page._translate("HRMonitor","請將手指放在鏡頭上!"))
+            self.page.instruction.setStyleSheet("color: black;")
+        print(f"R={avgR}, G={avgG}, B={avgB}, bright={bright}, if={avgR > (avgB + avgG)}...",end="\r",flush=True)
     
 
 if __name__ == "__main__":

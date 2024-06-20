@@ -63,6 +63,8 @@ def start(skipDMX, camera_select, mode):
         #v0.6.6
         gray = cv2.cvtColor(frm, cv2.COLOR_BGR2GRAY)
         bright = cv2.mean(gray)[0]
+
+        # this is int(bright)
         if str(bright)[1] == '.':
             bright_fixed = int(str(bright)[0])
         elif str(bright)[2] == '.':
