@@ -1,7 +1,7 @@
 #version 1.3.2
 import os
 from datetime import datetime
-import main
+import main_ref
 
 mode = 0
 camera_select = 0
@@ -15,7 +15,7 @@ import matplotlib.pyplot as plt
 from scipy.signal import find_peaks
 
 def start(skipDMX, camera_select, mode):
-    import main
+    import main_ref
     print(f'Checking Program... ({datetime.now()})')
     try:
         import cv2
@@ -48,7 +48,7 @@ def start(skipDMX, camera_select, mode):
     prog.update(10)
     prog.close()
     
-    if main.start(skipDMX = skipDMX, camera_select = camera_select, mode = mode) == True:
+    if main_ref.start(skipDMX = skipDMX, camera_select = camera_select, mode = mode) == True:
         polft = polft_algorithm()
         cv2.destroyAllWindows()
         return True
