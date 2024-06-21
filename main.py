@@ -76,7 +76,7 @@ class MainPage(QWidget):
                 painter.setPen(QPen(QColor("#dcdcdc"),10,Qt.PenStyle.SolidLine,Qt.PenCapStyle.RoundCap))
                 painter.drawArc(490,310,100,100,90*16,checking*-16)
 
-                plotted_samples = 200
+                plotted_samples = 100
                 plot = self.plot[-1*plotted_samples-5:][1:] if len(self.plot[-1*plotted_samples-5:]) > 1 else [0]
                 scale = 100/(max(plot)-min(plot)) if (max(plot)-min(plot)) != 0 else 0
                 avg = average(plot)
