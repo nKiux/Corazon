@@ -1,5 +1,15 @@
+Know Scratcher 
+[![wakatime](https://wakatime.com/badge/user/3bed848b-ab70-463a-ade3-235f88526a6a/project/73996fb1-edff-49dd-bbfe-0974ff86a1eb.svg)](https://wakatime.com/badge/user/3bed848b-ab70-463a-ade3-235f88526a6a/project/73996fb1-edff-49dd-bbfe-0974ff86a1eb)
+
 # 共寫更新
 最新版本請寫在最上面
+
+# 24/6/22 更新進度
+`Know Scratcher` `version 20S0 : 2.0 Stable 0`
+- Main
+  - Reframe
+  - Add realtime display
+  - 
 
 # 24/6/11 更新進度
 `JT Lin` `version 13S4 : 1.3 Stable 4`
