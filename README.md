@@ -1,5 +1,5 @@
 Know Scratcher 
-[![wakatime](https://wakatime.com/badge/user/3bed848b-ab70-463a-ade3-235f88526a6a/project/73996fb1-edff-49dd-bbfe-0974ff86a1eb.svg)](https://wakatime.com/badge/user/3bed848b-ab70-463a-ade3-235f88526a6a/project/73996fb1-edff-49dd-bbfe-0974ff86a1eb)
+[![wakatime](https://wakatime.com/badge/github/KnowScratcher/Corazon.svg)](https://wakatime.com/badge/github/KnowScratcher/Corazon)
 
 # 共寫更新
 最新版本請寫在最上面
