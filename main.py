@@ -2,10 +2,12 @@ from PyQt5 import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
+from scipy.signal import find_peaks
 import sys
 import cv2
 import threading
 import logging
+import time
 
 logging.basicConfig(filename="log.log",encoding="utf-8",level=logging.DEBUG)
 
@@ -13,12 +15,31 @@ running = True
 
 checking = 0
 
+def find_antipeak(l) -> list:
+    l2 = list(map(lambda x:x*-1,l))
+    avg = average(l2)
+    r = max(l2)-min(l2) #range
+    return find_peaks(l2, distance=7)[0] #,height=avg+0.2*r
+
+def get_bpm(index:list,times:list) -> float:
+    """
+    `index` is the list of indexes of the peaks
+
+    `times` is the time record of the data
+    """
+    time_list = [times[i] for i in index]
+    dt_list = []
+    for i in range(len(time_list)-1):
+        dt_list.append(time_list[i+1] - time_list[i])
+    dt = average(dt_list)
+    return round(60/(dt/1000000000),1) if dt != 0 else 0 #9個0
+
 def close(e):
     global running
     running = False
 
 def average(l):
-    return sum(l)/len(l)
+    return sum(l)/len(l) if len(l)>0 else 0
 
 class MainPage(QWidget):
     def __init__(self) -> None:
@@ -31,6 +52,7 @@ class MainPage(QWidget):
 
         self.frame = None
         self.plot = [0]
+        self.plot_time = [0]
 
         self.setup_camera()
         self.setup_instruction()
@@ -54,6 +76,7 @@ class MainPage(QWidget):
     
     def camera_control(self):
         global checking
+        loop = 0
         cap = cv2.VideoCapture(0)      # 設定攝影機鏡頭
         if not cap.isOpened():
             print("Cannot open camera")
@@ -78,11 +101,20 @@ class MainPage(QWidget):
 
                 plotted_samples = 100
                 plot = self.plot[-1*plotted_samples-5:][1:] if len(self.plot[-1*plotted_samples-5:]) > 1 else [0]
+                plot_time = self.plot_time if len(self.plot_time[-1*plotted_samples-5:]) > 1 else [0]
                 scale = 100/(max(plot)-min(plot)) if (max(plot)-min(plot)) != 0 else 0
                 avg = average(plot)
+                peaks = find_antipeak(plot)
                 for i in range(len(plot)-1):
                     painter.drawLine(int((1080/plotted_samples)*i), int((plot[i]-avg)*scale+670), int((1080/plotted_samples)*(i+1)), int((plot[i+1]-avg)*scale+670))
+                for i in peaks:
+                    painter.drawLine(int((1080/plotted_samples)*i), 620, int((1080/plotted_samples)*(i)), 720)
                 painter.end()
+                #print(get_bpm(peaks,plot_time))
+                if loop > 50:
+                    self.set_LCD_display(get_bpm(peaks,plot_time))
+                    loop = 0
+                loop += 1
             self.set_camera_image(pixmap)
 
     # Instruction
@@ -104,6 +136,9 @@ class MainPage(QWidget):
         self.lcd.setObjectName("LCD")
         self.lcd.setGeometry(880,720,200,100)
         self.lcd.display(0)
+    
+    def set_LCD_display(self,number):
+        self.lcd.display(number)
 
     # Translate
     def translate(self):
@@ -130,13 +165,14 @@ class FingerControl:
                 if bright_fix >= 40:
                     self.page.set_instruction("正在紀錄...","green")
                     self.page.plot.append(bright)
+                    self.page.plot_time.append(time.time_ns())
+                    #print(bright)
                 else:
                     self.page.set_instruction("請提高背景亮度!","red")
         else:
             checking = 0
             self.page.plot = [0]
             self.page.set_instruction("請將手指放在鏡頭上!","black")
-        print(bright_fix)
         #print(f"R={avgR}, G={avgG}, B={avgB}, bright={bright}, if={avgR > (avgB + avgG)}...",end="\r",flush=True)
     
 
