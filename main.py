@@ -47,6 +47,7 @@ class MainPage(QWidget):
         self.setObjectName("main_page")
         self.setWindowTitle("HRMonitor v2.0")
         self.resize(1080,820)
+        self.setFixedSize(1080,820)
 
         self.camera_open = True
 
