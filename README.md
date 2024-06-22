@@ -1,5 +1,23 @@
+# 使用方式
+## 沒有Python
+1. 到[Release](./releases)下載最新版(128MB)
+![donwload](./README-image/download.png)
+2. 解壓縮並執行exe檔
+![unzip](./README-image/unzip.png)
 
+## 有Python
+1. 到[Release](./releases)下載最新版**lite**(29.7KB)
+![dpy](./README-image/dpy.png)
+2. 解壓縮並執行setup.bat
+![setup](./README-image/setup.png)
+3. 執行main.py
+![py](./README-image/py.png)
 
+# 常見問題
+## 我的exe被防毒攔下來
+沒事的，我們可以保證裡面一隻病毒都沒有，所以你可以
+- 關閉防毒軟體 或 建立防毒例外
+- 下載Python然後用[lite版](./#有Python)
 
 # 時間紀錄
 Know Scratcher 
