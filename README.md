@@ -21,7 +21,6 @@
 - 關閉防毒軟體 或 建立防毒例外
 - 下載Python然後用[lite版](./#有Python)
 
-
 # 時間紀錄
 Know Scratcher 
 [![wakatime](https://wakatime.com/badge/github/KnowScratcher/Corazon.svg)](https://wakatime.com/badge/github/KnowScratcher/Corazon)
