@@ -26,7 +26,7 @@ def find_antipeak(l) -> list: # 找心跳點
     l2 = l
     #avg = average(l2)
     #r = max(l2)-min(l2) #range
-    return find_peaks(l2, distance=7)[0] #,height=avg+0.2*r
+    return find_peaks(l2, distance=3)[0] #,height=avg+0.2*r
 
 def get_bpm(index:list,times:list) -> float: # 計算BPM
     """
