@@ -13,11 +13,14 @@
 3. 執行main.py
 ![py](./README-image/py.png)
 
+⚠️請注意:**使用lite可能不會節省硬碟空間**⚠️
+
 # 常見問題
 ## 我的exe被防毒攔下來
 沒事的，我們可以保證裡面一隻病毒都沒有，所以你可以
 - 關閉防毒軟體 或 建立防毒例外
 - 下載Python然後用[lite版](./#有Python)
+
 
 # 時間紀錄
 Know Scratcher 
