@@ -1,12 +1,12 @@
 # 使用方式
 ## 沒有Python
-1. 到[Release](./releases)下載最新版(128MB)
+1. 到[Release](../../releases)下載最新版(128MB)
 ![donwload](./README-image/download.png)
 2. 解壓縮並執行exe檔
 ![unzip](./README-image/unzip.png)
 
 ## 有Python
-1. 到[Release](./releases)下載最新版**lite**(29.7KB)
+1. 到[Release](../../releases)下載最新版**lite**(29.7KB)
 ![dpy](./README-image/dpy.png)
 2. 解壓縮並執行setup.bat
 ![setup](./README-image/setup.png)
