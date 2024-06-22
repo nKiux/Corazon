@@ -9,6 +9,7 @@ Know Scratcher
 - Main
   - Reframe
   - Add realtime display
+  - Fix window size
 
 # 24/6/11 更新進度
 `JT Lin` `version 13S4 : 1.3 Stable 4`
