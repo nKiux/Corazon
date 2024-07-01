@@ -28,8 +28,13 @@ Know Scratcher
 # 共寫更新
 最新版本請寫在最上面
 
+# 24/7/1 更新進度
+`Know Scratcher` `version 2.0.1 : 2.0 Stable 1`
+- 新增結果顯示
+- 更改執行續運作
+
 # 24/6/22 更新進度
-`Know Scratcher` `version 20S0 : 2.0 Stable 0`
+`Know Scratcher` `version 2.0.0 : 2.0 Stable 0`
 - Main
   - Reframe
   - Add realtime display
