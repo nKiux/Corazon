@@ -1,5 +1,49 @@
+# 使用方式
+## 沒有Python
+1. 到[Release](../../releases)下載最新版(128MB)
+![donwload](./README-image/download.png)
+2. 解壓縮並執行exe檔
+![unzip](./README-image/unzip.png)
+
+## 有Python
+1. 到[Release](../../releases)下載最新版**lite**(29.7KB)
+![dpy](./README-image/dpy.png)
+2. 解壓縮並執行setup.bat
+![setup](./README-image/setup.png)
+3. 執行main.py
+![py](./README-image/py.png)
+
+⚠️請注意:**使用lite可能不會節省硬碟空間**⚠️
+
+# 常見問題
+## 我的exe被防毒攔下來
+沒事的，我們可以保證裡面一隻病毒都沒有，所以你可以
+- 關閉防毒軟體 或 建立防毒例外
+- 下載Python然後用[lite版](./#有Python)
+
+# 時間紀錄
+Know Scratcher 
+[![wakatime](https://wakatime.com/badge/github/KnowScratcher/Corazon.svg)](https://wakatime.com/badge/github/KnowScratcher/Corazon)
+
 # 共寫更新
 最新版本請寫在最上面
+
+# 24/7/3 更新進度
+`Know Scratcher` `version 2.0.2 : 2.0 Stable 2`
+- 動態調整視窗物件狀態
+
+# 24/7/1 更新進度
+`Know Scratcher` `version 2.0.1 : 2.0 Stable 1`
+- 新增結果顯示
+- 更改執行續運作
+
+# 24/6/22 更新進度
+`Know Scratcher` `version 2.0.0 : 2.0 Stable 0`
+- Main
+  - Reframe
+  - Add realtime display
+  - Fix window size
+  - Rewrite analyzing method
 
 # 24/6/11 更新進度
 `JT Lin` `version 13S4 : 1.3 Stable 4`
