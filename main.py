@@ -12,9 +12,15 @@ import logging
 import time
 import os
 import time
+import json
 
 APP_NAME = "HRMonitor"
 APP_VERSION = "v2.0.1"
+
+VIDEO_WIDTH = 1080 # 預設的寬度
+VIDEO_RATIO = 2/3 # 高度是寬度的幾倍
+
+VIDEO_HEIGHT = int(VIDEO_WIDTH*VIDEO_RATIO)
 
 running = True # 以視窗關閉鏡頭未關
 
@@ -54,6 +60,39 @@ def close(e): # 關閉視窗動作
 def average(l): # 計算用
     return sum(l)/len(l) if len(l)>0 else 0
 
+def get_data():
+    try:
+        with open("./config.json","x",encoding="utf-8") as j:
+            json.dump(
+                {
+                    "video_width":1080,
+                    "video_ratio":2/3
+                },
+                j,
+                indent="\t"
+            )
+    except:
+        with open("./config.json","r",encoding="utf-8") as j:
+            global VIDEO_HEIGHT,VIDEO_RATIO,VIDEO_WIDTH
+            data = json.load(j)
+            VIDEO_WIDTH = data["video_width"]
+            VIDEO_RATIO = data["video_ratio"]
+            VIDEO_HEIGHT = int(VIDEO_WIDTH*VIDEO_RATIO)
+
+def change_data(data:dict):
+    """
+    傳入{`你要改的鍵`:`值`}
+    """
+    d = {}
+    with open("./config.json","r",encoding="utf-8") as j:
+        d = json.load(j)
+    for key,value in data.items():
+        d[key] = value
+    with open("./config.json","w",encoding="utf-8") as j:
+        json.dump(d,j,indent="\t")
+            
+
+
 class ResultThread(QThread): # 控制開啟結果視窗的
     show_result = pyqtSignal(bool)
 
@@ -69,6 +108,7 @@ class ResultThread(QThread): # 控制開啟結果視窗的
 
 
 class Result(QWidget):
+    global VIDEO_HEIGHT,VIDEO_RATIO,VIDEO_WIDTH
     def __init__(self,main:"MainPage",datas:list,times:list) -> None:
         super().__init__()
         self.setObjectName("result_page")
@@ -109,14 +149,15 @@ class Result(QWidget):
         self.lcd.display(bpm)
 
 class MainPage(QWidget): # 視窗
+    global VIDEO_HEIGHT,VIDEO_RATIO,VIDEO_WIDTH
     def __init__(self) -> None:
         super().__init__()
         # 一些設定
         self.setObjectName("main_page")
         self.setWindowTitle(f"{APP_NAME} {APP_VERSION}")
         self.setWindowIcon(QIcon(resource_path("icon.ico")))
-        self.resize(1080,820)
-        self.setFixedSize(1080,820)
+        self.resize(VIDEO_WIDTH,VIDEO_HEIGHT+100)
+        # self.setFixedSize(VIDEO_WIDTH,VIDEO_HEIGHT+100)
         self.result_window = None
 
         # 設定基本數值
@@ -148,7 +189,7 @@ class MainPage(QWidget): # 視窗
         """
         self.camera = QLabel(self)
         self.camera.setObjectName("camera")
-        self.camera.setGeometry(0,0,1080,720)
+        self.camera.setGeometry(0,0,VIDEO_WIDTH,VIDEO_HEIGHT)
         camera_thread = threading.Thread(target=self.camera_control)
         camera_thread.start()
 
@@ -175,7 +216,7 @@ class MainPage(QWidget): # 視窗
                 self.set_instruction("無法開啟相機!!!")
                 break
             self.fingerControl.fingercontrol() # 呼叫確認有無手指
-            frame = cv2.resize(self.frame, (1080, 720))   # 改變尺寸和視窗相同
+            frame = cv2.resize(self.frame, (VIDEO_WIDTH, VIDEO_HEIGHT))   # 改變尺寸和視窗相同
             frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)  # 轉換成 RGB
             height, width, channel = frame.shape    # 讀取尺寸和 channel數量
             bytesPerline = channel * width          # 設定 bytesPerline ( 轉換使用 )
@@ -188,11 +229,11 @@ class MainPage(QWidget): # 視窗
 
                     painter.setPen(QPen(QColor("#c3c3c3"),10,Qt.PenStyle.SolidLine,Qt.PenCapStyle.RoundCap))
                     painter.setBrush(QBrush(QColor("#c3c3c3"),Qt.BrushStyle.SolidPattern)) # 設定填充
-                    painter.drawEllipse(490+(50-(self.data_count//(self.get_data_count//40))),310+(50-(self.data_count//(self.get_data_count//40))),self.data_count//(self.get_data_count//80),self.data_count//(self.get_data_count//80))
+                    painter.drawEllipse((VIDEO_WIDTH//2-50)+(50-(self.data_count//(self.get_data_count//40))),(VIDEO_HEIGHT//2-50)+(50-(self.data_count//(self.get_data_count//40))),self.data_count//(self.get_data_count//80),self.data_count//(self.get_data_count//80))
 
                     painter.setPen(QPen(QColor("#dcdcdc"),10,Qt.PenStyle.SolidLine,Qt.PenCapStyle.RoundCap)) # 設定筆刷
                     painter.setBrush(QBrush(Qt.BrushStyle.NoBrush)) # 重設填充
-                    painter.drawArc(490,310,100,100,90*16,checking*-16) # 繪製進度條
+                    painter.drawArc((VIDEO_WIDTH//2-50),(VIDEO_HEIGHT//2-50),100,100,90*16,checking*-16) # 繪製進度條
 
                     
                     plot = self.plot[-1*self.plotted_samples-1:][1:] if len(self.plot[-1*self.plotted_samples-1:]) > 1 else [0] # 取樣
@@ -201,9 +242,9 @@ class MainPage(QWidget): # 視窗
                     avg = average(plot)
                     peaks = find_antipeak(plot)
                     for i in range(len(plot)-1):
-                        painter.drawLine(int((1080/self.plotted_samples)*i), int((plot[i]-avg)*scale+670), int((1080/self.plotted_samples)*(i+1)), int((plot[i+1]-avg)*scale+670)) # 繪製心跳圖
+                        painter.drawLine(int((VIDEO_WIDTH/self.plotted_samples)*i), int((plot[i]-avg)*scale+(VIDEO_HEIGHT-50)), int((VIDEO_WIDTH/self.plotted_samples)*(i+1)), int((plot[i+1]-avg)*scale+(VIDEO_HEIGHT-50))) # 繪製心跳圖
                     for i in peaks:
-                        painter.drawLine(int((1080/self.plotted_samples)*i), 620, int((1080/self.plotted_samples)*(i)), 720) # 繪製心跳點
+                        painter.drawLine(int((VIDEO_WIDTH/self.plotted_samples)*i), VIDEO_HEIGHT-100, int((VIDEO_WIDTH/self.plotted_samples)*(i)), VIDEO_HEIGHT) # 繪製心跳點
                     painter.end()
 
                     if self.data_count%50==0: # 一段時間後
@@ -223,7 +264,7 @@ class MainPage(QWidget): # 視窗
         """
         self.instruction = QLabel(self)
         self.instruction.setObjectName("insturction")
-        self.instruction.setGeometry(0,720,500,100)
+        self.instruction.setGeometry(0,VIDEO_HEIGHT,500,100)
         self.instruct_font = QFont()
         self.instruct_font.setPointSize(20)
         self.instruction.setFont(self.instruct_font)
@@ -245,7 +286,7 @@ class MainPage(QWidget): # 視窗
         """
         self.lcd = QLCDNumber(self)
         self.lcd.setObjectName("LCD")
-        self.lcd.setGeometry(880,720,200,100)
+        self.lcd.setGeometry(VIDEO_WIDTH-200,VIDEO_HEIGHT,200,100)
         self.lcd.display(0)
     
     def set_LCD_display(self,number):
@@ -261,6 +302,22 @@ class MainPage(QWidget): # 視窗
         """
         self._translate = QCoreApplication.translate
         self.instruction.setText(self._translate("HRMonitor","請將手指放在鏡頭上"))
+
+    def update_size(self):
+        global VIDEO_HEIGHT,VIDEO_WIDTH
+        self.camera.setGeometry(0,0,VIDEO_WIDTH,VIDEO_HEIGHT)
+        self.lcd.setGeometry(VIDEO_WIDTH-200,VIDEO_HEIGHT,200,100)
+        self.instruction.setGeometry(0,VIDEO_HEIGHT,500,100)
+        change_data({"video_width":VIDEO_HEIGHT})
+
+    def onWindowSizeChange(self,e):
+        global VIDEO_RATIO,VIDEO_HEIGHT,VIDEO_WIDTH
+        if Form.height() == int(Form.width()*VIDEO_RATIO)+100:
+            VIDEO_WIDTH = self.width()
+            VIDEO_HEIGHT = self.height()-100
+            self.update_size()
+        else:
+            self.resize(Form.width(),int(Form.width()*VIDEO_RATIO)+100)
 
 class FingerControl:
     """
@@ -307,10 +364,12 @@ if __name__ == "__main__":
     """
     本來就要得一些東西
     """
+    get_data()
     app = QApplication(sys.argv)
 
     Form = MainPage()
     Form.closeEvent = close # 設定關閉時執行的
+    Form.resizeEvent = Form.onWindowSizeChange
     Form.show()
     app.exec()
     #sys.exit(app.exec_())
