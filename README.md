@@ -28,6 +28,10 @@ Know Scratcher
 # 共寫更新
 最新版本請寫在最上面
 
+# 24/7/3 更新進度
+`Know Scratcher` `version 2.0.2 : 2.0 Stable 2`
+- 動態調整視窗物件狀態
+
 # 24/7/1 更新進度
 `Know Scratcher` `version 2.0.1 : 2.0 Stable 1`
 - 新增結果顯示
