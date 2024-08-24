@@ -1,3 +1,16 @@
+# 使用方法
+請依照以下步驟運行程式
+
+**This is a project to detect heart rate using a webcam offline (except for installation requirements). Please understand that the results cannot be used as a medical diagnostic.**
+
+To use this code, please download
+
+- kernel_Litxtre.py
+- main.py
+- UI_Beta2.py
+
+Start "UI_Beta2.py" in Code or another IDE, we don't recommend double click it to start.
+
 # 共寫更新
 最新版本請寫在最上面
 
