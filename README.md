@@ -11,6 +11,8 @@ To use this code, please download
 
 Start "UI_Beta2.py" in Code or another IDE, we don't recommend double click it to start.
 
+Put your fingertip on the webcam after the webcam window shows up, then wait for about 12s.
+
 # 共寫更新
 最新版本請寫在最上面
 
