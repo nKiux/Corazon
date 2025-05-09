@@ -16,6 +16,34 @@ Put your fingertip on the webcam after the webcam window shows up, then wait for
 # 共寫更新
 最新版本請寫在最上面
 
+# 25/05/09 延長更新
+`Kiux` `version 20 : LiveLinkage and Better performance`
+
+## Built for better performance and stability
+- Main -> CamMainCtl
+   - Deleted multiple re-importing
+   - Deleted tqdm
+   - Deleted console output on testing
+   - Deleted several unnecessary output
+   - Removed multiple unused parameter
+   - Renamed several function for better readability
+   - Deleted unused importing for better performance
+- kernel_Litxtre
+   - Deleted multiple re-importing
+   - Deleted unused importing for better performance
+   - Removed multiple unused parameter
+   - Added better terminal output
+   - Classed Algorithms
+## Introducing LiveLinkage!
+- Features:
+   - Kernel Enhancement
+   - UI enhancement
+   - Multiple Terminal output for better debug
+   - Reconstructed UI control
+   - Pre-import for general stability 
+![LLLCMCogo](https://github.com/user-attachments/assets/69d20f4c-e0d5-4b50-921e-5b122851b7e4)
+
+
 # 24/6/11 更新進度
 `JT Lin` `version 13S4 : 1.3 Stable 4`
 - Main
