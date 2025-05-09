@@ -6,10 +6,10 @@
 To use this code, please download
 
 - kernel_Litxtre.py
-- main.py
-- UI_Beta2.py
+- CamMainCtl.py
+- LiveLinkage.py
 
-Start "UI_Beta2.py" in Code or another IDE, we don't recommend double click it to start.
+Start "LiveLinkage.py" in Code or another IDE, we don't recommend double click it to start.
 
 Put your fingertip on the webcam after the webcam window shows up, then wait for about 12s.
 
@@ -20,7 +20,7 @@ Put your fingertip on the webcam after the webcam window shows up, then wait for
 `Kiux` `version 20 : LiveLinkage and Better performance`
 
 ## Built for better performance and stability
-- Main -> CamMainCtl
+- Main -> CamMainCtl (Main is no longer needed)
    - Deleted multiple re-importing
    - Deleted tqdm
    - Deleted console output on testing
@@ -35,6 +35,7 @@ Put your fingertip on the webcam after the webcam window shows up, then wait for
    - Added better terminal output
    - Classed Algorithms
 ## Introducing LiveLinkage!
+**No longer need UI_beta2.py since this update !!**
 - Features:
    - Kernel Enhancement
    - UI enhancement
