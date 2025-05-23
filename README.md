@@ -16,6 +16,22 @@ Put your fingertip on the webcam after the webcam window shows up, then wait for
 # 共寫更新
 最新版本請寫在最上面
 
+# 25/05/23 補充更新
+`Kiux` `JT Lin` `version 10M : Minimal Corazon`
+## Corazon Minimal
+### Built for intergration with Embedded Systems that could start this code without further operations
+- Corazon Minimal:
+   - With any possible feature that you need but as minimal as possible
+   - Reconstructed the code with cleaner code style in just 97 lines
+   - Removed DynamarkX (DMX)
+   - Removed matplotlib to produce graph
+   - Removed files that generated during the test
+   - Removed UI
+   - 3 Algorithms is being re-writed in this minimal for faster calculation and accuracy
+   - Removed calling imports frequently for better compatibility
+   - Removed finger detection
+   - Removed the comparison between three algorithms by outputing three results
+
 # 25/05/09 延長更新
 `Kiux` `version 20 : LiveLinkage and Better performance`
 
