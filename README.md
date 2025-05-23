@@ -3,7 +3,7 @@
 
 **This is a project to detect heart rate using a webcam offline (except for installation requirements). Please understand that the results cannot be used as a medical diagnostic.**
 
-To use this code, please download
+## To use the full featured Corazon, please download:
 
 - kernel_Litxtre.py
 - CamMainCtl.py
@@ -12,6 +12,18 @@ To use this code, please download
 Start "LiveLinkage.py" in Code or another IDE, we don't recommend double click it to start.
 
 Put your fingertip on the webcam after the webcam window shows up, then wait for about 12s.
+
+## To use the Minimal Corazon, please download:
+- Corazon Minimal.py
+
+Please `pip install` the following modules:
+- numpy
+- scipy
+- opencv-python
+
+Start with IDE or Terminal(Commend Prompt / PowerShell, anything you like)
+
+### _Put your finger before the program starts._
 
 # 共寫更新
 最新版本請寫在最上面
