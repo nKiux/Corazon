@@ -3,7 +3,6 @@ import cv2
 import numpy as np
 import time
 from datetime import datetime
-from tqdm.rich import tqdm
 
 def start(camera_select):
     
@@ -125,3 +124,4 @@ def DMX3(time_now):
         print('fps >= 10')
     elif fatalError >= 0:
         fatalError -= 0.2
+
