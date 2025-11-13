@@ -20,6 +20,8 @@ Please `pip install` the following modules:
 - numpy
 - scipy
 - opencv-python
+- matplotlib
+- PyQt5
 
 Start with IDE or Terminal(Commend Prompt / PowerShell, anything you like)
 
