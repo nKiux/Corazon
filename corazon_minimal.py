@@ -37,12 +37,12 @@ class Algorithms:
             avg.append(np.average(result[i:i+5]))
             avg2.append(np.average(result[i:i+20]))
 
-        peak, _ = find_peaks(np.array(avg), distance=(8.5*(datacount/200)), height=np.array(avg2))
+        peak, _ = find_peaks(np.array(avg), distance=(6.5*(datacount/200)), height=np.array(avg2))
         
         peaks = len(peak)
-        Result2 = peaks * 6
-        return Result2, peak
-    
+        Result2 = peaks * 5
+        return Result2, peak, avg, avg2
+
     def polyfit(result):
         datacount = len(np.array(result))
         x = np.arange(len(result))
@@ -52,9 +52,9 @@ class Algorithms:
             pfix[i] = np.average(pfix[i:i+15])
         for i in range(-25, 0, 1):
             pfix[i] = np.average(pfix[i-15:i])
-        peak, _ = find_peaks(np.array(result), distance=(8.5*(datacount/200)), height=pfix)
-        Result3 = (len(peak)*6)
-        return Result3
+        peak, _ = find_peaks(np.array(result), distance=(6.5*(datacount/200)), height=pfix)
+        Result3 = (len(peak)*4)
+        return Result3, pfix, peak
     
 cam = cv2.VideoCapture(0)
 print('[+] Camera starting...')
@@ -106,23 +106,23 @@ while True:
             FPS = 0
             del bright_rec[0:FPS_P+1]
             lenBright = len(bright_rec)
-            for i, x in enumerate(bright_rec[lenBright + 2:lenBright - 2]):
-                bright_rec[i] = np.average(bright_rec[i-2:i+2])
-            res, peak = Algorithms.avg_calc(bright_rec)
+            res, peak, avg, avg2 = Algorithms.avg_calc(bright_rec)
+            plyfit_res, pfix, peak2 = Algorithms.polyfit(bright_rec)
             print('========================================')
             #print(f'Subseq returned a BPM: {Algorithms.subseq(bright_rec)}')
             print(f'Avg_calc returned a BPM: {res}')
-            print(f'Polyfit returned a BPM: {Algorithms.polyfit(bright_rec)}')
+            print(f'Polyfit returned a BPM: {plyfit_res}')
             print('========================================')
-            plt.clf()
-            plt.plot(bright_rec)
-            plt.pause(0.0001)
         else:
             FPS += 1
         plt.clf()
-        plt.plot(bright_rec)
+        plt.title(f'avg:{res}, plf:{plyfit_res}, frames:{FrameCount}, fps:{FPS_P}/s')
+        plt.plot(np.array(bright_rec), label="Data")
+        plt.plot(np.array(avg), label="Avg Baseline")
+        plt.plot(np.array(pfix), label="Polyfit Baseline")
+        plt.plot(peak2, np.array(bright_rec)[peak2], "o")
         if peak is not None and len(peak) > 0:
-            plt.plot(peak, np.array(bright_rec)[peak], "x")
+            plt.plot(peak, np.array(avg)[peak], "x")
         plt.pause(0.0001)
 
         
@@ -132,7 +132,10 @@ print(f'Total Frame Count = {FrameCount}')
 with open('CoraOutput.txt', 'w', encoding='utf-8') as f:
     for i in bright_rec:
         f.write(f'{i}\n')
+plt.title(f'avg:{res}, plf:{plyfit_res}, frames:{FrameCount}')
 plt.plot(np.array(bright_rec), label="Data")
-plt.plot(peak, np.array(bright_rec)[peak], "x")
-plt.title('Brightness over Frame')
+plt.plot(np.array(avg2), label="Avg Baseline")
+plt.plot(peak, np.array(avg)[peak], "x")
+plt.plot(np.array(pfix), label="Polyfit Baseline")
+plt.plot(peak2, np.array(bright_rec)[peak2], "o")
 plt.show()
