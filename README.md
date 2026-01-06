@@ -31,6 +31,11 @@ Start with IDE or Terminal(Commend Prompt / PowerShell, anything you like)
 最新版本請寫在最上面
 
 # 26/01/06 更新進度
+`Kiux` `Version 22M : improved accuracy`
+- Corazon_Minimal
+   - Fine Tuned Both Avg Calc / Polyfit Algorithm
+   - Accuracy improved under ideal environment
+   - Corazon_Minimal will now generate a "CoraOutput.txt", which contains nearly 10~15s' bright data
 `Kiux` `Version 21M : Minimal Continous Corazon`
 ## Corazon Minimal V21
 ### Built for Extended use of minimal corazon
