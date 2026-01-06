@@ -30,6 +30,14 @@ Start with IDE or Terminal(Commend Prompt / PowerShell, anything you like)
 # 共寫更新
 最新版本請寫在最上面
 
+# 26/01/06 更新進度
+## Corazon Minimal V21
+### Built for Extended use of minimal corazon
+- Corazon Minimal:
+   - Enabled Continous Measuring.
+   - Added a few variables
+!!Note!! **Alpla version is now low accuracy, for the most accurate version, Please use the full version** !!Note!!
+
 # 25/05/23 補充更新
 `Kiux` `JT Lin` `version 10M : Minimal Corazon`
 ## Corazon Minimal
