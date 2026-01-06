@@ -36,8 +36,8 @@ Start with IDE or Terminal(Commend Prompt / PowerShell, anything you like)
    - Fine Tuned Both Avg Calc / Polyfit Algorithm
    - Accuracy improved under ideal environment
    - Corazon_Minimal will now generate a "CoraOutput.txt", which contains nearly 10~15s' bright data
+
 `Kiux` `Version 21M : Minimal Continous Corazon`
-## Corazon Minimal V21
 ### Built for Extended use of minimal corazon
 - Corazon Minimal:
    - Enabled Continous Measuring.
