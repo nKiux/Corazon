@@ -43,7 +43,6 @@ Start with IDE or Terminal(Commend Prompt / PowerShell, anything you like)
    - Enabled Continous Measuring.
    - Added a few variables
   
-!!Note!! **Alpla version is now low accuracy, for the most accurate version, Please use the full version** !!Note!!
 
 # 25/05/23 補充更新
 `Kiux` `JT Lin` `version 10M : Minimal Corazon`
