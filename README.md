@@ -31,6 +31,7 @@ Start with IDE or Terminal(Commend Prompt / PowerShell, anything you like)
 最新版本請寫在最上面
 
 # 26/01/06 更新進度
+`Kiux` `Version 21M : Minimal Continous Corazon`
 ## Corazon Minimal V21
 ### Built for Extended use of minimal corazon
 - Corazon Minimal:
