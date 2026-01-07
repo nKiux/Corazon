@@ -30,6 +30,18 @@ Start with IDE or Terminal(Commend Prompt / PowerShell, anything you like)
 # 共寫更新
 最新版本請寫在最上面
 
+# 26/01/07 更新進度
+`Kiux` `Version 23 : improved performance and accuracy`
+- Corazon_Minimal
+   - Fine Tuned Both Algorithm to be As Accurate As the Full Version
+   - Accuracy has been Improved
+   - Added few variable
+   - Removed unused code
+   - Performance is now better
+   - Corazon_Minimal can now update data in real time
+   - It will now show the detected beat in the graph as well as the full version will do
+   - Maybe we'll change the name to Corazon 2.0
+
 # 26/01/06 更新進度
 `Kiux` `Version 22M : improved accuracy`
 - Corazon_Minimal
