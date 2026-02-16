@@ -21,7 +21,7 @@ Please `pip install` the following modules:
 - scipy
 - opencv-python
 - matplotlib
-- PyQt5
+- PyQt6
 
 Start with IDE or Terminal(Commend Prompt / PowerShell, anything you like)
 
@@ -29,6 +29,14 @@ Start with IDE or Terminal(Commend Prompt / PowerShell, anything you like)
 
 # 共寫更新
 最新版本請寫在最上面
+
+# 26/02/16 更新進度
+`JT Lin` `Version 24 : UI Integration`
+- Corazon_UI_MinimalOptimization
+   - Integrated Corazon_Minimal (last version) with PyQt6 UI
+   - Performance Improvement
+   - Whole process has been redesigned
+   - Maybe next version will add webcam selector and BPM display
 
 # 26/01/07 更新進度
 `Kiux` `Version 23 : improved performance and accuracy`
