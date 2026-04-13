@@ -1,4 +1,4 @@
-# please pip install the following modules: numpy, scipy, opencv-python, PyQt6, matplotlib
+# please pip install the following modules: numpy, scipy, opencv-python, PyQt6, matplotlib, pygrabber
 import sys
 import cv2
 import time
@@ -6,9 +6,31 @@ import numpy as np
 from scipy.signal import find_peaks
 
 # PyQt6 Imports
-from PyQt6.QtWidgets import QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QLabel
+from PyQt6.QtWidgets import QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QLabel, QComboBox
 from PyQt6.QtCore import QThread, pyqtSignal, Qt
-from PyQt6.QtGui import QImage, QPixmap
+from PyQt6.QtGui import QImage, QPixmap, QFont
+
+
+def list_cameras(max_test=5):
+    """Return list of (index, name) tuples for available cameras."""
+    cameras = []
+    names_by_index = {}
+    try:
+        from pygrabber.dshow_graph import FilterGraph
+        for i, n in enumerate(FilterGraph().get_input_devices()):
+            names_by_index[i] = n
+    except Exception:
+        pass
+
+    for i in range(max_test):
+        cap = cv2.VideoCapture(i, cv2.CAP_DSHOW)
+        if cap.isOpened():
+            name = names_by_index.get(i, f'Camera {i}')
+            cameras.append((i, name))
+            cap.release()
+    if not cameras:
+        cameras.append((0, 'Camera 0'))
+    return cameras
 
 # Matplotlib Integration
 from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg as FigureCanvas
@@ -59,12 +81,23 @@ class WorkerThread(QThread):
     image_update = pyqtSignal(QImage)
     plot_update = pyqtSignal(dict)
     status_update = pyqtSignal(str)
+    bpm_update = pyqtSignal(int)
+
+    def __init__(self, cam_index=0):
+        super().__init__()
+        self.cam_index = cam_index
+        self._switch_requested = False
+
+    def set_camera(self, index):
+        if index != self.cam_index:
+            self.cam_index = index
+            self._switch_requested = True
 
     def run(self):
         self.status_update.emit('[!] Please put your finger on the webcam')
         self.status_update.emit('[+] Starting up main...')
-        
-        cam = cv2.VideoCapture(0)
+
+        cam = cv2.VideoCapture(self.cam_index)
         self.status_update.emit('[+] Camera starting...')
         
         FrameCount = 0
@@ -80,6 +113,17 @@ class WorkerThread(QThread):
         self.is_running = True
 
         while self.is_running:
+            if self._switch_requested:
+                cam.release()
+                cam = cv2.VideoCapture(self.cam_index)
+                self._switch_requested = False
+                bright_rec = []
+                BPM_rec = []
+                FrameCount = 0
+                start_time = round(time.time())
+                self.plot_update.emit({'mode': 'clear'})
+                self.status_update.emit(f'[+] Switched to camera {self.cam_index}')
+
             check, frame = cam.read()
             if not check:
                 self.status_update.emit('[-] Camera Failed!')
@@ -160,6 +204,7 @@ class WorkerThread(QThread):
                         del BPM_rec[0]
 
                     avg_bpm = round(np.average(BPM_rec)) if BPM_rec else 0
+                    self.bpm_update.emit(int(avg_bpm))
                     plot_data['title'] = f'avc:{res}, plf:{plyfit_res}, frames:{FrameCount}, 10s avg:{avg_bpm}, fps:{FPS_P}/s'
                     plot_data['bright_rec'] = np.array(bright_rec)
                     plot_data['avg'] = np.array(avg)
@@ -178,6 +223,7 @@ class WorkerThread(QThread):
                 time_passed = time_fixed - start_time
                 del bright_rec[:]
                 stopped = True
+                self.bpm_update.emit(0)
                 self.plot_update.emit({'mode': 'clear'})
 
             else:
@@ -207,30 +253,55 @@ class MainWindow(QMainWindow):
         self.setCentralWidget(central_widget)
         main_layout = QHBoxLayout(central_widget)
 
-        # Left: Webcam View
+        # Left: Webcam View + camera selector
         self.video_label = QLabel("Webcam Feed")
         self.video_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.video_label.setMinimumSize(480, 360)
-        
+
+        self.camera_selector = QComboBox()
+        self.cameras = list_cameras()
+        for idx, name in self.cameras:
+            self.camera_selector.addItem(f'{name} (#{idx})', idx)
+        self.camera_selector.currentIndexChanged.connect(self.on_camera_changed)
+
         video_container = QVBoxLayout()
-        video_container.addWidget(self.video_label)
+        video_container.addWidget(self.video_label, stretch=1)
+        video_container.addWidget(self.camera_selector, alignment=Qt.AlignmentFlag.AlignLeft)
         main_layout.addLayout(video_container, stretch=2)
 
-        # Right: Matplotlib Plot
+        # Right: Matplotlib Plot + BPM display
         self.figure = Figure()
         self.canvas = FigureCanvas(self.figure)
         self.ax = self.figure.add_subplot(1, 1, 1)
-        
+
+        self.bpm_label = QLabel("BPM: --")
+        bpm_font = QFont()
+        bpm_font.setPointSize(18)
+        bpm_font.setBold(True)
+        self.bpm_label.setFont(bpm_font)
+        self.bpm_label.setAlignment(Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
+
         plot_container = QVBoxLayout()
-        plot_container.addWidget(self.canvas)
+        plot_container.addWidget(self.canvas, stretch=1)
+        plot_container.addWidget(self.bpm_label, alignment=Qt.AlignmentFlag.AlignRight)
         main_layout.addLayout(plot_container, stretch=3)
 
         # Start Worker Thread
-        self.worker = WorkerThread()
+        initial_idx = self.cameras[0][0] if self.cameras else 0
+        self.worker = WorkerThread(cam_index=initial_idx)
         self.worker.image_update.connect(self.update_image)
         self.worker.plot_update.connect(self.update_plot)
         self.worker.status_update.connect(self.print_status)
+        self.worker.bpm_update.connect(self.update_bpm)
         self.worker.start()
+
+    def on_camera_changed(self, _):
+        idx = self.camera_selector.currentData()
+        if idx is not None:
+            self.worker.set_camera(int(idx))
+
+    def update_bpm(self, bpm):
+        self.bpm_label.setText(f"BPM: {bpm}" if bpm > 0 else "BPM: --")
 
     def update_image(self, qt_image):
         pixmap = QPixmap.fromImage(qt_image)
