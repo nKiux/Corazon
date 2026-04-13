@@ -22,6 +22,7 @@ Please `pip install` the following modules:
 - opencv-python
 - matplotlib
 - PyQt6
+- pygrabber
 
 Start with IDE or Terminal(Commend Prompt / PowerShell, anything you like)
 
@@ -29,6 +30,12 @@ Start with IDE or Terminal(Commend Prompt / PowerShell, anything you like)
 
 # 共寫更新
 最新版本請寫在最上面
+
+# 26/04/13 更新進度
+`JT Lin` `version 24.1 : Cam selector & BPM display`
+- Corazon_UI_MinimalOptimization
+   - Added Webcam Selector at bottom left
+   - Added small BPM Display at bottom right
 
 # 26/02/16 更新進度
 `JT Lin` `Version 24 : UI Integration`
